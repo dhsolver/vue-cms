@@ -1,3 +1,3 @@
-# Junket CMS
-A Vue based SPA
+# junket-cms
+Junket CMS Frontend SPA using Vue
 
