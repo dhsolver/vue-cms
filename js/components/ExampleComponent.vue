@@ -5,7 +5,7 @@
                 <div class="card card-default">
                     <div class="card-header">Component</div>
                     <div class="card-body">
-                       Works
+                       Works TEEE
                     </div>
                 </div>
             </div>
