@@ -11,5 +11,14 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('js/app.js', 'public/js')
-   .sass('sass/app.scss', 'public/css');
+ if (mix.inProduction) {
+
+    mix.js('js/app.js', 'dist/js')
+        .sass('sass/app.scss', 'dist/css');
+
+ } else {
+
+    mix.js('js/app.js', 'public/js')
+        .sass('sass/app.scss', 'public/css');
+ 
+ }
