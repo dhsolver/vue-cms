@@ -45,11 +45,16 @@
 
 <script>
 import Form from 'vform'
+import { mapGetters } from 'vuex';
 
 export default {
+    
     middleware: 'guest',
 
-    components: {
+    computed: {
+        ...mapGetters({
+            user: 'auth/user'
+        }),
     },
 
     metaInfo () {
@@ -78,6 +83,11 @@ export default {
             // Fetch the user.
             await this.$store.dispatch('auth/fetchUser')
 
+            if (this.user.role === 'admin') {
+                this.$router.push({ name: 'admin.dashboard' })
+                return;
+            }
+            
             // Redirect home.
             this.$router.push({ name: 'home' })
         }

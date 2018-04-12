@@ -1,10 +1,10 @@
 <template>
     <div class="text-center">
-        <h3 class="mb-4">{{ $t('page_not_found') }}</h3>
+        <h3 class="mb-4">Page Not Found</h3>
 
         <div class="links">
-            <router-link :to="{ name: 'welcome' }">
-                {{ $t('go_home') }}
+            <router-link :to="{ name: 'home' }">
+                Go Home
             </router-link>
         </div>
     </div>

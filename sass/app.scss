@@ -1,5 +1,18 @@
 @import 'variables';
+
+
+@import '~bootswatch/dist/united/variables';
+
 @import '~bootstrap/scss/bootstrap';
+
+@import '~bootswatch/dist/united/bootswatch';
+
+.navbar-laravel {
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  }
+
+
 @import '~sweetalert2/src/sweetalert2';
 
 @import 'elements/buttons';
