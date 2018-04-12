@@ -1,4 +1,5 @@
 <template>
+    <transition name="fade">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -14,6 +15,7 @@
             </div>
         </div>
     </div>
+    </transition>
 </template>
 
 <script>
@@ -22,7 +24,7 @@
     export default {
         middleware: 'auth',
 
-        metaInfo () {
+        metaInfo() {
             return { title: 'Home' }
         },
             
