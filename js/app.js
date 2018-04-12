@@ -1,17 +1,32 @@
 require('./bootstrap');
 import Vue from 'vue';
-import BootstrapVue from 'bootstrap-vue';
 
+import store from './store'
 import router from './router';
 import App from './components/App';
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+import 'bootstrap/dist/css/bootstrap.css';
 
-Vue.use(BootstrapVue);
+import './plugins'
+import './components'
+
+Vue.config.productionTip = false
+
+Vue.mixin({
+    data: () => {
+        return {
+            get urls() {
+                return {
+                    auth: 'http://junket-api.test/auth/',
+                    cms: 'http://junket-api.test/cms/',
+                }
+            },
+        }
+    },
+})
 
 new Vue({
-    el: '#app',
     router,
-    render: h => h(App)
+    store,
+    ...App
 })
