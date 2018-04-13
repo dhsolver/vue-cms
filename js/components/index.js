@@ -3,6 +3,7 @@ import Child from './Child'
 import Button from './Button'
 import Spinner from './Spinner'
 import { HasError, AlertError, AlertSuccess } from 'vform'
+import InputHelp from './InputHelp'
 
 // Components that are registered globaly.
 [
@@ -11,7 +12,8 @@ import { HasError, AlertError, AlertSuccess } from 'vform'
     Spinner,
     HasError,
     AlertError,
-    AlertSuccess
+    AlertSuccess,
+    InputHelp
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

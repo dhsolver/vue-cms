@@ -11,15 +11,23 @@ import store from './store'
 import router from './router';
 import App from './components/App';
 
-// import 'bootstrap/dist/css/bootstrap.css';
+import fontawesome from '@fortawesome/fontawesome'
+import solid from '@fortawesome/fontawesome-free-solid'
+import regular from '@fortawesome/fontawesome-free-regular'
+fontawesome.library.add(solid, regular)
 
 import './plugins'
 import './components'
 
-// import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 Vue.config.productionTip = false
+
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+Vue.component('fa', FontAwesomeIcon);
+
+import Form from './classes/Form';
+window.Form = Form;
 
 Vue.mixin({
     data: () => {
@@ -28,6 +36,7 @@ Vue.mixin({
                 return {
                     auth: 'http://junket-api.test/auth/',
                     cms: 'http://junket-api.test/cms/',
+                    admin: 'http://junket-api.test/admin/',
                 }
             },
         }

@@ -2,7 +2,7 @@ import Login from '../pages/login';
 import Home from '../pages/Home';
 import NotFound from '../pages/errors/404';
 import Dashboard from '../pages/admin/dashboard';
-import Clients from '../pages/admin/clients';
+import Clients from '../pages/admin/clients/list';
 import Users from '../pages/admin/users';
 import Tours from '../pages/admin/tours';
 

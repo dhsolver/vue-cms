@@ -2,6 +2,16 @@
     <b-card header="Clients"
         class="card-primary"
     >
+        <b-row class="mb-3">
+            <b-col md="6">
+                <button class="btn btn-primary" @click.prevent="addClientModal = true">
+                    <fa :icon="['fas', 'plus']" /> Add Client
+                </button>
+            </b-col>
+            <b-col md="6">
+                <b-form-input v-model="filter" placeholder="Search..." class="ml-auto" />
+            </b-col>
+        </b-row>
         <spinner v-model="busy"></spinner>
 
         <!-- Customer Table -->
@@ -9,6 +19,7 @@
             <b-table
                 :items="items"
                 :fields="fields"
+                :filter="filter"
                 :sort-by.sync="sortBy"
                 :sort-desc.sync="sortDesc"
             >
@@ -17,26 +28,39 @@
                 </template>
                 <template slot="actions" slot-scope="{ item }">
                     <router-link
-                            class="btn btn-warning"
-                            :to="`/customer/${item.id}`"
+                            class="btn btn-sm btn-primary"
+                            :to="`/client/${item.id}`"
                     >
-                        <i class="fa fa-pencil"></i>
+                        <fa :icon="['far', 'edit']" />
                     </router-link>
                 </template>
             </b-table>
         </div>
+
+        <b-modal id="addClientModal" :title="addClientModalTitle" v-model="addClientModal">
+            <client-form ref="clientForm" :client="currentClient" @success="addClientModal = false"></client-form>
+            <div slot="modal-footer">
+               <b-btn variant="default" @click="addClientModal = false">Close</b-btn>
+               <b-btn variant="info" @click="addClient">Add</b-btn>
+            </div>
+        </b-modal>
 
     </b-card>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import FormatsDates from "../../mixins/FormatsDates";
+import FormatsDates from "../../../mixins/FormatsDates";
+import ClientForm from './form';
 
 export default {
     middleware: ['auth', 'admin'],
 
     layout: 'admin',
+
+    components: {
+        'client-form': ClientForm,    
+    },
 
     metaInfo() {
         return { title: 'Clients' }
@@ -65,9 +89,15 @@ export default {
         filter: null,
         sortBy: 'name',
         sortDesc: false,
+        currentClient: {},
+        addClientModal: false,
+        addClientModalTitle: 'Add Client',
     }),
 
     methods: {
+        addClient() {
+            this.$refs.clientForm.submit();
+        }
     },
 
     async created () {
