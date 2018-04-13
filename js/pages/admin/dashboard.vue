@@ -1,12 +1,9 @@
 <template>
-    <transition name="fade">
-        <b-card header="Admin Dashboard"
-            tag="dashboard"
-            class="card-primary"
-        >
-            <div>Hey {{ user.name }}</div>
-        </b-card>
-    </transition>
+    <b-card header="Admin Dashboard"
+        class="card-primary"
+    >
+        <div>Hey {{ user.name }}</div>
+    </b-card>
 </template>
 
 <script>
