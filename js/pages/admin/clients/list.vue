@@ -4,7 +4,7 @@
     >
         <b-row class="mb-3">
             <b-col md="6">
-                <button class="btn btn-primary" @click.prevent="addClientModal = true">
+                <button class="btn btn-primary" @click.prevent="prepareAddModal">
                     <fa :icon="['fas', 'plus']" /> Add Client
                 </button>
             </b-col>
@@ -29,7 +29,7 @@
                 <template slot="actions" slot-scope="{ item }">
                     <router-link
                             class="btn btn-sm btn-primary"
-                            :to="`/client/${item.id}`"
+                            :to="{ name: 'admin.client.show', params: { id: item.id } }"
                     >
                         <fa :icon="['far', 'edit']" />
                     </router-link>
@@ -95,6 +95,11 @@ export default {
     }),
 
     methods: {
+        prepareAddModal() {
+            this.$refs.clientForm.reset(); 
+            this.addClientModal = true
+        },
+
         addClient() {
             this.$refs.clientForm.submit();
         }

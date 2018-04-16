@@ -20,7 +20,7 @@ export default {
     metaInfo() {
         return { title: 'Users' }
     },
-        
+    
     computed: mapGetters({
     }),
 

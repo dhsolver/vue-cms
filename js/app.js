@@ -29,15 +29,13 @@ Vue.component('fa', FontAwesomeIcon);
 import Form from './classes/Form';
 window.Form = Form;
 
+import { urls } from './config';
+
 Vue.mixin({
     data: () => {
         return {
             get urls() {
-                return {
-                    auth: 'http://junket-api.test/auth/',
-                    cms: 'http://junket-api.test/cms/',
-                    admin: 'http://junket-api.test/admin/',
-                }
+                return urls;
             },
         }
     },

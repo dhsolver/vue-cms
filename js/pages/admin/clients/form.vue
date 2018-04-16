@@ -1,6 +1,6 @@
 <template>   
     <div>
-        <b-form @submit="submit">
+        <b-form @submit.prevent="submit">
             
             <b-form-group label="Name:" label-for="name">
                 <b-form-input id="name"
@@ -22,7 +22,7 @@
                 <input-help :form="form" field="email" text=""></input-help>
             </b-form-group>
             
-            <b-form-group label="Password:" label-for="password">
+            <b-form-group v-if="! hasClient" label="Password:" label-for="password">
                 <b-form-input id="password"
                     type="password"
                     v-model="form.password"
@@ -53,16 +53,42 @@
             }
         },
 
+        watch: {
+            'client': () => {
+                console.log('client changed');
+            }
+        },
+
+        computed: {
+            hasClient() {
+                return this.client.id ? true : false;
+            }
+        },
+
+        mounted() {
+            console.log('mounted: ' + this.client);
+
+            if (this.client.id) {
+                this.form = new Form(this.client);
+            }
+        },
+
         methods: {
             submit() {
                 this.form.post(this.urls.admin + 'clients')
                     .then( ({data}) => {
                         console.log(data);
-
+                        this.$store.commit('clients/pushToList', data)
                         this.$emit('success');
+                        this.reset();
                     }).catch( (e) => {
                         console.log(e);
+                        this.reset();
                     });
+            },
+
+            reset() {
+                this.form.reset();
             }
         }
     }
