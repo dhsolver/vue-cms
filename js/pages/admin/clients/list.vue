@@ -17,7 +17,7 @@
         <spinner v-model="loading"></spinner>
 
         <!-- Client Table -->
-        <b-row v-if="! loading">
+        <b-row v-if="!loading && totalRows">
             <b-col lg="12">
                 <b-table
                     :items="items"
@@ -51,6 +51,11 @@
                         Showing {{ perPage < totalRows ? perPage : totalRows }} of {{ totalRows }} results
                     </b-col>
                 </b-row>
+            </b-col>
+        </b-row>
+        <b-row v-if="!totalRows">
+            <b-col class="text-center text-muted my-4">
+                <h4>No Results</h4>
             </b-col>
         </b-row>
 
