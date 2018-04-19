@@ -6,6 +6,8 @@ import Clients from '../pages/admin/clients/list';
 import ClientEdit from '../pages/admin/clients/edit';
 import Users from '../pages/admin/users/list';
 import UserEdit from '../pages/admin/users/edit';
+import Admins from '../pages/admin/admins/list';
+import AdminEdit from '../pages/admin/admins/edit';
 import Tours from '../pages/admin/tours';
 
 export default [
@@ -17,6 +19,8 @@ export default [
     { path: '/admin/client/:id', name: 'admin.client.show', component: ClientEdit },
     { path: '/admin/users', name: 'admin.users', component: Users },
     { path: '/admin/user/:id', name: 'admin.user.show', component: UserEdit },
+    { path: '/admin/admins', name: 'admin.admins', component: Admins },
+    { path: '/admin/admin/:id', name: 'admin.admin.show', component: AdminEdit },
     { path: '/admin/tours', name: 'admin.tours', component: Tours },
 
     // catch all 404

@@ -53,7 +53,7 @@
                 </b-row>
             </b-col>
         </b-row>
-        <b-row v-if="!totalRows">
+        <b-row v-if="!loading && !totalRows">
             <b-col class="text-center text-muted my-4">
                 <h4>No Results</h4>
             </b-col>
