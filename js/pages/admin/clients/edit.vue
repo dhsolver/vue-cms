@@ -1,11 +1,13 @@
 <template>
-    <b-card :header="client.name"
+    <b-card :header="title"
         class="card-primary"
     >
-        <spinner v-model="busy"></spinner>
+        <spinner v-model="loading"></spinner>
 
-        <client-form v-if="! busy" ref="clientForm" :client="client" @success="onSuccess"></client-form>
+        <client-form v-if="! loading" ref="clientForm" :client="client"></client-form>
 
+        <busy-button variant="info" :busy="saving" @click="update">Save Client</busy-button>
+        <busy-button variant="danger" :busy="deleting" @click="destroy" :disabled="saving">Delete Client</busy-button>
     </b-card>
 </template>
 
@@ -21,24 +23,51 @@ export default {
     components: { ClientForm },
 
     data: () => ({
-        busy: true,
+        loading: true,
+        saving: false,
+        deleting: false,
     }),
 
     computed: {
         ...mapGetters({
             client: 'clients/current'
-        })
+        }),
+
+        title() {
+            return "Edit Client: " + this.client.name;
+        },
     },
 
     methods: {
-        onSuccess() {
-
+        update() {
+            this.saving = true;
+            this.$refs.clientForm.submit()
+                .then( ({data}) => {
+                    this.$store.commit('clients/fetchClientSuccess', data.data);
+                    this.saving = false;
+                }).catch( e => {
+                    this.saving = false;
+                });
+        },
+        
+        destroy() {
+            this.deleting = true;
+            let f = new Form({});
+            console.log(this.$refs.clientForm.url);
+            f.delete(this.$refs.clientForm.url)
+                .then( ({ data }) => {
+                    this.deleting = false;
+                    console.log('redirect back');
+                    this.$router.push({ name: 'admin.clients' });
+                }).catch( e => {
+                    this.deleting = false;
+                });
         },
     },
 
     async mounted () {
         await this.$store.dispatch('clients/fetchClient', this.$route.params.id);
-        this.busy = false;
+        this.loading = false;
     },
 }
 </script>

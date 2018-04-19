@@ -3,7 +3,7 @@ window.axios = require('axios');
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 window.moment = require('moment');
 
-import Vue from 'vue';
+window.Vue = require('vue');
 import BootstrapVue from 'bootstrap-vue'
 Vue.use(BootstrapVue);
 
@@ -26,6 +26,10 @@ Vue.config.productionTip = false
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 Vue.component('fa', FontAwesomeIcon);
 
+Vue.filter('nl2br', value => {
+    return value.toString().replace(/(?:\r\n|\r|\n)/g, '<br />');
+});
+
 import Form from './classes/Form';
 window.Form = Form;
 
@@ -46,3 +50,4 @@ new Vue({
     store,
     ...App
 })
+require('./alerts');

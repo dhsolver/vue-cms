@@ -30,17 +30,17 @@ class AxiosResponseHandler {
                 this.handleAlert('error', this.getMessage());
             }
             else {
-                this.handleAlert('error', 'Please refresh and try again.');
+                this.handleAlert('error', 'An unexpected error occurred.  Please try again.');
             }
         }
         if (this.hasRedirect()) this.handleRedirect();
     }
 
     handleAlert(type, message) {
-        if (this.hasRedirect()) {
-            alerts.flashMessage(type, message);
-            return;
-        }
+        // if (this.hasRedirect()) {
+        //     alerts.flashMessage(type, message);
+        //     return;
+        // }
         alerts.addMessage(type, message);
     }
 

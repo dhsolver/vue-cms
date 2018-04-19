@@ -4,6 +4,7 @@
             
             <b-form-group label="Name:" label-for="name">
                 <b-form-input id="name"
+                    :disabled="form.busy"
                     type="text"
                     v-model="form.name"
                     required
@@ -14,6 +15,7 @@
             
             <b-form-group label="Email:" label-for="email">
                 <b-form-input id="email"
+                    :disabled="form.busy"
                     type="email"
                     v-model="form.email"
                     required
@@ -24,6 +26,7 @@
             
             <b-form-group v-if="! hasClient" label="Password:" label-for="password">
                 <b-form-input id="password"
+                    :disabled="form.busy"
                     type="password"
                     v-model="form.password"
                     required
@@ -41,7 +44,13 @@
     export default {
         name: 'ClientForm',
 
-        props: ['client'],
+        props: {
+            client: Object,
+            autoReset: {
+                type: Boolean,
+                default: false,
+            }
+        },
         
         data() {
             return {
@@ -62,12 +71,18 @@
         computed: {
             hasClient() {
                 return this.client.id ? true : false;
-            }
+            },
+
+            url() {
+                let url = this.urls.admin + 'clients';
+                if (this.hasClient) {
+                    url = url + `/${this.client.id}`;
+                }
+                return url;
+            },
         },
 
         mounted() {
-            console.log('mounted: ' + this.client);
-
             if (this.client.id) {
                 this.form = new Form(this.client);
             }
@@ -75,16 +90,11 @@
 
         methods: {
             submit() {
-                this.form.post(this.urls.admin + 'clients')
-                    .then( ({data}) => {
-                        console.log(data);
-                        this.$store.commit('clients/pushToList', data)
-                        this.$emit('success');
-                        this.reset();
-                    }).catch( (e) => {
-                        console.log(e);
-                        this.reset();
-                    });
+                this.form.resetOnSuccess = !this.hasClient;
+
+                let method = this.hasClient ? 'patch' : 'post';
+                
+                return this.form.submit(method, this.url);
             },
 
             reset() {

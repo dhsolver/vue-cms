@@ -38,10 +38,10 @@
         </div>
 
         <b-modal id="addClientModal" :title="addClientModalTitle" v-model="addClientModal">
-            <client-form ref="clientForm" :client="currentClient" @success="addClientModal = false"></client-form>
+            <client-form ref="clientForm" :client="currentClient"></client-form>
             <div slot="modal-footer">
                <b-btn variant="default" @click="addClientModal = false">Close</b-btn>
-               <b-btn variant="info" @click="addClient">Add</b-btn>
+               <busy-button :busy="isAdding" variant="info" @click="addClient">Add Client</busy-button>
             </div>
         </b-modal>
 
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import FormatsDates from "../../../mixins/FormatsDates";
 import ClientForm from './form';
 
@@ -76,6 +76,7 @@ export default {
 
     data: () => ({
         busy: true,
+        isAdding: false,
         fields: {
             id: { sortable: true },
             name: { sortable: true },
@@ -97,15 +98,24 @@ export default {
     methods: {
         prepareAddModal() {
             this.$refs.clientForm.reset(); 
-            this.addClientModal = true
+            this.addClientModal = true 
         },
 
         addClient() {
-            this.$refs.clientForm.submit();
-        }
+            this.isAdding = true;
+            this.$refs.clientForm.submit()
+                .then( ({ data }) => {
+                    this.isAdding = false;
+                    this.$store.commit('clients/pushToList', data.data);
+                    this.addClientModal = false;
+                })
+                .catch(e => {
+                    this.isAdding = false;
+                });
+        },
     },
 
-    async created () {
+    async created() {
         await this.$store.dispatch('clients/fetchClients');
         this.busy = false;
     },

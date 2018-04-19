@@ -1,9 +1,11 @@
-import Vue from 'vue'
-import Child from './Child'
-import Button from './Button'
-import Spinner from './Spinner'
-import { HasError, AlertError, AlertSuccess } from 'vform'
-import InputHelp from './InputHelp'
+import Vue from 'vue';
+import Child from './Child';
+import Button from './Button';
+import Spinner from './Spinner';
+import { HasError, AlertError, AlertSuccess } from 'vform';
+import InputHelp from './InputHelp';
+import Message from './Message';
+import BusyButton from './BusyButton';
 
 // Components that are registered globaly.
 [
@@ -13,7 +15,9 @@ import InputHelp from './InputHelp'
     HasError,
     AlertError,
     AlertSuccess,
-    InputHelp
+    InputHelp,
+    Message,
+    BusyButton,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

@@ -17,6 +17,7 @@ class Form {
         this.resetOnSuccess = false;
         this.alertOnResponse = true;
         this.errorMods = 0;
+        this.busy = false;
     }
 
     /**
@@ -92,6 +93,16 @@ class Form {
 
 
     /**
+     * Send a DELETE request to the given URL.
+     * .
+     * @param {string} url
+     */
+    delete(url) {
+        return this.submit('delete', url);
+    }
+
+
+    /**
      * Submit the form.
      *
      * @param {string} method
@@ -99,10 +110,12 @@ class Form {
      */
     submit(method, url) {
         let Form = this;
+        this.busy = true;
         return new Promise((resolve, reject) => {
             axios[method](url, this.data())
                 .then(response => {
-                    console.log('Axios success');
+                    // console.log('Axios success');
+                    this.busy = false;
                     this.handler = new AxiosResponseHandler();
                     this.handler.handleResponse(response, this.alertOnResponse);
                     if (this.resetOnSuccess) this.reset();
@@ -110,6 +123,7 @@ class Form {
                 })
                 .catch(error => {
                     console.log('Axios error');
+                    this.busy = false;
                     this.handler = new AxiosResponseHandler();
                     this.handler.handleError(error, this.alertFromResponse);
                     reject(error);
