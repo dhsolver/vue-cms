@@ -9,6 +9,7 @@ export const state = {
 
 export const getters = {
     list: state => state.list,
+    count: state => state.list.length,
     current: state => state.current,
 }
 

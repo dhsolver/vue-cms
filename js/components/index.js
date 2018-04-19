@@ -6,6 +6,7 @@ import { HasError, AlertError, AlertSuccess } from 'vform';
 import InputHelp from './InputHelp';
 import Message from './Message';
 import BusyButton from './BusyButton';
+import ConfirmModal from './ConfirmModal';
 
 // Components that are registered globaly.
 [
@@ -18,6 +19,7 @@ import BusyButton from './BusyButton';
     InputHelp,
     Message,
     BusyButton,
+    ConfirmModal,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

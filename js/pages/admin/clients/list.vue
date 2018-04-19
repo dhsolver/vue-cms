@@ -2,6 +2,7 @@
     <b-card header="Clients"
         class="card-primary"
     >
+        <!-- Filters -->
         <b-row class="mb-3">
             <b-col md="6">
                 <button class="btn btn-primary" @click.prevent="prepareAddModal">
@@ -12,31 +13,48 @@
                 <b-form-input v-model="filter" placeholder="Search..." class="ml-auto" />
             </b-col>
         </b-row>
-        <spinner v-model="busy"></spinner>
 
-        <!-- Customer Table -->
-        <div v-if="!busy" class="table-responsive">
-            <b-table
-                :items="items"
-                :fields="fields"
-                :filter="filter"
-                :sort-by.sync="sortBy"
-                :sort-desc.sync="sortDesc"
-            >
-                <template slot="created_at" slot-scope="{ item }">
-                    {{ formatDateTimeFromUTC(item.created_at) }}
-                </template>
-                <template slot="actions" slot-scope="{ item }">
-                    <router-link
-                            class="btn btn-sm btn-primary"
-                            :to="{ name: 'admin.client.show', params: { id: item.id } }"
-                    >
-                        <fa :icon="['far', 'edit']" />
-                    </router-link>
-                </template>
-            </b-table>
-        </div>
+        <spinner v-model="loading"></spinner>
 
+        <!-- Client Table -->
+        <b-row v-if="! loading">
+            <b-col lg="12">
+                <b-table
+                    :items="items"
+                    :fields="fields"
+                    :filter="filter"
+                     @filtered="onFiltered"
+                    :sort-by.sync="sortBy"
+                    :sort-desc.sync="sortDesc"
+                    :current-page="currentPage"
+                    :per-page="perPage"
+                >
+                    <template slot="created_at" slot-scope="{ item }">
+                        {{ formatDateTimeFromUTC(item.created_at) }}
+                    </template>
+                    <template slot="actions" slot-scope="{ item }">
+                        <router-link
+                                class="btn btn-sm btn-primary"
+                                :to="{ name: 'admin.client.show', params: { id: item.id } }"
+                        >
+                            <fa :icon="['far', 'edit']" />
+                        </router-link>
+                    </template>
+                </b-table>
+
+                <!-- Pagination -->
+                <b-row>
+                    <b-col md="6" >
+                        <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" />
+                    </b-col>
+                    <b-col md="6" class="text-right">
+                        Showing {{ perPage < totalRows ? perPage : totalRows }} of {{ totalRows }} results
+                    </b-col>
+                </b-row>
+            </b-col>
+        </b-row>
+
+        <!-- Add Modal -->
         <b-modal id="addClientModal" :title="addClientModalTitle" v-model="addClientModal">
             <client-form ref="clientForm" :client="currentClient"></client-form>
             <div slot="modal-footer">
@@ -70,13 +88,18 @@ export default {
 
     computed: {
         ...mapGetters({
-            items: 'clients/list'
+            items: 'clients/list',
+            itemCount: 'clients/count',
         })
     },
 
     data: () => ({
-        busy: true,
+        loading: true,
         isAdding: false,
+        addClientModal: false,
+        addClientModalTitle: 'Add Client',
+        totalRows: 0,
+
         fields: {
             id: { sortable: true },
             name: { sortable: true },
@@ -91,8 +114,8 @@ export default {
         sortBy: 'name',
         sortDesc: false,
         currentClient: {},
-        addClientModal: false,
-        addClientModalTitle: 'Add Client',
+        perPage: 25,
+        currentPage: 1,
     }),
 
     methods: {
@@ -113,11 +136,18 @@ export default {
                     this.isAdding = false;
                 });
         },
+
+        onFiltered(filteredItems) {
+            // Trigger pagination to update the number of buttons/pages due to filtering
+            this.totalRows = filteredItems.length;
+            this.currentPage = 1;
+        }
     },
 
     async created() {
         await this.$store.dispatch('clients/fetchClients');
-        this.busy = false;
+        this.totalRows = this.itemCount;
+        this.loading = false;
     },
 
 }

@@ -8,6 +8,7 @@
                     type="text"
                     v-model="form.name"
                     required
+                    autofocus
                     placeholder="Name">
                 </b-form-input>
                 <input-help :form="form" field="name" text=""></input-help>

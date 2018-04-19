@@ -4,10 +4,18 @@
     >
         <spinner v-model="loading"></spinner>
 
-        <client-form v-if="! loading" ref="clientForm" :client="client"></client-form>
+        <div v-if="! loading">
+            <client-form ref="clientForm" :client="client"></client-form>
 
-        <busy-button variant="info" :busy="saving" @click="update">Save Client</busy-button>
-        <busy-button variant="danger" :busy="deleting" @click="destroy" :disabled="saving">Delete Client</busy-button>
+            <busy-button variant="info" :busy="saving" @click="update">Save Client</busy-button>
+            <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="saving">Delete Client</busy-button>
+        </div>
+
+        <!-- Confirmation modal -->
+        <confirm-modal ref="confirmDelete">
+            Are you sure you want to delete {{ client.name }}?
+        </confirm-modal>
+
     </b-card>
 </template>
 
@@ -51,17 +59,19 @@ export default {
         },
         
         destroy() {
-            this.deleting = true;
-            let f = new Form({});
-            console.log(this.$refs.clientForm.url);
-            f.delete(this.$refs.clientForm.url)
-                .then( ({ data }) => {
-                    this.deleting = false;
-                    console.log('redirect back');
-                    this.$router.push({ name: 'admin.clients' });
-                }).catch( e => {
-                    this.deleting = false;
-                });
+            this.$refs.confirmDelete.confirm(() => {
+                this.deleting = true;
+                let f = new Form({});
+                console.log(this.$refs.clientForm.url);
+                f.delete(this.$refs.clientForm.url)
+                    .then( ({ data }) => {
+                        this.deleting = false;
+                        console.log('redirect back');
+                        this.$router.push({ name: 'admin.clients' });
+                    }).catch( e => {
+                        this.deleting = false;
+                    });
+            });
         },
     },
 
