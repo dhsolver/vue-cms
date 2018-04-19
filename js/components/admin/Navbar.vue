@@ -10,8 +10,8 @@
         <!-- Navbar left -->
         <b-navbar-nav>
             <b-nav-item :to="{ name: 'admin.clients' }" active-class="active">Clients</b-nav-item>
-            <b-nav-item :to="{ name: 'admin.users' }">Users</b-nav-item>
-            <b-nav-item :to="{ name: 'admin.tours' }">Tours</b-nav-item>
+            <b-nav-item :to="{ name: 'admin.users' }" active-class="active">Users</b-nav-item>
+            <b-nav-item :to="{ name: 'admin.tours' }" active-class="active">Tours</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

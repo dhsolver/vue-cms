@@ -1,12 +1,12 @@
 <template>
-    <b-card header="Clients"
+    <b-card header="Users"
         class="card-primary"
     >
         <!-- Filters -->
         <b-row class="mb-3">
             <b-col md="6">
                 <button class="btn btn-primary" @click.prevent="prepareAddModal">
-                    <fa :icon="['fas', 'plus']" /> Add Client
+                    <fa :icon="['fas', 'plus']" /> Add User
                 </button>
             </b-col>
             <b-col md="6">
@@ -16,14 +16,14 @@
 
         <spinner v-model="loading"></spinner>
 
-        <!-- Client Table -->
+        <!-- User Table -->
         <b-row v-if="!loading && totalRows">
             <b-col lg="12">
                 <b-table
                     :items="items"
                     :fields="fields"
                     :filter="filter"
-                     @filtered="onFiltered"
+                    @filtered="onFiltered"
                     :sort-by.sync="sortBy"
                     :sort-desc.sync="sortDesc"
                     :current-page="currentPage"
@@ -35,7 +35,7 @@
                     <template slot="actions" slot-scope="{ item }">
                         <router-link
                                 class="btn btn-sm btn-primary"
-                                :to="{ name: 'admin.client.show', params: { id: item.id } }"
+                                :to="{ name: 'admin.user.show', params: { id: item.id } }"
                         >
                             <fa :icon="['far', 'edit']" />
                         </router-link>
@@ -60,11 +60,11 @@
         </b-row>
 
         <!-- Add Modal -->
-        <b-modal id="addClientModal" :title="addClientModalTitle" v-model="addClientModal">
-            <client-form ref="clientForm" :client="currentClient"></client-form>
+        <b-modal id="addUserModal" :title="addUserModalTitle" v-model="addUserModal">
+            <user-form ref="userForm" :user="currentUser"></user-form>
             <div slot="modal-footer">
-               <b-btn variant="default" @click="addClientModal = false">Close</b-btn>
-               <busy-button :busy="isAdding" variant="info" @click="addClient">Add Client</busy-button>
+               <b-btn variant="default" @click="addUserModal = false">Close</b-btn>
+               <busy-button :busy="isAdding" variant="info" @click="addUser">Add User</busy-button>
             </div>
         </b-modal>
 
@@ -74,7 +74,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import FormatsDates from "../../../mixins/FormatsDates";
-import ClientForm from './form';
+import UserForm from './form';
 
 export default {
     middleware: ['auth', 'admin'],
@@ -82,19 +82,19 @@ export default {
     layout: 'admin',
 
     components: {
-        'client-form': ClientForm,    
+        'user-form': UserForm,    
     },
 
     metaInfo() {
-        return { title: 'Clients' }
+        return { title: 'Users' }
     },
     
     mixins: [ FormatsDates ],
 
     computed: {
         ...mapGetters({
-            items: 'clients/list',
-            itemCount: 'clients/count',
+            items: 'users/list',
+            itemCount: 'users/count',
         }),
 
         showing() {
@@ -115,8 +115,8 @@ export default {
     data: () => ({
         loading: true,
         isAdding: false,
-        addClientModal: false,
-        addClientModalTitle: 'Add Client',
+        addUserModal: false,
+        addUserModalTitle: 'Add User',
         totalRows: 0,
 
         fields: {
@@ -132,24 +132,24 @@ export default {
         filter: null,
         sortBy: 'name',
         sortDesc: false,
-        currentClient: {},
+        currentUser: {},
         perPage: 25,
         currentPage: 1,
     }),
 
     methods: {
         prepareAddModal() {
-            this.$refs.clientForm.reset(); 
-            this.addClientModal = true 
+            this.$refs.userForm.reset(); 
+            this.addUserModal = true 
         },
 
-        addClient() {
+        addUser() {
             this.isAdding = true;
-            this.$refs.clientForm.submit()
+            this.$refs.userForm.submit()
                 .then( ({ data }) => {
                     this.isAdding = false;
-                    this.$store.commit('clients/pushToList', data.data);
-                    this.addClientModal = false;
+                    this.$store.commit('users/pushToList', data.data);
+                    this.addUserModal = false;
                 })
                 .catch(e => {
                     this.isAdding = false;
@@ -158,6 +158,7 @@ export default {
 
         onFiltered(filteredItems) {
             // Trigger pagination to update the number of buttons/pages due to filtering
+            console.log('filtered: ' + this.filter);
             this.totalRows = filteredItems.length;
             this.currentPage = 1;
         }
@@ -172,7 +173,7 @@ export default {
     },
 
     async created() {
-        await this.$store.dispatch('clients/fetchClients');
+        await this.$store.dispatch('users/fetchUsers');
         this.totalRows = this.itemCount;
         this.loading = false;
     },

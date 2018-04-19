@@ -42,7 +42,7 @@ export const actions = {
 
     async fetchClients ({ commit }) {
         try {
-            const { data } = await axios.get('http://junket-api.test/admin/clients')
+            const { data } = await axios.get(urls.admin + 'clients')
 
             commit('fetchClientsSuccess', { list: data })
         } catch (e) {
