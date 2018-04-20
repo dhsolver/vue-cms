@@ -12,7 +12,7 @@ Junket CMS Frontend SPA using Vue
 
 ### Development Setup
 
-1. Copy .env.example file to .env and edit MIX_DEV_API_URL to point to your local install of the Junket API
+1. Make sure to set MIX_DEV_API_URL environment var to your local install of the Junket API
 
 ```
 MIX_DEV_API_URL=http://junket-api.test
@@ -29,7 +29,7 @@ npm run hot
 
 ### How to Deploy
 
-1. Make sure MIX_PROD_API_URL is set properly
+1. Make sure MIX_PROD_API_URL environment var is set properly
 
 ```
 MIX_PROD_API_URL=https://api.wejunket.com
