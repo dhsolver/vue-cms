@@ -26,9 +26,7 @@ Vue.config.productionTip = false
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 Vue.component('fa', FontAwesomeIcon);
 
-Vue.filter('nl2br', value => {
-    return value.toString().replace(/(?:\r\n|\r|\n)/g, '<br />');
-});
+require('./mixins/filters');
 
 import Form from './classes/Form';
 window.Form = Form;

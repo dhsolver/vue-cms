@@ -8,7 +8,8 @@ import Users from '../pages/admin/users/list';
 import UserEdit from '../pages/admin/users/edit';
 import Admins from '../pages/admin/admins/list';
 import AdminEdit from '../pages/admin/admins/edit';
-import Tours from '../pages/admin/tours';
+import Tours from '../pages/admin/tours/list';
+import TourEdit from '../pages/admin/tours/edit';
 
 export default [
     { path: '/', name: 'home', component: Home },
@@ -22,6 +23,7 @@ export default [
     { path: '/admin/admins', name: 'admin.admins', component: Admins },
     { path: '/admin/admin/:id', name: 'admin.admin.show', component: AdminEdit },
     { path: '/admin/tours', name: 'admin.tours', component: Tours },
+    { path: '/admin/tour/:id', name: 'admin.tour.edit', component: TourEdit },
 
     // catch all 404
     { path: '*', component: NotFound }
