@@ -12,6 +12,19 @@ Junket CMS Frontend SPA using Vue
 
 ### Development Setup
 
+1. Set MIX_DEV_API_URL variable in .env file to point to your local install of the Junket API
+
+```
+MIX_DEV_API_URL=http://junket-api.test
+```
+
+2. Run hot loading watcher
+
+```
+npm run hot
+```
+
+3. Visit the root of the /public directory in browser
 
 
 ### How to Deploy
@@ -22,4 +35,4 @@ Junket CMS Frontend SPA using Vue
 npm run prod
 ```
 
-2. Upload dist directory to server or CDN
+2. Upload contents of dist directory to server or CDN

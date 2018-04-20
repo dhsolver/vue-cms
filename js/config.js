@@ -1,7 +1,10 @@
+
+let host = process.env.NODE_ENV == 'development' ? process.env.MIX_DEV_API_URL : process.env.MIX_PROD_API_URL;
+
 let urls = {
-    auth: 'http://junket-api.test/auth/',
-    cms: 'http://junket-api.test/cms/',
-    admin: 'http://junket-api.test/admin/',
+    auth: `${host}/auth/`,
+    cms: `${host}/auth/`,
+    admin: `${host}/admin/`,
 }
 
 export {
