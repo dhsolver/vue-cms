@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '../store'
 import router from '../router'
-import swal from 'sweetalert2'
 
 // Request interceptor
 axios.interceptors.request.use(request => {

@@ -1,4 +1,5 @@
 <template>
+    <transition name="fade">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -8,33 +9,38 @@
                        <div>Hey {{ user.name }}</div>
                        <div>
                            <button class="btn btn-primary" @click.prevent="logout">Logout</button>
+
+                            <router-link :to="{ name: 'admin.dashboard' }">
+                                Admin
+                            </router-link>
                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </transition>
 </template>
 
 <script>
-    import { mapGetters, mapMutations } from 'vuex';
+import { mapGetters } from 'vuex';
 
-    export default {
-        middleware: 'auth',
+export default {
+    middleware: 'auth',
 
-        metaInfo () {
-            return { title: 'Home' }
-        },
-            
-        computed: mapGetters({
-            user: 'auth/user'
-        }),
+    metaInfo() {
+        return { title: 'Home' }
+    },
+        
+    computed: mapGetters({
+        user: 'auth/user'
+    }),
 
-        methods: {
-            async logout () {
-                this.$store.commit('auth/logout');
-                this.$router.push({ name: 'login' });
-            }
+    methods: {
+        async logout () {
+            this.$store.commit('auth/logout');
+            this.$router.push({ name: 'login' });
         }
     }
+}
 </script>
