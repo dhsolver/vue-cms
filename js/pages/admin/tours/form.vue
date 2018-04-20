@@ -2,13 +2,24 @@
     <div>
         <b-form @submit.prevent="submit">
             
+            <b-form-group label="Client:" label-for="user_id">    
+                <b-form-select 
+                    v-model="form.user_id" 
+                    :disabled="form.busy"
+                    class="mb-3">
+
+                    <option value="">-- Select a Client --</option>
+                    <option v-for="item in clients" :value="item.id" :key="item.id">{{ item.name }}</option>
+                </b-form-select>
+                <input-help :form="form" field="user_id" text=""></input-help>
+            </b-form-group>
+
             <b-form-group label="Title:" label-for="title">
                 <b-form-input id="title"
                     :disabled="form.busy"
                     type="text"
                     v-model="form.title"
                     required
-                    autofocus
                     placeholder="Title">
                 </b-form-input>
                 <input-help :form="form" field="title" text=""></input-help>
@@ -48,6 +59,8 @@
 </template>
 
 <script type='es6'>
+    import { mapGetters } from 'vuex';
+
     export default {
         name: 'TourForm',
 
@@ -62,6 +75,7 @@
         data() {
             return {
                 'form': new Form({
+                    user_id: '',
                     title: '',
                     description: '',
                     pricing_type: 'free',
@@ -86,6 +100,10 @@
         },
 
         computed: {
+            ...mapGetters({
+                clients: 'clients/list',
+            }),
+
             hasTour() {
                 return this.tour.id ? true : false;
             },
@@ -99,10 +117,12 @@
             },
         },
 
-        mounted() {
+        async mounted() {
             if (this.tour.id) {
                 this.form = new Form(this.tour);
             }
+
+            await this.$store.dispatch('clients/fetchClients');
         },
 
         methods: {
