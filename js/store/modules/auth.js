@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
+import { urls } from '../../config';
 
 export const state = {
     user: {},
@@ -37,15 +38,9 @@ export const mutations = {
 }
 
 export const actions = {
-    saveToken ({ commit, dispatch }, payload) {
-        commit('saveToken', payload)
-    },
-
     async fetchUser ({ commit }) {
         try {
-            // console.log(Vue.urls);;
-            const { data } = await axios.get('http://junket-api.test/auth/session')
-
+            const { data } = await axios.get(urls.auth + 'session')
             commit('fetchUserSuccess', { user: data })
         } catch (e) {
             commit('fetchUserFailure')
