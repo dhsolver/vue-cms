@@ -5,6 +5,7 @@ body { padding: 0px; margin: 0px; }
 .right-side {width: 400px; height: 650px;}
 .dash-main { max-height: 650px }
 .f-1 { flex: 1; }
+.f-5 { flex: 0.5; }
 .square { border-radius: 0px!important; }
 
 /* Jon's overrides */
@@ -21,56 +22,59 @@ body { padding: 0px; margin: 0px; }
 .btn-primary, .btn-info {
     color:#fff; 
 }
-
 .search-input {
+    color: #495057;
+    border: 1px solid $blue;
+}
+.search-input .icon {
+    color: $blue;
+}
+.icon-input {
     display: block;
     width: 100%;
     font-size: 1rem;
     line-height: 1.5;
-    color: #495057;
     background-color: #fff;
     background-clip: padding-box;
-    border: 1px solid $blue;
     border-radius: 20px;
     padding: 6px 15px;
+    border: 1px solid $grayBorder;
 }
-.search-input .icon {
-    color: $blue;
-    width:16px;
-    margin-right: 5px;
+.icon-input .icon {
+    width: 16px;
+    margin-right: 10px;
     padding-top: 2px;
 }
-.search-input input {
+.icon-input input {
     border: 0px;
     flex: 1
 }
-.search-input input:focus {
+.icon-input input:focus {
     outline: none;
 }
 
-input.form-control {
+.form-control {
     border: 1px solid $inputBorder;
     border-radius: 20px;
     padding: 6px 15px;
 }
-input::-webkit-input-placeholder {
-    opacity: 0.5; 
-}
-input.form-control::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-    opacity: 0.5; 
-}
-input.form-control:-ms-input-placeholder { /* Internet Explorer 10-11 */
-    opacity: 0.5; 
-}
-input.form-control::-ms-input-placeholder { /* Microsoft Edge */
-    opacity: 0.5; 
-}
-.form-control:disabled {
+
+input::placeholder { opacity: 0.5; }
+input::-ms-input-placeholder { opacity: 0.5; }
+input:-ms-input-placeholder { opacity: 0.5; } 
+input:disabled {
     background-color: $grayDisabled;
     border-color: $grayBorder;
 }
 
 .form-text { margin-left: 15px }
+h4 {
+    font-weight: bold;
+    margin-left: 12px;
+    font-size: 16px;
+    text-transform: uppercase;
+    color: $darkBlue;
+}
 
 h3 {
     display:block; 
@@ -253,6 +257,7 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
 .addrescir{
     border:1px solid $inputBorder; border-radius:50%; background-color: $bg; text-align:center; width:140px; margin:0 auto; padding-top:42px; height:140px;
 }
+.info-icon{background-color:$bg; width:25px; height:25px; color:#fff; text-align:center; border-radius:20px; color:$darkBlue; display:inline-block; margin-left:10px; margin-right:2px;} 
 
 /* CSS Document */
 // body{margin:0px; padding:0px; font-family:"Trebuchet MS"; font-size:14px;}
@@ -342,7 +347,6 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
 // background: linear-gradient(to bottom, #dc8e3f 0%,#c32b66 52%,#7c22b7 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 // filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dc8e3f', endColorstr='#7c22b7',GradientType=0 ); /* IE6-9 */} 
 // .rltvpost input.textbox{padding-left:50px;}
-// .qicon{background-color:$bg; width:25px; height:25px; color:#fff; text-align:center; border-radius:20px; color:#454f63; display:inline-block; margin-left:10px; margin-right:2px;} 
 // .addimgbox{float:left; background-color:#eacdcd; text-align:center; padding:50px 0; margin-bottom:25px; margin-right:25px; width:30%;}
 // .addimgbox:last-child{margin-right:0px;}
 // .addimgbox a{color:#fff; text-decoration:none;}

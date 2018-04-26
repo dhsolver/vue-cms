@@ -7,12 +7,12 @@
         </div>
 
         <!-- FORM --> 
-        <div class="bg-white rounded right-side">
+        <div class="bg-white rounded right-side" style="overflow: auto">
             <div class="d-flex">
                 <b-btn variant="info" class="square f-1" @click="back()">
                     Dashboard
                 </b-btn>
-                <b-btn variant="info" class="square f-1">
+                <b-btn variant="info" class="square f-1" style="margin-left: 1px">
                     Add Stop
                 </b-btn>
             </div>
@@ -29,6 +29,143 @@
                 <div class="addrescir">
                     <fa :icon="['fas', 'map-marker-alt']" size="4x" style="color: #79acd1"/>
                 </div>
+            </div>
+
+            <div class="p-3">
+                    
+                <b-form-group>
+                    <b-form-input id="title"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.title"
+                        required
+                        placeholder="Title">
+                    </b-form-input>
+                    <input-help :form="form" field="title" text=""></input-help>
+                </b-form-group>
+                
+                <b-form-group>
+                    <b-form-textarea id="description"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.description"
+                        required
+                        rows="5"
+                        placeholder="Description">
+                    </b-form-textarea>
+                    <input-help :form="form" field="description" text=""></input-help>
+                </b-form-group>
+                
+                <h4>Pricing</h4>
+                <b-form-group>    
+                    <b-form-select 
+                        v-model="form.pricing_type" 
+                        :disabled="form.busy"
+                        class="mb-3">
+                        <option value="">Free</option>
+                        <option value="">Premium</option>
+                    </b-form-select>
+                    <input-help :form="form" field="pricing_type" text=""></input-help>
+                </b-form-group>
+
+                <h4>Junket Info</h4>
+
+                <b-form-group>    
+                    <b-form-select 
+                        v-model="form.type" 
+                        :disabled="form.busy">
+                        <option value="">Outdoor</option>
+                        <option value="">Indoor</option>
+                        <option value="">Adventure</option>
+                    </b-form-select>
+                    <input-help :form="form" field="type" text=""></input-help>
+                </b-form-group>
+
+                <b-form-group>
+                    <b-form-input id="address"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.address"
+                        required
+                        placeholder="Address">
+                    </b-form-input>
+                    <input-help :form="form" field="address" text=""></input-help>
+                </b-form-group>
+                
+                <b-form-group>
+                    <b-form-input id="city"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.city"
+                        required
+                        placeholder="City">
+                    </b-form-input>
+                    <input-help :form="form" field="city" text=""></input-help>
+                </b-form-group>
+
+                <b-form-group>
+                    <div class="d-flex">
+                        <b-form-input id="state"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.state"
+                            required
+                            placeholder="State"
+                            class="f-1">
+                        </b-form-input>
+
+                        <b-form-input id="zipcode"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.zipcode"
+                            required
+                            placeholder="Zipcode"
+                            class="f-5 ml-2">
+                        </b-form-input>
+                    </div>
+                    <input-help :form="form" field="zipcode" text=""></input-help>
+                    <input-help :form="form" field="state" text=""></input-help>
+                </b-form-group>
+                
+                <h4>Social</h4>
+
+                <b-form-group>
+                    <div class="icon-input social-input d-flex">
+                        <span class="icon fb-circle">
+                            <fa :icon="['fab', 'facebook-f']"/>
+                        </span>
+                        <input type="text" placeholder="Facebook URL" />
+                    </div>
+                </b-form-group>
+                <b-form-group>
+                    <div class="icon-input social-input d-flex">
+                        <span class="icon ig-circle">
+                            <fa :icon="['fab', 'instagram']"/>
+                        </span>
+                        <input type="text" placeholder="Instagram URL" />
+                    </div>
+                </b-form-group>
+                <b-form-group>
+                    <div class="icon-input social-input d-flex">
+                        <span class="icon twitter-circle">
+                            <fa :icon="['fab', 'twitter']"/>
+                        </span>
+                        <input type="text" placeholder="Twitter URL" />
+                    </div>
+                </b-form-group>
+
+                <h4 class="float-left">Audio</h4>
+                    <span class="info-icon">
+                        <fa :icon="['fas', 'info']"/>
+                    </span>
+                <div class="clearfix"></div>
+
+                <h4 class="float-left">Media</h4>
+                    <span class="info-icon">
+                        <fa :icon="['fas', 'info']"/>
+                    </span>
+                <div class="clearfix"></div>
+
             </div>
         </div>
     </div>
@@ -62,6 +199,10 @@ export default {
 
     data: () => ({
         filter: '',
+        form: new Form({
+            title: '',
+        }),
+
         tour: {
             type: "tour",
             stops: [
@@ -81,5 +222,38 @@ export default {
     overflow: auto;
     justify-content: space-between;
     min-width: 610px;
+}
+.ig-circle {
+    width: 25px;
+    height: 25px;
+    color: #fff;
+    text-align: center;
+    border-radius: 20px;
+    background: #dc8e3f;
+    background: -moz-linear-gradient(top, #dc8e3f 0%, #c32b66 52%, #7c22b7 100%);
+    background: -webkit-linear-gradient(top, #dc8e3f 0%,#c32b66 52%,#7c22b7 100%);
+    background: linear-gradient(to bottom, #dc8e3f 0%,#c32b66 52%,#7c22b7 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#dc8e3f', endColorstr='#7c22b7',GradientType=0 )
+}
+.fb-circle {
+    width: 25px;
+    height: 25px;
+    color: #fff;
+    text-align: center;
+    border-radius: 20px;
+    background: #3b5998;
+}
+.twitter-circle {
+    width: 25px;
+    height: 25px;
+    color: #fff;
+    text-align: center;
+    border-radius: 20px;
+    background: #75bbf1;
+}
+.social-input .icon {
+    width: 25px!important;
+    margin-right: 10px!important;
+    color: #fff;
 }
 </style>

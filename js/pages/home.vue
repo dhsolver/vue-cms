@@ -16,7 +16,7 @@
                 </div>
 
                 <!-- Search bar -->
-                <div class="search-input mb-5 d-flex">
+                <div class="icon-input search-input mb-5 d-flex">
                     <span class="icon"><fa :icon="['fas', 'search']"/></span>
                     <input type="text" placeholder="Search Junkets" />
                 </div>
