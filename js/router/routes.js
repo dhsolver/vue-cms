@@ -1,6 +1,7 @@
 import Login from '../pages/login';
 import Register from '../pages/register'
 import Home from '../pages/home';
+import Tour from '../pages/tour';
 
 import NotFound from '../pages/errors/404';
 
@@ -18,6 +19,7 @@ export default [
     { path: '/', name: 'home', component: Home },
     { path: '/login', name: 'login', component: Login },
     { path: '/register', name: 'register', component: Register },
+    { path: '/tour/:id', name: 'tour', component: Tour },
 
     { path: '/admin/', name: 'admin.dashboard', component: Dashboard },
     { path: '/admin/clients', name: 'admin.clients', component: Clients },

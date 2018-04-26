@@ -1,13 +1,13 @@
 <template>
-    <div class="shadow-lg rounded d-flex flex-row" style="max-height: 650px">
+    <div class="shadow-lg rounded d-flex flex-row dash-main">
 
         <!-- JUNKET LIST -->
-        <div class="bg-gray compass-bg rounded d-flex flex-wrap p-3" style="overflow: auto; flex: 1; justify-content: space-between;">
-            <tour-box v-for="item in tours" :type="item.type" :key="item"></tour-box>
+        <div class="bg-gray compass-bg rounded d-flex flex-wrap p-3 tour-list">
+            <tour-box v-for="item in tours" :tour="item" :key="item"></tour-box>
         </div>
 
         <!-- DASHBOARD --> 
-        <div class="p-50 bg-white rounded d-flex flex-column" style="width: 400px; height: 650px;">
+        <div class="p-50 bg-white rounded d-flex flex-column right-side">
 
             <div class="f-1">
                 <!-- LOGO -->            
@@ -85,3 +85,12 @@ export default {
     }),
 }
 </script>
+
+<style>
+.tour-list {
+    flex: 1; 
+    overflow: auto;
+    justify-content: space-between;
+    min-width: 610px;
+}
+</style>

@@ -1,12 +1,12 @@
 <template>
     <div class="tour-box">
-        <div class="heading">
+        <div class="heading" @click="editTour()">
             <img src="images/pix-2.jpg" alt="tour image" width="275" hegiht="185" />
             <div class="title">
                 Title of Junket<br />City, State
             </div>
             <div class="category" :class="typeClass">
-                <fa :icon="['fas', 'map-marker-alt']" />&nbsp;{{ this.type }}
+                <fa :icon="['fas', 'map-marker-alt']" />&nbsp;{{ this.tour.type }}
             </div>
             <div class="count">
                 <fa :icon="['fas', 'map-marker-alt']" />&nbsp;31
@@ -38,18 +38,21 @@
     export default {
         name: "TourBox",
 
-        props: ['type'],
+        props: ['tour'],
 
         data: () => ({
         }),
 
         computed: {
             typeClass() {
-                return this.type == 'adventure' ? 'bg-success' : 'bg-info';
+                return this.tour.type == 'adventure' ? 'bg-success' : 'bg-info';
             },
         },
 
         methods: {
+            editTour() {
+                this.$router.push({ name: 'tour', params: { id: 1 } });
+            }
         },
     }
 </script>

@@ -2,6 +2,9 @@
 
 body { padding: 0px; margin: 0px; }
 
+.right-side {width: 400px; height: 650px;}
+.dash-main { max-height: 650px }
+
 /* Jon's overrides */
 .btn {
     display: block;
@@ -61,8 +64,8 @@ input.form-control::-ms-input-placeholder { /* Microsoft Edge */
     opacity: 0.5; 
 }
 .form-control:disabled {
-    background-color: #f5f5f5;
-    border-color: #d9d5d4;
+    background-color: $grayDisabled;
+    border-color: $grayBorder;
 }
 
 .form-text { margin-left: 15px }
@@ -89,6 +92,14 @@ h3 {
     background-color: #e8e8e8;
     background-position-y: 105%;
     background-position-x: 105%;
+    background-size: 330px;
+    background-repeat: no-repeat;
+}
+.map-pin-bg {
+    background-image: url('../assets/images/map-marker-alt.png');
+    background-color: #e8e8e8;
+    background-position-y: 105%;
+    background-position-x: 90%;
     background-size: 330px;
     background-repeat: no-repeat;
 }
@@ -154,7 +165,73 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
 }
 
 
+.stop-box {
+    padding: 5px;
+    width: 210px;
+    position: relative;
+    margin-bottom: 0.75rem;
+    cursor: pointer;
+}
 
+.stop-box img {
+    width: 200px;
+    height: 200px;
+}
+
+.stop-box .overlay {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 200px;
+    height: 200px;
+}
+
+.stop-box .title {
+    position: absolute;
+    top: 90px;
+    left: 5px;
+
+    width: 200px;
+    padding: 5px;
+    font-size: 20px;
+    text-align: center;
+    // line-height: 200px;
+    color: $white;
+}
+
+.white-circle { 
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    margin-top: 10px;
+    margin-left: 10px;
+    width:35px; 
+    height:35px;
+    background-color:#fff; 
+    color:#000; 
+    font-weight:bold; 
+    text-align:center; 
+    line-height:35px; 
+    border-radius:30px; 
+    font-size:17px;
+}
+
+.delete {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 25px;
+    height: 25px;
+    background-color: #fff;
+    color: $red;
+    font-weight: normal;
+    text-align: center;
+    border-radius: 30px;
+    line-height: 26px;
+}
+.delete:hover {
+    background-color: $grayBorder;
+}
 
 
 /* CSS Document */
@@ -291,7 +368,6 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
 // .fbox:last-child{margin-right:0%;}
 // .fbox img{width:100%;}
 // .fboxdata{position:absolute; top:10px; left:10px; width:91%;}
-// .whitecircle{width:35px; height:35px; background-color:#fff; color:#000; font-weight:bold; text-align:center; line-height:35px; border-radius:30px; font-size:17px;}
 // .mainhd{font-size:20px; text-align:center; line-height:25px; color:#fff; padding:40px 10px 0 10px;}
 // .crossicon{position:absolute; bottom:6px; right:7px; width:25px; height:25px; background-color:#fff; color:#e50909; font-weight:normal; text-align:center; line-height:22px; border-radius:30px; font-size:20px;}
 // .addbox{background-color:#88959c; color:#fff; text-align:center; padding:80px 0;}
