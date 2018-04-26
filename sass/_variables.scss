@@ -3,7 +3,7 @@ $font-family-sans-serif:      "Trebuchet MS", -apple-system, BlinkMacSystemFont,
 $font-family-monospace:       SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !default;
 $font-family-base:            $font-family-sans-serif !default;
 
-$body-bg: #e8e8e8;
+$body-bg: #f3f3f3;
 $body-color: #212529;
 
 $theme-colors: (
@@ -11,12 +11,12 @@ $theme-colors: (
     "success": #62bc8c,
     "secondary": #3e4759,
     "danger": #e20e24,
-    "info": #77acd2,
+    "info": #79acd1,
     "warning": #e9d94e,
 );
 
-$blue:    #77acd2 !default;
-$green:   #62bc8c !default;
+$blue:    #79acd1 !default;
+$green:   #1b221e !default;
 $red:     #e20e24 !default;
 $darkBlue: #3e4759 !default;
 

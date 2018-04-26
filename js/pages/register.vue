@@ -1,7 +1,9 @@
 <template>
     <div class="d-flex">
-        <div class="mx-auto auth-box mt-5">
-            <div class="logo mb-5"><img src="images/junket-logo.png" alt=""></div>
+        <div class="mx-auto auth-box mt-5 shadow-lg bg-white rounded">
+            <div class="text-center mb-5">
+                <img src="images/junket-logo.png" alt="Junket">
+            </div>
 
             <b-form @submit.prevent="register">
                 <b-form-group>

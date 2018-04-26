@@ -1,6 +1,6 @@
 <template>
     <div class="main-layout">
-        <main class="container mt-4">
+        <main class="ml-auto mr-auto mt-5" style="width: 90%">
             <child/>
         </main>
     </div>

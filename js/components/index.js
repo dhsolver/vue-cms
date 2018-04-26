@@ -6,6 +6,7 @@ import InputHelp from './InputHelp';
 import Message from './Message';
 import BusyButton from './BusyButton';
 import ConfirmModal from './ConfirmModal';
+import TourBox from './TourBox';
 
 // Components that are registered globaly.
 [
@@ -16,6 +17,7 @@ import ConfirmModal from './ConfirmModal';
     Message,
     BusyButton,
     ConfirmModal,
+    TourBox,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

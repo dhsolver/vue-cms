@@ -48,7 +48,8 @@ export default {
     methods: {
         async logout () {
             this.$store.commit('auth/logout');
-            this.$router.push({ name: 'login' });
+            window.location = "/";
+            // this.$router.push({ name: 'login' });
         }
     }
 }

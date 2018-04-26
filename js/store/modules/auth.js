@@ -10,7 +10,8 @@ export const state = {
 export const getters = {
     user: state => state.user,
     token: state => state.token,
-    check: state => state.user.id !== undefined
+    check: state => state.user.id !== undefined,
+    isAdmin: state => state.user && (state.user.role == 'admin' || state.user.role == 'superadmin'),
 }
 
 export const mutations = {
