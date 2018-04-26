@@ -8,7 +8,28 @@
 
         <!-- FORM --> 
         <div class="bg-white rounded right-side">
-            test
+            <div class="d-flex">
+                <b-btn variant="info" class="square f-1" @click="back()">
+                    Dashboard
+                </b-btn>
+                <b-btn variant="info" class="square f-1">
+                    Add Stop
+                </b-btn>
+            </div>
+
+            <div class="feature-box">
+                <div class="addlink">
+                <a href="#">
+                    <fa :icon="['fas', 'plus']" />
+                    <br>Add Feature Image</a>
+                </div>
+            </div>
+
+            <div class="circbox">
+                <div class="addrescir">
+                    <fa :icon="['fas', 'map-marker-alt']" size="4x" style="color: #79acd1"/>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -33,6 +54,10 @@ export default {
             this.$store.commit('auth/logout');
             window.location = '/';
         },
+
+        back() {
+            this.$router.push({ name: 'home', params: { id: 1 } });
+        }
     },
 
     data: () => ({
