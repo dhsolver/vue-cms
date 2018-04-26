@@ -13,11 +13,15 @@ let mix = require('laravel-mix');
  if (mix.inProduction()) {
 
     mix.js('js/app.js', 'dist/js')
-        .sass('sass/app.scss', 'dist/css');
+        .sass('sass/app.scss', 'dist/css')
+        .sass('sass/admin.scss', 'dist/css')
+        .copyDirectory('assets/images', 'dist/images');
 
  } else {
 
     mix.js('js/app.js', 'public/js')
-        .sass('sass/app.scss', 'public/css');
+        .sass('sass/app.scss', 'public/css')
+        .sass('sass/admin.scss', 'public/css')
+        .copyDirectory('assets/images', 'public/images');
  
  }

@@ -3,7 +3,18 @@
         <div class="mx-auto auth-box mt-5">
             <div class="logo mb-5"><img src="images/junket-logo.png" alt=""></div>
 
-            <b-form @submit.prevent="login">
+            <b-form @submit.prevent="register">
+                <b-form-group>
+                    <b-form-input id="name"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.name"
+                        required
+                        placeholder="Your Name">
+                    </b-form-input>
+                    <input-help :form="form" field="name" text=""></input-help>
+                </b-form-group>
+                
                 <b-form-group>
                     <b-form-input id="email"
                         :disabled="form.busy"
@@ -29,16 +40,16 @@
                             
                 <b-row class="mt-3">
                     <b-col lg="12">
-                        <busy-button variant="primary" type="submit" :busy="busy" class="w-100">LOGIN</busy-button>
+                        <busy-button variant="primary" type="submit" :busy="busy" class="w-100">REGISTER</busy-button>
                     </b-col>
                 </b-row>
 
                 <div class="mt-5 text-center">
-                    <h3>Don't have an account?</h3>
+                    <h3>Already have an account?</h3>
                 </div>
 
                 <div class="mt-2">
-                    <b-btn :to="{ name: 'register' }" type="button" variant="secondary" class="w-100">REGISTER</b-btn>
+                    <b-btn :to="{ name: 'login' }" variant="secondary" class="w-100">LOGIN</b-btn>
                 </div>
             </b-form>
         </div>
@@ -59,7 +70,7 @@ export default {
     },
 
     metaInfo () {
-        return { title: "Login" }
+        return { title: "Register" }
     },
 
     data: () => ({
@@ -72,37 +83,9 @@ export default {
     }),
 
     methods: {
-        async login () {
-            this.busy = true;
-            
-            // Submit the form.
-            await this.form.post(this.urls.auth + 'login')
-                .then( ({ data }) => {
-                    // Save the token.
-                    this.$store.commit('auth/saveToken', {
-                        token: data.token,
-                        remember: this.remember
-                    })
+        async register() {
 
-                    this.loadDashboard();
-                })
-                .catch( e => {
-                    this.busy = false;
-                });
-        },
-
-        async loadDashboard() {
-            // Fetch the user.
-            await this.$store.dispatch('auth/fetchUser')
-
-            if (this.user.role === 'admin') {
-                this.$router.push({ name: 'admin.dashboard' })
-                return;
-            }
-            
-            // Redirect home.
-            this.$router.push({ name: 'home' })
-        },
+        }
     }
 }
 </script>

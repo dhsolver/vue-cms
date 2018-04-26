@@ -1,8 +1,8 @@
 <template>
     <div class="main-layout">
-        <div class="container mt-4">
+        <main class="container mt-4">
             <child/>
-        </div>
+        </main>
     </div>
 </template>
 
@@ -14,3 +14,5 @@ export default {
     }
 }
 </script>
+
+<style lang="scss" src="../../sass/app.scss"></style>

@@ -1,5 +1,5 @@
 <template>
-    <b-btn :variant="variant" @click.prevent="onClick" :disabled="busy">
+    <b-btn :variant="variant" :size="size" :disabled="busy">
         <fa v-if="busy" class="fa-spin" :icon="['fas', 'spinner']" />
         <span v-else>
             <slot></slot>
@@ -15,19 +15,9 @@
             variant: String,
             size: {
                 type: String,
-                default: 'lg',
+                default: 'md',
             },
             busy: Boolean,
-            title: String,
         },
-
-        data: () => ({
-        }),
-
-        methods: {
-            onClick(e) {
-                this.$emit('click', e);
-            },
-        }
     }
 </script>

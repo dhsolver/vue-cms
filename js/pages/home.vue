@@ -10,9 +10,9 @@
                        <div>
                            <button class="btn btn-primary" @click.prevent="logout">Logout</button>
 
-                            <router-link :to="{ name: 'admin.dashboard' }">
+                            <a href="/#/admin">
                                 Admin
-                            </router-link>
+                            </a>
                        </div>
                     </div>
                 </div>

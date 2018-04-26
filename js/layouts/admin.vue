@@ -14,19 +14,10 @@ import Navbar from '../components/admin/Navbar';
 export default {
     name: 'MainLayout',
 
-    computed: mapGetters({
-        user: 'auth/user'
-    }),
-
     components: {
         navbar: Navbar,
     },
-
-    methods: {
-        async logout () {
-            this.$store.commit('auth/logout');
-            this.$router.push({ name: 'login' });
-        }
-    }
 }
 </script>
+
+<style lang="scss" src="../../sass/admin.scss"></style>

@@ -1,6 +1,9 @@
 import Login from '../pages/login';
-import Home from '../pages/Home';
+import Register from '../pages/register'
+import Home from '../pages/home';
+
 import NotFound from '../pages/errors/404';
+
 import Dashboard from '../pages/admin/dashboard';
 import Clients from '../pages/admin/clients/list';
 import ClientEdit from '../pages/admin/clients/edit';
@@ -14,6 +17,7 @@ import TourEdit from '../pages/admin/tours/edit';
 export default [
     { path: '/', name: 'home', component: Home },
     { path: '/login', name: 'login', component: Login },
+    { path: '/register', name: 'register', component: Register },
 
     { path: '/admin/', name: 'admin.dashboard', component: Dashboard },
     { path: '/admin/clients', name: 'admin.clients', component: Clients },

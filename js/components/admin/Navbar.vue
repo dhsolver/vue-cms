@@ -21,7 +21,7 @@
                 <template slot="button-content">
                     {{ user.name }}
                 </template>
-                <b-dropdown-item :to="{ name: 'home' }">
+                <b-dropdown-item href="/">
                     Client Dashboard
                 </b-dropdown-item>
                 <b-dropdown-item href="#" @click.prevent="logout">
