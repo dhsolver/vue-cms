@@ -9,6 +9,7 @@
                 <b-form-group>
                     <b-form-input id="email"
                         :disabled="form.busy"
+                        name="email"
                         type="email"
                         v-model="form.email"
                         required
@@ -20,6 +21,7 @@
                 <b-form-group>
                     <b-form-input id="password"
                         :disabled="form.busy"
+                        name="password"
                         type="password"
                         v-model="form.password"
                         required

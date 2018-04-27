@@ -25,7 +25,7 @@
 
         <!-- STOP LIST -->
         <div class="left-side">
-            <div class="bg-gray compass-bg p-3 h-100">
+            <div class="bg-gray compass-bg p-4 h-100">
                 <b-row v-for="i in Math.ceil(tour.stops.length / 4)" :key="i">
                     <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
                         <stop-box :stop="item" @click="editStop(item)" @delete="deleteStop(item)"></stop-box>

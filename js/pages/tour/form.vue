@@ -16,6 +16,7 @@
 
         <div class="p-3">
                 
+            <audio-player :sources="['/media/test.mp3']"></audio-player>
             <b-form-group>
                 <b-form-input id="title"
                     :disabled="form.busy"

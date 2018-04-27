@@ -9,6 +9,7 @@ import ConfirmModal from './ConfirmModal';
 import TourBox from './TourBox';
 import StopBox from './StopBox';
 import ImageBox from './ImageBox';
+import AudioPlayer from './AudioPlayer';
 
 // Components that are registered globaly.
 [
@@ -22,6 +23,7 @@ import ImageBox from './ImageBox';
     TourBox,
     StopBox,
     ImageBox,
+    AudioPlayer,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })
