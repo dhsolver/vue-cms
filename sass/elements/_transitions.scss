@@ -1,17 +1,42 @@
 .page-enter-active,
 .page-leave-active {
-  transition: opacity .2s;
+    transition: opacity .2s;
 }
 .page-enter,
 .page-leave-to {
-  opacity: 0;
+    opacity: 0;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .15s
+    transition: opacity .15s
 }
 .fade-enter,
 .fade-leave-to {
-  opacity: 0
+    opacity: 0
+}
+
+
+
+.slide-leave-active,
+.slide-enter-active {
+    transition: 0.2s;
+}
+.slide-enter {
+    transform: translate(100%, 0);
+}
+.slide-leave-to {
+    transform: translate(-100%, 0);
+}
+
+
+.slide-right-leave-active,
+.slide-right-enter-active {
+    transition: 0.2s;
+}
+.slide-right-enter {
+    transform: translate(-100%, 0);
+}
+.slide-right-leave-to {
+    transform: translate(100%, 0);
 }

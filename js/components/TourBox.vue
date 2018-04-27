@@ -1,6 +1,6 @@
 <template>
     <div class="tour-box">
-        <div class="heading" @click="editTour()" style="background: url('images/pix-2.jpg');">
+        <div class="heading bg-fit" @click="editTour()" style="background: url('images/pix-2.jpg');">
             <!-- <img src="images/pix-2.jpg" alt="tour image" width="275" hegiht="185" /> -->
             <div class="title">
                 Title of Junket<br />City, State
