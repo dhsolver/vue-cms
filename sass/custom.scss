@@ -66,6 +66,13 @@ input:disabled {
     background-color: $grayDisabled;
     border-color: $grayBorder;
 }
+.form-control::placeholder { opacity: 0.5; }
+.form-control::-ms-input-placeholder { opacity: 0.5; }
+.form-control:-ms-input-placeholder { opacity: 0.5; } 
+.form-control:disabled {
+    background-color: $grayDisabled;
+    border-color: $grayBorder;
+}
 
 .form-text { margin-left: 15px }
 h4 {
@@ -106,7 +113,7 @@ h3 {
     background-color: $bg;
     background-position-y: 105%;
     background-position-x: 90%;
-    background-size: 330px;
+    background-size: 300px;
     background-repeat: no-repeat;
 }
 
