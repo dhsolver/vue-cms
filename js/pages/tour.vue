@@ -1,10 +1,5 @@
 <template>
-    <div class="shadow-lg rounded d-flex flex-row dash-main">
-
-        <!-- STOP LIST -->
-        <div class="bg-gray map-pin-bg rounded d-flex flex-wrap p-3 stop-list">
-            <stop-box v-for="item in tour.stops" :stop="item" :key="item.id"></stop-box>
-        </div>
+    <div class="wrapper shadow-lg">
 
         <!-- FORM --> 
         <div class="bg-white rounded right-side" style="overflow: auto">
@@ -168,6 +163,22 @@
 
             </div>
         </div>
+
+        <!-- STOP LIST -->
+        <div class="left-side">
+            <div class="bg-gray compass-bg rounded p-3 h-100">
+                <b-row v-for="i in Math.ceil(tour.stops.length / 4)" :key="i">
+                    <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
+                        <stop-box :stop="item"></stop-box>
+                    </b-col>
+                </b-row>
+            </div>
+        </div>
+<!--         
+        <div class="bg-gray map-pin-bg rounded d-flex flex-wrap p-3 stop-list">
+            <stop-box v-for="item in tour.stops" :stop="item" :key="item.id"></stop-box>
+        </div> -->
+
     </div>
 </template>
 

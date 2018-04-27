@@ -1,11 +1,5 @@
 <template>
-    <div class="shadow-lg rounded d-flex flex-row dash-main">
-
-        <!-- JUNKET LIST -->
-        <div class="bg-gray compass-bg rounded d-flex flex-wrap p-3 tour-list">
-            <tour-box v-for="item in tours" :tour="item" :key="item"></tour-box>
-        </div>
-
+    <div class="wrapper shadow-lg">
         <!-- DASHBOARD --> 
         <div class="p-50 bg-white rounded d-flex flex-column right-side">
 
@@ -46,6 +40,22 @@
                 </div>
             </div>
         </div>
+        
+        <div class="left-side">
+            <!-- JUNKET LIST -->
+            <!-- <div class="bg-gray compass-bg rounded d-flex flex-wrap p-3 tour-list"> -->
+            <div class="bg-gray compass-bg rounded p-3 h-100">
+                <b-row v-for="i in Math.ceil(tours.length / 3)" :key="i">
+                    <b-col class="box-col" xl="4" v-for="item in tours.slice((i - 1) * 3, i * 3)" :key="item.id">
+                        <tour-box :tour="item"></tour-box>
+                    </b-col>
+                    <!-- <b-col xl="4"><tour-box :tour="tours[0]"></tour-box></b-col>
+                    <b-col xl="4"><tour-box :tour="tours[0]"></tour-box></b-col>
+                    <b-col xl="4"><tour-box :tour="tours[0]"></tour-box></b-col> -->
+                </b-row>
+            </div>
+        </div>
+
     </div>
 </template>
 
@@ -71,16 +81,16 @@ export default {
         },
 
         add() {
-            this.tours.push({type: "tour"});
+            this.tours.push({id: this.tours.length + 1, type: "tour"});
         },
     },
 
     data: () => ({
         filter: '',
         tours: [
-            { type: "tour" },
-            { type: "tour" },
-            { type: "adventure" },
+            { id: 1, type: "tour" },
+            { id: 2, type: "tour" },
+            { id: 3, type: "adventure" },
         ],
     }),
 }
@@ -92,5 +102,6 @@ export default {
     overflow: auto;
     justify-content: space-between;
     min-width: 610px;
+    height: 100%;
 }
 </style>

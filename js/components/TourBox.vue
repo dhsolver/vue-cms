@@ -1,7 +1,7 @@
 <template>
     <div class="tour-box">
-        <div class="heading" @click="editTour()">
-            <img src="images/pix-2.jpg" alt="tour image" width="275" hegiht="185" />
+        <div class="heading" @click="editTour()" style="background: url('images/pix-2.jpg');">
+            <!-- <img src="images/pix-2.jpg" alt="tour image" width="275" hegiht="185" /> -->
             <div class="title">
                 Title of Junket<br />City, State
             </div>
@@ -20,17 +20,6 @@
                 <a href="#" class="skinny" ><fa :icon="['fas', 'link']" />&nbsp;URL</a>
             </div>
         </div>
-        <!--<div class="btcount_pt">
-            <i class="fa fa-map-marker" aria-hidden="true"></i> 31
-        </div>
-        <div class="anlinks clearfix">
-            <span class="analytbox">
-                <i class="fa fa-bar-chart" aria-hidden="true"></i> ANALYTICS 
-            </span>
-            <span class="urlbox">
-                <i class="fa fa-link" aria-hidden="true"></i> URL
-            </span>
-        </div> -->
     </div>
 </template>
 

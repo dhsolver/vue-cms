@@ -1,9 +1,11 @@
 <template>
-    <div class="main-layout">
-        <main class="ml-auto mr-auto mt-5" style="width: 90%">
-            <child/>
-        </main>
-    </div>
+    <main>
+        <div class="root">
+            <div class="fill">
+                <child/>
+            </div>
+        </div>
+    </main>
 </template>
 
 <script>

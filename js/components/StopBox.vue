@@ -1,17 +1,13 @@
 <template>
-    <div class="stop-box">
-        <img src="images/pix-3.jpg" alt="stop image" width="200" height="200" />
+    <div class="stop-box" style="background: url('images/pix-3.jpg');">
+        <div class="white-circle">31</div>
 
-        <div class="overlay">
-            <div class="white-circle">31</div>
+        <div class="title">
+            Title of Stop
+        </div>
 
-            <div class="title">
-                Title of Junket 
-            </div>
-
-            <div class="delete">
-                <fa :icon="['fas', 'times']" />
-            </div>
+        <div class="delete">
+            <fa :icon="['fas', 'times']" />
         </div>
     </div>
 </template>
