@@ -9,3 +9,7 @@ Vue.filter('capitalize', value => {
 Vue.filter('nl2br', value => {
     return value.toString().replace(/(?:\r\n|\r|\n)/g, '<br />');
 });
+
+Vue.filter('minsec', s => {
+    return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + Math.floor(s);
+})

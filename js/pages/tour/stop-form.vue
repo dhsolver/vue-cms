@@ -148,6 +148,7 @@
                     <fa :icon="['fas', 'info']"/>
                 </span>
             </h4>
+            <audio-player :sources="['none']"></audio-player>
 
             <!-- MEDIA -->
             <h4 class="info-heading mt-3">
@@ -244,7 +245,7 @@
 
                 <b-tab title="Multiple Choice" active>
                     <!-- Multiple Choice -->
-                    <h3 class="mt-3 mb-3">Options</h3>
+                    <h3 class="mt-3">Options</h3>
 
                     <div class="icon-input question-input d-flex mb-2">
                         <span class="icon">A.</span>

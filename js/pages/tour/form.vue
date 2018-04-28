@@ -15,8 +15,6 @@
         </div>
 
         <div class="p-3">
-                
-            <audio-player :sources="['/media/test.mp3']"></audio-player>
             <b-form-group>
                 <b-form-input id="title"
                     :disabled="form.busy"
@@ -146,7 +144,10 @@
             </h4>
 
             <h3>Intro Audio</h3>
+            <audio-player :sources="introAudioSource" @uploaded="uploadIntroAudio()"></audio-player>
+            
             <h3>Background Audio</h3>
+            <audio-player :sources="backgroundAudioSource" @uploaded="uploadedBackgroundAudio()"></audio-player>
             
             <!-- MEDIA -->
             <h4 class="info-heading mt-3">
@@ -257,10 +258,29 @@
             form: new Form({
                 id: 0,
                 title: '',
+                intro_audio: '',
+                background_audio: '',
             }),
         }),
 
+        computed: {
+            introAudioSource() {
+                return this.intro_audio ? [this.intro_audio] : ['none'];
+            },
+
+            backgroundAudioSource() {
+                return this.background_audio ? [this.background_audio] : ['none'];
+            },
+        },
+
         methods: {
+            uploadedBackgroundAudio() {
+                this.background_audio = 'media/test.mp3';
+            },
+
+            uploadedIntroAudio() {
+                this.intro_audio = 'media/test.mp3';
+            },
         }
     }
 </script>
