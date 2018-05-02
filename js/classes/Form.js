@@ -31,14 +31,23 @@ class Form {
     /**
      * Fetch all relevant data for the form.
      */
-    data() {
-        let data = {};
+    data(multipart = false) {
+        if (multipart) {
+            let data = new FormData();
 
-        for (let property in this.originalData) {
-            data[property] = this[property];
+            for (let property in this.originalData) {
+                data.append(property, this[property]);
+            }
+            return data;
+            
+        } else {
+            let data = {};
+
+            for (let property in this.originalData) {
+                data[property] = this[property];
+            }
+            return data;
         }
-
-        return data;
     }
 
     /**
@@ -116,11 +125,11 @@ class Form {
      * @param {string} method
      * @param {string} url
      */
-    submit(method, url) {
+    submit(method, url, multipart = false) {
         let Form = this;
         this.busy = true;
         return new Promise((resolve, reject) => {
-            axios[method](url, this.data())
+            axios[method](url, this.data(multipart))
                 .then(response => {
                     // console.log('Axios success');
                     this.busy = false;

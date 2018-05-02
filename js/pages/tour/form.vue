@@ -1,11 +1,20 @@
 <template>
     <div>
         <div v-show="hasTour">
-            <div class="feature-box">
+            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadImage" hidden>
+            <div v-if="! form.main_image" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
-                <a href="#">
                     <fa :icon="['fas', 'plus']" />
-                    <br>Add Feature Image</a>
+                    <br>Add Feature Image
+                </div>
+            </div>
+            <div v-else 
+                class="feature-box" 
+                @click.stop="openFileDialog('main_image')"
+                :style="{ 'background-image': `url('${form.main_image_path}')` }" 
+            >
+                <div class="delete" @click.stop="deleteMedia('main_image')">
+                    <fa :icon="['fas', 'times']" />
                 </div>
             </div>
 
@@ -67,14 +76,14 @@
 
             <div v-show="hasTour">
                 <b-form-group>
-                    <b-form-input id="address"
+                    <b-form-input id="address1"
                         :disabled="form.busy"
                         type="text"
-                        v-model="form.address"
+                        v-model="form.address1"
                         required
                         placeholder="Address">
                     </b-form-input>
-                    <input-help :form="form" field="address" text=""></input-help>
+                    <input-help :form="form" field="address1" text=""></input-help>
                 </b-form-group>
                 
                 <b-form-group>
@@ -118,24 +127,27 @@
                         <span class="icon fb-circle">
                             <fa :icon="['fab', 'facebook-f']"/>
                         </span>
-                        <input type="text" placeholder="Facebook URL" />
+                        <input type="text" placeholder="Facebook URL" v-model="form.facebook_url" id="facebook_url" />
                     </div>
+                    <input-help :form="form" field="facebook_url" text=""></input-help>
                 </b-form-group>
                 <b-form-group>
                     <div class="icon-input social-input d-flex">
                         <span class="icon ig-circle">
                             <fa :icon="['fab', 'instagram']"/>
                         </span>
-                        <input type="text" placeholder="Instagram URL" />
+                        <input type="text" placeholder="Instagram URL" v-model="form.instagram_url" id="instagram_url" />
                     </div>
+                    <input-help :form="form" field="instagram_url" text=""></input-help>
                 </b-form-group>
                 <b-form-group>
                     <div class="icon-input social-input d-flex">
                         <span class="icon twitter-circle">
                             <fa :icon="['fab', 'twitter']"/>
                         </span>
-                        <input type="text" placeholder="Twitter URL" />
+                        <input type="text" placeholder="Twitter URL" v-model="form.twitter_url" id="twitter_url" />
                     </div>
+                    <input-help :form="form" field="twitter_url" text=""></input-help>
                 </b-form-group>
 
                 <!-- AUDIO -->
@@ -179,18 +191,24 @@
                         <span class="icon yt-circle">
                             <fa size="xs" :icon="['fas', 'play']"/>
                         </span>
-                        <input type="text" placeholder="Youtube Video URL" />
+                        <input type="text" placeholder="Youtube Video URL" id="video_url" v-model="form.video_url" />
                     </div>
+                    <input-help :form="form" field="video_url" text=""></input-help>
                 </b-form-group>
 
-                <div class="image-box yt-placeholder">
+                <iframe v-if="videoSource" id="ytplayer" type="text/html" style="width:100%; height: 200px;" :src="videoSource" frameborder="0"></iframe>
+                <div v-else class="image-box yt-placeholder">
                     <div class="label">
                         <div><fa size="4x" color="#e03d3f" :icon="['fab', 'youtube']"/></div>
                         <div>Enter YouTube URL Above</div>
                     </div>
                 </div>
+                <!-- 
+                    test urls:
+                    https://youtu.be/Bey4XXJAqS8
+                    https://www.youtube.com/watch?v=Bey4XXJAqS8
 
-                <!-- <iframe id="ytplayer" type="text/html" style="width:100%; height: 200px;"
+                    <iframe id="ytplayer" type="text/html" style="width:100%; height: 200px;"
                 src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
                 frameborder="0"></iframe> -->
 
@@ -256,15 +274,53 @@
 import { mapGetters } from 'vuex';
 export default {
     data: () => ({
+        maxAudioSize: 100000000,
+        maxImageSize: 25000000,
+
         form: new Form({
-            id: '',
+            id: null,
             title: '',
             description: '',
             type: '',
             pricing_type: '',
 
-            intro_audio: '',
+            address1: '',
+            address2: '',
             background_audio: '',
+            city: '',
+            deleted_at: '',
+            description: '',
+            end_image: '',
+            end_message: '',
+            end_point: '',
+            end_video_url: '',
+            facebook_url: '',
+            image_1: '',
+            image_1_path: '',
+            image_2: '',
+            image_2_path: '',
+            image_3: '',
+            image_3_path: '',
+            instagram_url: '',
+            intro_audio: '',
+            main_image: '',
+            main_image_path: '',
+            pricing_type: '',
+            prize_details: '',
+            prize_instructions: '',
+            published_at: '',
+            start_image: '',
+            start_message: '',
+            start_point: '',
+            start_video_url: '',
+            state: '',
+            stops: [],
+            title: '',
+            trophy_image: '',
+            twitter_url: '',
+            type: '',
+            video_url: '',
+            zipcode: '',
         }),
     }),
 
@@ -286,9 +342,65 @@ export default {
         backgroundAudioSource() {
             return this.background_audio ? [this.background_audio] : ['none'];
         },
+
+        videoSource() {
+            if (!this.form.video_url.includes('youtube.com/watch?v=')) {
+                return '';
+            }
+            
+            //https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com
+            // return this.form.video_url + '&autoplay=0&origin=https://cms.wejunket.com';
+            // return this.form.video_url + '&autoplay=1&origin=http://example';
+            let v = this.getUrlQueryParam('v', this.form.video_url);
+            if (v) {
+                return `https://www.youtube.com/embed/${v}?autoplay=0&origin=http://example.com`;
+            }
+
+            return '';
+        }
     },
 
     methods: {
+        deleteMedia(name) {
+            console.log('delete media not implemented yet');
+        },
+
+        openFileDialog(id) {
+            document.getElementById(id).click();
+        },
+
+        uploadImage(e) {
+            // validate file
+            let file = e.target.files[0];
+            if (! file) {
+                console.log('no file');
+                return;
+            }
+
+            if (file.size > this.maxImageSize) {
+                this.clearFile(e.target);
+                alerts.addMessage('error', 'Images must be less than 25 MB.');
+                return;
+            }
+
+            let f = new Form({
+                [e.target.name]: file,
+            })
+
+            f.submit('post', this.saveUrl + '/media', true)
+                .then(response => {
+                    this.$store.commit('tours/fetchTourSuccess', response.data.data);
+                })
+                .catch(e => {
+                    console.log(e);
+                });
+        },
+
+        clearFile(target) {
+            target.value = null;
+            this.form[target.name] = '';
+        },
+
         uploadedBackgroundAudio() {
             this.background_audio = 'media/test.mp3';
         },
@@ -308,11 +420,21 @@ export default {
 
             return this.form.submit(method, url);
         },
+        
+        getUrlQueryParam(name, url) {
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        },
 
         save() {
             this.submit()
                 .then( ({ data }) => {
                     console.log(data);
+                    this.$store.commit('tours/fetchTourSuccess', data.data);
                 })
                 .catch(e => {
                     console.log('save tour error:');
@@ -329,11 +451,11 @@ export default {
         this.form.fill(this.tour);
     },
 
-    // watch: {
-    //     tour(newVal) {
-    //         this.form.fill(newVal);
-    //     },
-    // },
+    watch: {
+        tour(newVal) {
+            this.form.fill(newVal);
+        },
+    },
 }
 </script>
 

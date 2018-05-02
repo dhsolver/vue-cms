@@ -282,6 +282,7 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
     text-align: center;
     border-radius: 30px;
     line-height: 26px;
+    z-index: 10;
 }
 .delete:hover {
     background-color: $red;
@@ -293,21 +294,25 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
 /*  */
 /*  */
 /*  */
-.feature-box{ 
+.feature-box{
     width:100%;
     height: 200px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    cursor: pointer;
+    position: relative;
+}
+.feature-box.empty {
     background: #9a7979; /* Old browsers */
     background: -moz-linear-gradient(top, #9a7979 1%, #cfbcbc 100%); /* FF3.6-15 */
     background: -webkit-linear-gradient(top, #9a7979 1%,#cfbcbc 100%); /* Chrome10-25,Safari5.1-6 */
     background: linear-gradient(to bottom, #9a7979 1%,#cfbcbc 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#9a7979', endColorstr='#cfbcbc',GradientType=0 ); /* IE6-9 */
 }
-.addlink{text-align:center; width:100%; padding:50px 0; font-size:17px;}
+.addlink{color:#fff; text-decoration:none; text-align:center; width:100%; padding:50px 0; font-size:17px;}
 .addlink .fa-plus{font-size:25px;}
-.addlink a{color:#fff; text-decoration:none;}
-.addlink a:hover{color:#fff; text-decoration:none;}
 
-.circbox { margin-top:-65px; z-index:10000; }
+.circbox { position:relative; margin-top:-65px; z-index:2; }
 .addrescir{
     border:1px solid $inputBorder; border-radius:50%; background-color: $bg; text-align:center; width:140px; margin:0 auto; padding-top:42px; height:140px;
 }
