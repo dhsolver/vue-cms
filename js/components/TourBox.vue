@@ -3,13 +3,13 @@
         <div class="heading bg-fit" @click="editTour()" style="background: url('images/pix-2.jpg');">
             <!-- <img src="images/pix-2.jpg" alt="tour image" width="275" hegiht="185" /> -->
             <div class="title">
-                Title of Junket<br />City, State
+                {{ tour.title }}<br />{{ location }}
             </div>
             <div class="category" :class="typeClass">
                 <fa :icon="['fas', 'map-marker-alt']" />&nbsp;{{ this.tour.type }}
             </div>
             <div class="count">
-                <fa :icon="['fas', 'map-marker-alt']" />&nbsp;31
+                <fa :icon="['fas', 'map-marker-alt']" />&nbsp;{{ this.tour.stops_count }}
             </div>
         </div>
         <div class="footer d-flex p-1">
@@ -36,11 +36,18 @@
             typeClass() {
                 return this.tour.type == 'adventure' ? 'bg-success' : 'bg-info';
             },
+
+            location() {
+                if (this.tour.city && this.tour.state) {
+                    return this.tour.city + ', ' + this.tour.state;
+                }
+                return '';
+            },
         },
 
         methods: {
             editTour() {
-                this.$router.push({ name: 'tour', params: { id: 1 } });
+                this.$router.push({ name: 'tour', params: { id: this.tour.id } });
             }
         },
     }

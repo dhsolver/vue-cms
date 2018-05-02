@@ -4,6 +4,7 @@
             :status="value"
             :size="75"
             :depth="10"
+            color="#79acd1"
         />
     </div>
 </template>

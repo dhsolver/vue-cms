@@ -1,19 +1,25 @@
 import axios from 'axios';
 import Vue from 'vue';
-import { urls } from '../../config';
 
 export const state = {
     list: [],
-    current: {},
+    current: { stops: [] },
+    url: '',
 }
 
 export const getters = {
     list: state => state.list,
     count: state => state.list.length,
     current: state => state.current,
+    saveUrl: state => `${state.url}tours/${state.current.id}`,
+    createUrl: state => `${state.url}tours`,
 }
 
 export const mutations = {
+    setUrl(state, url) {
+        Vue.set(state, 'url', url);
+    },
+
     fetchToursSuccess(state, { list }) {
         state.list = list
     },
@@ -31,7 +37,7 @@ export const mutations = {
     },
 
     fetchTourFailure(state) {
-        Vue.set(state, 'current', {})
+        Vue.set(state, 'current', { stops: [] })
     },
 }
 
@@ -42,7 +48,7 @@ export const actions = {
 
     async fetchTours ({ commit }) {
         try {
-            const { data } = await axios.get(urls.admin + 'tours')
+            const { data } = await axios.get(state.url + 'tours')
 
             commit('fetchToursSuccess', { list: data })
         } catch (e) {
@@ -52,8 +58,8 @@ export const actions = {
 
     async fetchTour ({ commit }, id) {
         try {
-            commit('fetchTourSuccess', {})
-            const { data } = await axios.get(urls.admin + `tours/${id}`)
+            commit('fetchTourSuccess', { stops: [] })
+            const { data } = await axios.get(state.url + `tours/${id}`)
             commit('fetchTourSuccess', data)
 
         } catch (e) {

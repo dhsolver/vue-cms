@@ -1,5 +1,5 @@
 <template>
-    <b-btn :variant="variant" :size="size" :disabled="busy">
+    <b-btn :variant="variant" :size="size" :disabled="busy" @click="onClick">
         <fa v-if="busy" class="fa-spin" :icon="['fas', 'spinner']" />
         <span v-else>
             <slot></slot>
@@ -19,5 +19,11 @@
             },
             busy: Boolean,
         },
+
+        methods: {
+            onClick(e) {
+                this.$emit('click', e);
+            },
+        }
     }
 </script>

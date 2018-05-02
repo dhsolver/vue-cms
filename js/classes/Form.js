@@ -20,6 +20,14 @@ class Form {
         this.busy = false;
     }
 
+    fill(data) {
+        this.reset();
+        this.originalData = data;
+        for (let field in data) {
+            this[field] = data[field];
+        }
+    }
+
     /**
      * Fetch all relevant data for the form.
      */
