@@ -1,13 +1,14 @@
 <template>
-    <div>
+    <div @click="$emit('click')">
         <div v-if="url" class="image-box bg-fit" :style="{ background: bgImage }">
-            <div class="delete" @click.stop="$emit('delete')">
-                <fa :icon="['fas', 'times']" />
-            </div>
+            <delete-media-button type="tour" :id="id"></delete-media-button>
         </div>
         <div v-else class="image-box">
             <div class="label">
-                <div><fa size="lg" :icon="['fas', 'plus']"/></div>
+                <div>
+                    <fa v-if="busy" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
+                    <fa v-else size="lg" :icon="['fas', 'plus']" />
+                </div>
                 <div>Add Image</div>
             </div>
         </div>
@@ -16,7 +17,20 @@
 
 <script>
     export default {
-        props: ['url'],
+        props: {
+            url: {
+                type: String,
+                default: '',
+            },
+            busy: {
+                type: Boolean,
+                default: false,
+            },
+            id: {
+                type: String,
+                required: true,
+            }
+        },
 
         name: 'ImageBox',
 

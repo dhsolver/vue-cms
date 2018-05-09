@@ -4,7 +4,7 @@
             <div class="audio-player">
                 <div class="top">
                     <div class="control">
-                        <a href="#" @click.prevent="togglePlayback">
+                        <a href="#" @click.prevent="togglePlayback" :disabled="isEmpty">
                             <fa v-if="playing" :icon="['fas', 'pause']"/>
                             <fa v-else :icon="['fas', 'play']"/>
                         </a>
@@ -18,11 +18,16 @@
                         <input type="range" min="0" max="100" v-model="volumeVal" class="slider" @change="changeVolume" ref="volumeSlider" />
                         </div>
                     </div>
-                    <div class="upload">
-                        <a href="#" @click="upload">
+                    <div v-if="isEmpty" class="action">
+                        <fa v-if="busy" :icon="['fas', 'spinner']" class="fa-spin"/>
+                        <a v-else href="#" @click.prevent="$emit('upload')">
                             <fa :icon="['fas', 'upload']"/>
                         </a>
                         <div class="lbl">UPLOAD</div>
+                    </div>
+                    <div v-else class="action remove">
+                        <delete-media-button type="tour" :id="id" @beforeDelete="reset()"></delete-media-button>
+                        <div class="lbl">REMOVE</div>
                     </div>
                 </div>
                 <div class="progress-bar">
@@ -41,10 +46,24 @@ export default {
     
     mixins: [ VueHowler ],
 
+    props: {
+        busy: false,
+        id: {
+            type: String,
+            required: true,
+        }
+    },
+
     data: () => ({
         volumeVal: 50,
         seekVal: 0,
     }),
+
+    computed: {
+        isEmpty() {
+            return (this.sources && this.sources[0] == 'none')
+        },
+    },
 
     methods: {
         changeSeek() {
@@ -52,10 +71,12 @@ export default {
             this.setSeek(parseInt(this.seekVal));
             this.drawPlaybackProgress();
         },
+
         changeVolume() {
             this.setVolume(parseInt(this.volumeVal) / 100);
             this.drawVolumeProgress();
         },
+
         drawVolumeProgress() {
             let val = parseInt(this.volumeVal) / 100;
             this.$refs.volumeSlider.style.backgroundImage =
@@ -64,6 +85,7 @@ export default {
                 + 'color-stop(' + val + ', #d9d1d1)'
                 + ')';
         },
+
         drawPlaybackProgress() {
             let val = this.seekVal / this.duration;
             this.$refs.seekSlider.style.backgroundImage =
@@ -72,8 +94,10 @@ export default {
                 + 'color-stop(' + val + ', #d9d1d1)'
                 + ')';
         },
-        upload() {
-            this.sources = ['/media/test.mp3'];
+
+        reset() {
+            console.log('audio file deleted');
+            this.stop();
         },
     },
 
@@ -94,6 +118,8 @@ export default {
 $audioGray: #d9d1d1;
 $blue:    #79acd1 !default;
 $darkBlue: #3e4759 !default;
+$red:     #e20e24 !default;
+$darkRed: #ad1a28 !default;
 
 .audio-wrapper { 
     border: 2px solid $darkBlue;
@@ -129,29 +155,32 @@ $darkBlue: #3e4759 !default;
     display: flex;
 }
 .volume .icon { padding: 0px 5px; }
-.upload {
+.action {
     padding: 5px 5px 5px 5px;
-    width: 60px; background-color: #fff;
+    width: 60px; 
+    background-color: #fff;
     text-align: center;
 }
-.upload .lbl { 
+.action .lbl { 
     font-size: 10px;
     color: $darkBlue;
     font-weight: bold;
     line-height: 10px;
 }
-.audio-player .upload a { color: $blue; font-size: 1.3rem; }
-.audio-player .upload a:hover { color: $darkBlue; }
+.audio-player .delete {
+    position: inherit!important;
+    width: 100%!important;
+}
+.audio-player .action a { color: $blue; font-size: 1.3rem; }
+.audio-player .action a:hover { color: $darkBlue; }
+.audio-player .action.remove a { color: $red; font-size: 1.3rem; }
+.audio-player .action.remove a:hover { color: $darkRed; }
 
 .progress-bar { 
     height: 15px; 
     background-color: $audioGray; 
     border-top: 1px solid #fff; 
 }
-
-
-
-
 
 .slidecontainer {
     flex: 1;

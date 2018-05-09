@@ -87,6 +87,7 @@ export default {
 
     async mounted() {
         this.$store.commit('tours/setUrl', urls.cms);
+        this.$store.commit('tours/clearCurrentTour');
         await this.$store.dispatch('tours/fetchTours');
         this.loading = false;
     },
@@ -121,12 +122,10 @@ export default {
             window.location = '/';
         },
 
-
         add() {
             this.busy = true;
             this.$refs.addForm.submit()
                 .then( ({ data }) => {
-                    console.log(data.data);
                     this.$router.push({ name: 'tour', params: { id: data.data.id } });
                     this.busy = false;
                 })

@@ -1,10 +1,12 @@
 <template>
     <div>
         <div v-show="hasTour">
-            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadImage" hidden>
+            <!-- FEATURE IMAGE -->
+            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadMedia" hidden>
             <div v-if="! form.main_image" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
-                    <fa :icon="['fas', 'plus']" />
+                    <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
+                    <fa v-else size="lg" :icon="['fas', 'plus']" />
                     <br>Add Feature Image
                 </div>
             </div>
@@ -13,9 +15,7 @@
                 @click.stop="openFileDialog('main_image')"
                 :style="{ 'background-image': `url('${form.main_image_path}')` }" 
             >
-                <div class="delete" @click.stop="deleteMedia('main_image')">
-                    <fa :icon="['fas', 'times']" />
-                </div>
+                <delete-media-button type="tour" id="main_image"></delete-media-button>
             </div>
 
             <div class="circbox">
@@ -23,9 +23,11 @@
                     <fa :icon="['fas', 'map-marker-alt']" size="4x" style="color: #79acd1"/>
                 </div>
             </div>
+            <!-- /end FEATURE IMAGE -->
         </div>
 
         <div class="p-3">
+            <!-- MAIN FORM -->
             <b-form-group>
                 <b-form-input id="title"
                     :disabled="form.busy"
@@ -119,7 +121,9 @@
                     <input-help :form="form" field="zipcode" text=""></input-help>
                     <input-help :form="form" field="state" text=""></input-help>
                 </b-row>
+                <!-- /end MAIN FORM -->
                 
+                <!-- SOCIAL URLS -->
                 <h4>Social</h4>
 
                 <b-form-group>
@@ -127,7 +131,7 @@
                         <span class="icon fb-circle">
                             <fa :icon="['fab', 'facebook-f']"/>
                         </span>
-                        <input type="text" placeholder="Facebook URL" v-model="form.facebook_url" id="facebook_url" />
+                        <input type="text" placeholder="Facebook URL" v-model="form.facebook_url" id="facebook_url" :disabled="form.busy" />
                     </div>
                     <input-help :form="form" field="facebook_url" text=""></input-help>
                 </b-form-group>
@@ -136,7 +140,7 @@
                         <span class="icon ig-circle">
                             <fa :icon="['fab', 'instagram']"/>
                         </span>
-                        <input type="text" placeholder="Instagram URL" v-model="form.instagram_url" id="instagram_url" />
+                        <input type="text" placeholder="Instagram URL" v-model="form.instagram_url" id="instagram_url" :disabled="form.busy" />
                     </div>
                     <input-help :form="form" field="instagram_url" text=""></input-help>
                 </b-form-group>
@@ -145,10 +149,11 @@
                         <span class="icon twitter-circle">
                             <fa :icon="['fab', 'twitter']"/>
                         </span>
-                        <input type="text" placeholder="Twitter URL" v-model="form.twitter_url" id="twitter_url" />
+                        <input type="text" placeholder="Twitter URL" v-model="form.twitter_url" id="twitter_url" :disabled="form.busy" />
                     </div>
                     <input-help :form="form" field="twitter_url" text=""></input-help>
                 </b-form-group>
+                <!-- /end SOCIAL URLS -->
 
                 <!-- AUDIO -->
                 <h4 class="info-heading">
@@ -159,10 +164,22 @@
                 </h4>
 
                 <h3>Intro Audio</h3>
-                <audio-player :sources="introAudioSource" @uploaded="uploadIntroAudio()"></audio-player>
+                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <audio-player 
+                    id="intro_audio"
+                    :sources="introAudioSource" 
+                    :busy="busyUploading == 'intro_audio'"
+                    @upload="openFileDialog('intro_audio')" 
+                />
                 
                 <h3>Background Audio</h3>
-                <audio-player :sources="backgroundAudioSource" @uploaded="uploadedBackgroundAudio()"></audio-player>
+                <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <audio-player 
+                    id="background_audio"
+                    :sources="backgroundAudioSource" 
+                    :busy="busyUploading == 'background_audio'"
+                    @upload="openFileDialog('background_audio')" 
+                />
                 
                 <!-- MEDIA -->
                 <h4 class="info-heading mt-3">
@@ -175,50 +192,56 @@
                 <!-- IMAGES  -->
                 <b-row class="image-row mb-3">
                     <b-col lg="4">
-                        <image-box url="/images/pix-3.jpg"></image-box>
+                        <input id="image_1" name="image_1" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="image_1"
+                            :url="form.image_1_path" 
+                            @click="openFileDialog('image_1')" 
+                            :busy="busyUploading == 'image_1'"
+                        ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <image-box url=""></image-box>
+                        <input id="image_2" name="image_2" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="image_2"
+                            :url="form.image_2_path" 
+                            @click="openFileDialog('image_2')" 
+                            :busy="busyUploading == 'image_2'"
+                        ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <image-box url=""></image-box>
+                        <input id="image_3" name="image_3" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="image_3"
+                            :url="form.image_3_path" 
+                            @click="openFileDialog('image_3')" 
+                            :busy="busyUploading == 'image_3'"
+                        ></image-box>
                     </b-col>
                 </b-row>
+                <!-- /end IMAGES -->
 
                 <!-- YOUTUBE -->
-                <b-form-group>
-                    <div class="icon-input social-input d-flex">
-                        <span class="icon yt-circle">
-                            <fa size="xs" :icon="['fas', 'play']"/>
-                        </span>
-                        <input type="text" placeholder="Youtube Video URL" id="video_url" v-model="form.video_url" />
-                    </div>
-                    <input-help :form="form" field="video_url" text=""></input-help>
-                </b-form-group>
-
-                <iframe v-if="videoSource" id="ytplayer" type="text/html" style="width:100%; height: 200px;" :src="videoSource" frameborder="0"></iframe>
-                <div v-else class="image-box yt-placeholder">
-                    <div class="label">
-                        <div><fa size="4x" color="#e03d3f" :icon="['fab', 'youtube']"/></div>
-                        <div>Enter YouTube URL Above</div>
-                    </div>
-                </div>
-                <!-- 
-                    test urls:
-                    https://youtu.be/Bey4XXJAqS8
-                    https://www.youtube.com/watch?v=Bey4XXJAqS8
-
-                    <iframe id="ytplayer" type="text/html" style="width:100%; height: 200px;"
-                src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
-                frameborder="0"></iframe> -->
+                <youtube-input :form="form" id="video_url" v-model="form.video_url"></youtube-input>
+                <!-- /end YOUTUBE -->
 
                 <!-- PRIZE -->
                 <h4 class="mt-3">Trophy</h4>
 
                 <div class="trophy-box d-flex">
-                    <img src="/images/trophy.png" width="100" height="100" class="mr-3" />
-                    <b-btn variant="primary" class="f-1" height="100">
-                        <fa size="lg" :icon="['fas', 'plus']"/><br/>
+                    <input id="trophy_image" name="trophy_image" type="file" class="input-file" @change="uploadMedia" hidden>
+
+                    <img v-if="! form.trophy_image" src="/images/trophy.png" width="100" height="100" class="mr-3" />
+                    <div v-else 
+                        class="trophy-img mr-3" 
+                        :style="{ 'background-image': `url('${form.trophy_image_path}')` }" 
+                    >
+                        <delete-media-button type="tour" id="trophy_image"></delete-media-button>
+                    </div>
+
+                    <b-btn variant="primary" class="f-1" height="100" @click.stop="openFileDialog('trophy_image')" :disabled="busyUploading == 'trophy_image'">
+                        <fa v-if="busyUploading == 'trophy_image'" size="lg" class="fa-spin" :icon="['fas', 'spinner']" />
+                        <fa v-else size="lg" :icon="['fas', 'plus']"/><br/>
                         Upload Custom
                     </b-btn>
                 </div>
@@ -245,9 +268,69 @@
                     </b-form-textarea>
                     <input-help :form="form" field="prize_instructions" text=""></input-help>
                 </b-form-group>
+                <!-- /end PRIZE -->
 
+                <!-- START/END POINTS -->
+                <h4 class="mt-3">START POINT</h4>
+                <b-form-group>
+                    <b-form-textarea id="start_message"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.start_message"
+                        required
+                        rows="3"
+                        placeholder="Start Point Message">
+                    </b-form-textarea>
+                    <input-help :form="form" field="start_message" text=""></input-help>
+                </b-form-group>
+
+                <h3>Start Point Media</h3>
+                <b-row class="image-row mb-3">
+                    <b-col lg="4">
+                        <input id="start_image" name="start_image" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="start_image"
+                            :url="form.start_image_path" 
+                            @click="openFileDialog('start_image')" 
+                            :busy="busyUploading == 'start_image'"
+                        ></image-box>
+                    </b-col>
+                </b-row>
+
+                <youtube-input :form="form" id="start_video_url" v-model="form.start_video_url"></youtube-input>
+
+                <h4 class="mt-3">END POINT</h4>
+                <b-form-group>
+                    <b-form-textarea id="end_message"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.end_message"
+                        required
+                        rows="3"
+                        placeholder="End Point Message">
+                    </b-form-textarea>
+                    <input-help :form="form" field="end_message" text=""></input-help>
+                </b-form-group>
+
+                <h3>End Point Media</h3>
+                <b-row class="image-row mb-3">
+                    <b-col lg="4">
+                        <input id="end_image" name="end_image" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="end_image"
+                            :url="form.end_image_path" 
+                            @click="openFileDialog('end_image')" 
+                            :busy="busyUploading == 'end_image'"
+                        ></image-box>
+                    </b-col>
+                </b-row>
+
+                <youtube-input :form="form" id="end_video_url" v-model="form.end_video_url"></youtube-input>
+
+                <!-- /end START/END POINTS -->
+                
                 <!-- SAVE BUTTONS -->
-                <h4 class="info-heading">
+                <h4 class="info-heading mt-4">
                     Save
                     <span class="info-icon" v-b-tooltip.hover title="Safe info">
                         <fa :icon="['fas', 'info']"/>
@@ -276,6 +359,7 @@ export default {
     data: () => ({
         maxAudioSize: 100000000,
         maxImageSize: 25000000,
+        busyUploading: '',
 
         form: new Form({
             id: null,
@@ -287,6 +371,7 @@ export default {
             address1: '',
             address2: '',
             background_audio: '',
+            background_audio_path: '',
             city: '',
             deleted_at: '',
             description: '',
@@ -303,6 +388,7 @@ export default {
             image_3_path: '',
             instagram_url: '',
             intro_audio: '',
+            intro_audio_path: '',
             main_image: '',
             main_image_path: '',
             pricing_type: '',
@@ -317,6 +403,7 @@ export default {
             stops: [],
             title: '',
             trophy_image: '',
+            trophy_image_path: '',
             twitter_url: '',
             type: '',
             video_url: '',
@@ -336,40 +423,20 @@ export default {
         },
 
         introAudioSource() {
-            return this.intro_audio ? [this.intro_audio] : ['none'];
+            return this.form.intro_audio_path ? [this.form.intro_audio_path] : ['none'];
         },
 
         backgroundAudioSource() {
-            return this.background_audio ? [this.background_audio] : ['none'];
+            return this.form.background_audio_path ? [this.form.background_audio_path] : ['none'];
         },
-
-        videoSource() {
-            if (!this.form.video_url.includes('youtube.com/watch?v=')) {
-                return '';
-            }
-            
-            //https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com
-            // return this.form.video_url + '&autoplay=0&origin=https://cms.wejunket.com';
-            // return this.form.video_url + '&autoplay=1&origin=http://example';
-            let v = this.getUrlQueryParam('v', this.form.video_url);
-            if (v) {
-                return `https://www.youtube.com/embed/${v}?autoplay=0&origin=http://example.com`;
-            }
-
-            return '';
-        }
     },
 
     methods: {
-        deleteMedia(name) {
-            console.log('delete media not implemented yet');
-        },
-
         openFileDialog(id) {
             document.getElementById(id).click();
         },
 
-        uploadImage(e) {
+        uploadMedia(e, type = 'image') {
             // validate file
             let file = e.target.files[0];
             if (! file) {
@@ -377,11 +444,22 @@ export default {
                 return;
             }
 
-            if (file.size > this.maxImageSize) {
-                this.clearFile(e.target);
-                alerts.addMessage('error', 'Images must be less than 25 MB.');
-                return;
+            if (type == 'audio') {
+                if (file.size > this.maxAudioSize) {
+                    this.clearFile(e.target);
+                    alerts.addMessage('error', 'Audio files must be less than 100 MB.');
+                    return;
+                }
+            } else {
+                if (file.size > this.maxImageSize) {
+                    this.clearFile(e.target);
+                    alerts.addMessage('error', 'Images must be less than 25 MB.');
+                    return;
+                }
             }
+
+            this.busyUploading = e.target.name;
+            this.form.busy = true;
 
             let f = new Form({
                 [e.target.name]: file,
@@ -390,23 +468,21 @@ export default {
             f.submit('post', this.saveUrl + '/media', true)
                 .then(response => {
                     this.$store.commit('tours/fetchTourSuccess', response.data.data);
+                    this.form.busy = false;
+                    this.busyUploading = '';
+                    this.clearFile(e.target);
                 })
                 .catch(e => {
                     console.log(e);
+                    this.form.busy = false;
+                    this.busyUploading = '';
+                    this.clearFile(e.target);
                 });
         },
 
         clearFile(target) {
             target.value = null;
             this.form[target.name] = '';
-        },
-
-        uploadedBackgroundAudio() {
-            this.background_audio = 'media/test.mp3';
-        },
-
-        uploadedIntroAudio() {
-            this.intro_audio = 'media/test.mp3';
         },
 
         submit() {
@@ -419,15 +495,6 @@ export default {
             }
 
             return this.form.submit(method, url);
-        },
-        
-        getUrlQueryParam(name, url) {
-            name = name.replace(/[\[\]]/g, "\\$&");
-            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-                results = regex.exec(url);
-            if (!results) return null;
-            if (!results[2]) return '';
-            return decodeURIComponent(results[2].replace(/\+/g, " "));
         },
 
         save() {
@@ -448,16 +515,17 @@ export default {
     },
 
     mounted() {
-        this.form.fill(this.tour);
+        if (this.tour.id) {
+            this.form.fill(this.tour);
+        }
     },
 
     watch: {
         tour(newVal) {
-            this.form.fill(newVal);
+            if (newVal.id) {
+                this.form.fill(newVal);
+            }
         },
     },
 }
 </script>
-
-<style>
-</style>

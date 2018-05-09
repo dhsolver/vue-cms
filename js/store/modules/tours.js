@@ -36,7 +36,7 @@ export const mutations = {
         Vue.set(state, 'current', tour)
     },
 
-    fetchTourFailure(state) {
+    clearCurrentTour(state) {
         Vue.set(state, 'current', { stops: [] })
     },
 }
@@ -64,7 +64,7 @@ export const actions = {
 
         } catch (e) {
             console.log(e);
-            commit('fetchTourFailure')
+            commit('clearCurrentTour')
         }
     },
 }

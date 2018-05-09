@@ -1,6 +1,7 @@
 <template>
     <div class="tour-box">
-        <div class="heading bg-fit" @click="editTour()" style="background: url('images/pix-2.jpg');">
+        <div class="heading bg-fit" @click="editTour()" :style="backgroundImage">
+        <!-- <div class="heading bg-fit" @click="editTour()" style="background: url('images/pix-2.jpg');"> -->
             <!-- <img src="images/pix-2.jpg" alt="tour image" width="275" hegiht="185" /> -->
             <div class="title">
                 {{ tour.title }}<br />{{ location }}
@@ -42,6 +43,14 @@
                     return this.tour.city + ', ' + this.tour.state;
                 }
                 return '';
+            },
+
+            backgroundImage() {
+                if (this.tour.main_image_path) {
+                    return `background: url(${this.tour.main_image_path})`;
+                } else {
+                    return '';
+                }
             },
         },
 
