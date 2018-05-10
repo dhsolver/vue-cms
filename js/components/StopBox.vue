@@ -1,9 +1,9 @@
 <template>
-    <div class="stop-box bg-fit" style="background: url('images/pix-3.jpg');" @click="$emit('click')">
-        <div class="white-circle">31</div>
+    <div class="stop-box bg-fit" :style="backgroundImage" @click="$emit('click')">
+        <div class="white-circle">{{ stop.order }}</div>
 
         <div class="title">
-            Title of Stop
+            {{ stop.title }}
         </div>
 
         <div class="delete" @click.stop="$emit('delete')">
@@ -22,6 +22,14 @@
         }),
 
         computed: {
+            backgroundImage() {
+                let url = this.imagePath(this.stop.main_image);
+                if (url) {
+                    return `background: url(${url})`;
+                } else {
+                    return '';
+                }
+            },
         },
 
         methods: {

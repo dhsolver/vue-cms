@@ -354,13 +354,14 @@
                         </busy-button>
                     </b-col>
                     <b-col lg="6">
-                        <b-btn variant="secondary" class="w-100" @click="addStop">
-                            <fa :icon="['fas', 'map-marker-alt']"/>&nbsp;&nbsp;Add a Stop
+                        <b-btn variant="danger" class="w-100">
+                            <fa :icon="['fas', 'times']"/>&nbsp;&nbsp;Delete
                         </b-btn>
                     </b-col>
                 </b-row>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -519,10 +520,6 @@ export default {
                     console.log('save tour error:');
                     console.log(e);
                 });
-        },
-
-        addStop() {
-            this.tour.stops.push( { id: this.tour.stops.length + 1, title: "Title of Stop" })
         },
     },
 

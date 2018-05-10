@@ -5,6 +5,8 @@ export const state = {
     list: [],
     current: { stops: [] },
     url: '',
+
+    currentStop: {},
 }
 
 export const getters = {
@@ -14,6 +16,9 @@ export const getters = {
     saveUrl: state => `${state.url}tours/${state.current.id}`,
     createUrl: state => `${state.url}tours`,
     mediaUrl: state => `${state.url}media/upload`,
+    createStopUrl: state => `${state.url}tours/${state.current.id}/stops`,
+    saveStopUrl: state => `${state.url}tours/${state.current.id}/stops/${state.currentStop.id}`,
+    currentStop: state => state.currentStop,
 }
 
 export const mutations = {
@@ -47,6 +52,14 @@ export const mutations = {
         tour[field] = media;
         Vue.set(state, 'current', tour)
     },
+
+    pushStop(state, stop) {
+        state.current.stops.push(stop)
+    },
+
+    setCurrentStop(state, stop) {
+        state.currentStop = stop;
+    }
 }
 
 export const actions = {

@@ -8,7 +8,7 @@
                 <b-btn variant="info" class="square f-1" @click="openDashboard()">
                     Dashboard
                 </b-btn>
-                <b-btn variant="info" class="square f-1" style="margin-left: 1px" @click="addStop()">
+                <b-btn variant="info" class="square f-1" style="margin-left: 1px" @click="stopModal()">
                     Add Stop
                 </b-btn>
             </div>
@@ -19,7 +19,7 @@
             </div>
 
             <transition :name="formTransition" mode="out-in">
-                <stop-form v-if="mode == 'stop'" :stop="currentStop" ref="stopForm"></stop-form>
+                <stop-form v-if="mode == 'stop'" ref="stopForm"></stop-form>
                 <tour-form v-else ref="editForm"></tour-form>
             </transition>
         </div>
@@ -37,6 +37,17 @@
                 <div v-else class="no-results">No Stops</div>
             </div>
         </div>
+
+        <!-- ADD STOP MODAL -->
+        <b-modal title="Add a Stop" v-model="showStopModal">
+            <stop-form ref="stopModalForm"></stop-form>
+
+            <div slot="modal-footer" class="w-100">
+                <busy-button class="float-right" variant="primary" :busy="busy" @click="addStop">Create Stop</busy-button>
+                <b-btn variant="secondary" @click="showStopModal = false">Cancel</b-btn>
+            </div>
+        </b-modal>
+        <!-- /end ADD STOP MODAL -->
 
     </div>
 </template>
@@ -64,6 +75,7 @@ export default {
             user: 'auth/user',
             isAdmin: 'auth/isAdmin',
             tour: 'tours/current',
+            currentStop: 'tours/currentStop',
         }),
 
         formTransition() {
@@ -80,8 +92,8 @@ export default {
     data: () => ({
         loading: true,
         mode: 'tour',
-        currentStop: {},
         busy: false,
+        showStopModal: false,
     }),
 
     methods: {
@@ -95,12 +107,12 @@ export default {
         },
 
         showTourForm() {
-            this.currentStop = {};
+            this.$store.commit('tours/setCurrentStop', {});
             this.mode = 'tour';    
         },
 
         editStop(stop) {
-            this.currentStop = stop;
+            this.$store.commit('tours/setCurrentStop', stop);
             this.mode = 'stop';
         },
 
@@ -112,6 +124,25 @@ export default {
             this.tour.stops.push( { id: this.tour.stops.length + 1, title: "Title of Stop" })
         },
 
+        stopModal() {
+            this.$refs.stopModalForm.form.reset();
+            this.showStopModal = true;
+        },
+
+        addStop() {
+            this.busy = true;
+            this.$refs.stopModalForm.submit()
+                .then( ({ data }) => {
+                    this.$store.commit('tours/pushStop', data.data);
+                    this.busy = false;
+                    this.showStopModal = false;
+                    this.editStop(data.data);
+                })
+                .catch(e => {
+                    console.log(e);
+                    this.busy = false;
+                });
+        },
     },
 }
 </script>

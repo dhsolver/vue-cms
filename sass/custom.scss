@@ -243,6 +243,12 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
 .stop-box {
     height: 200px;
     position: relative;
+    background-color: $darkBlue;
+    background: $darkBlue; /* Old browsers */
+    background: -moz-linear-gradient(top, $darkBlue 1%, #829198 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, $darkBlue 1%,#829198 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, $darkBlue 1%,#829198 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=$darkBlue, endColorstr=#829198,GradientType=0 ); /* IE6-9 */
 }
 .stop-box:hover {
     opacity: 0.80; /* css standard */
