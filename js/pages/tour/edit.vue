@@ -86,6 +86,13 @@ export default {
     async mounted() {
         this.$store.commit('tours/setUrl', urls.cms);
         await this.$store.dispatch('tours/fetchTour', this.$route.params.id);
+
+        console.log(this.tour);;
+        if (!this.tour.id) {
+            // 404
+            this.$router.push({ name: 'home' });
+        }
+
         this.loading = false;
     },
 
@@ -103,7 +110,7 @@ export default {
         },
 
         openDashboard() {
-            this.$router.push({ name: 'home', params: { id: 1 } });
+            this.$router.push({ name: 'home' });
         },
 
         showTourForm() {

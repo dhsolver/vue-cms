@@ -79,10 +79,13 @@ export const actions = {
 
     async fetchTour ({ commit }, id) {
         try {
-            commit('fetchTourSuccess', { stops: [] })
-            const { data } = await axios.get(state.url + `tours/${id}`)
-            commit('fetchTourSuccess', data)
-
+            commit('clearCurrentTour');
+            const response = await axios.get(state.url + `tours/${id}`)
+            
+            if (response.status == 200) {
+                commit('fetchTourSuccess', response.data)
+            } 
+            
         } catch (e) {
             console.log(e);
             commit('clearCurrentTour')
