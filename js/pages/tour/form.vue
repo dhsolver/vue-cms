@@ -3,7 +3,7 @@
         <div v-show="hasTour">
             <!-- FEATURE IMAGE -->
             <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadMedia" hidden>
-            <div v-if="! form.main_image" class="feature-box empty" @click.stop="openFileDialog('main_image')">
+            <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
                     <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
                     <fa v-else size="lg" :icon="['fas', 'plus']" />
@@ -13,9 +13,11 @@
             <div v-else 
                 class="feature-box" 
                 @click.stop="openFileDialog('main_image')"
-                :style="{ 'background-image': `url('${form.main_image_path}')` }" 
+                :style="{ 'background-image': `url('${imagePath(form.main_image)}')` }" 
             >
-                <delete-media-button type="tour" id="main_image"></delete-media-button>
+                <div class="delete" @click.stop="deleteMedia('main_image')">
+                    <fa :icon="['fas', 'times']" />
+                </div>
             </div>
 
             <div class="circbox">
@@ -167,18 +169,20 @@
                 <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
                 <audio-player 
                     id="intro_audio"
-                    :sources="introAudioSource" 
+                    :sources="audioSource(form.intro_audio)"
                     :busy="busyUploading == 'intro_audio'"
-                    @upload="openFileDialog('intro_audio')" 
+                    @upload="openFileDialog('intro_audio')"
+                    @delete="deleteMedia('intro_audio')"
                 />
                 
                 <h3>Background Audio</h3>
                 <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
                 <audio-player 
                     id="background_audio"
-                    :sources="backgroundAudioSource" 
+                    :sources="audioSource(form.background_audio)" 
                     :busy="busyUploading == 'background_audio'"
                     @upload="openFileDialog('background_audio')" 
+                    @delete="deleteMedia('background_audio')"
                 />
                 
                 <!-- MEDIA -->
@@ -192,30 +196,33 @@
                 <!-- IMAGES  -->
                 <b-row class="image-row mb-3">
                     <b-col lg="4">
-                        <input id="image_1" name="image_1" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image1" name="image1" type="file" class="input-file" @change="uploadMedia" hidden>
                         <image-box 
-                            id="image_1"
-                            :url="form.image_1_path" 
-                            @click="openFileDialog('image_1')" 
-                            :busy="busyUploading == 'image_1'"
+                            id="image1"
+                            :url="imagePath(form.image1)" 
+                            :busy="busyUploading == 'image1'"
+                            @click="openFileDialog('image1')" 
+                            @delete="deleteMedia('image1')"
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image_2" name="image_2" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image2" name="image2" type="file" class="input-file" @change="uploadMedia" hidden>
                         <image-box 
-                            id="image_2"
-                            :url="form.image_2_path" 
-                            @click="openFileDialog('image_2')" 
-                            :busy="busyUploading == 'image_2'"
+                            id="image2"
+                            :url="imagePath(form.image2)" 
+                            :busy="busyUploading == 'image2'"
+                            @click="openFileDialog('image2')" 
+                            @delete="deleteMedia('image2')"
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image_3" name="image_3" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image3" name="image3" type="file" class="input-file" @change="uploadMedia" hidden>
                         <image-box 
-                            id="image_3"
-                            :url="form.image_3_path" 
-                            @click="openFileDialog('image_3')" 
-                            :busy="busyUploading == 'image_3'"
+                            id="image3"
+                            :url="imagePath(form.image3)" 
+                            :busy="busyUploading == 'image3'"
+                            @click="openFileDialog('image3')" 
+                            @delete="deleteMedia('image3')"
                         ></image-box>
                     </b-col>
                 </b-row>
@@ -234,9 +241,11 @@
                     <img v-if="! form.trophy_image" src="/images/trophy.png" width="100" height="100" class="mr-3" />
                     <div v-else 
                         class="trophy-img mr-3" 
-                        :style="{ 'background-image': `url('${form.trophy_image_path}')` }" 
+                        :style="{ 'background-image': `url('${imagePath(form.trophy_image)}')` }" 
                     >
-                        <delete-media-button type="tour" id="trophy_image"></delete-media-button>
+                        <div class="delete" @click.stop="deleteMedia('trophy_image')">
+                            <fa :icon="['fas', 'times']" />
+                        </div>
                     </div>
 
                     <b-btn variant="primary" class="f-1" height="100" @click.stop="openFileDialog('trophy_image')" :disabled="busyUploading == 'trophy_image'">
@@ -290,9 +299,10 @@
                         <input id="start_image" name="start_image" type="file" class="input-file" @change="uploadMedia" hidden>
                         <image-box 
                             id="start_image"
-                            :url="form.start_image_path" 
-                            @click="openFileDialog('start_image')" 
+                            :url="imagePath(form.start_image)" 
                             :busy="busyUploading == 'start_image'"
+                            @click="openFileDialog('start_image')" 
+                            @delete="deleteMedia('start_image')"
                         ></image-box>
                     </b-col>
                 </b-row>
@@ -318,9 +328,10 @@
                         <input id="end_image" name="end_image" type="file" class="input-file" @change="uploadMedia" hidden>
                         <image-box 
                             id="end_image"
-                            :url="form.end_image_path" 
-                            @click="openFileDialog('end_image')" 
+                            :url="imagePath(form.end_image)" 
                             :busy="busyUploading == 'end_image'"
+                            @click="openFileDialog('end_image')" 
+                            @delete="deleteMedia('end_image')"
                         ></image-box>
                     </b-col>
                 </b-row>
@@ -371,7 +382,7 @@ export default {
             address1: '',
             address2: '',
             background_audio: '',
-            background_audio_path: '',
+            background_audio_id: '',
             city: '',
             deleted_at: '',
             description: '',
@@ -380,17 +391,17 @@ export default {
             end_point: '',
             end_video_url: '',
             facebook_url: '',
-            image_1: '',
-            image_1_path: '',
-            image_2: '',
-            image_2_path: '',
-            image_3: '',
-            image_3_path: '',
+            image1: '',
+            image1_id: '',
+            image2: '',
+            image2_id: '',
+            image3: '',
+            image3_id: '',
             instagram_url: '',
             intro_audio: '',
-            intro_audio_path: '',
+            intro_audio_id: '',
             main_image: '',
-            main_image_path: '',
+            main_image_id: '',
             pricing_type: '',
             prize_details: '',
             prize_instructions: '',
@@ -403,7 +414,7 @@ export default {
             stops: [],
             title: '',
             trophy_image: '',
-            trophy_image_path: '',
+            trophy_image_id: '',
             twitter_url: '',
             type: '',
             video_url: '',
@@ -416,22 +427,34 @@ export default {
             tour: 'tours/current',
             createUrl: 'tours/createUrl',
             saveUrl: 'tours/saveUrl',
+            mediaUrl: 'tours/mediaUrl',
         }),
         
         hasTour() {
             return this.tour.id ? true : false;
         },
-
-        introAudioSource() {
-            return this.form.intro_audio_path ? [this.form.intro_audio_path] : ['none'];
-        },
-
-        backgroundAudioSource() {
-            return this.form.background_audio_path ? [this.form.background_audio_path] : ['none'];
-        },
     },
 
     methods: {
+        deleteMedia(field) {
+            this.form[field] = null;
+            this.form[`${field}_id`] = null;
+        },
+
+        imagePath(media) {
+            if (!media || !media.path) {
+                return '';
+            }
+            return media.path;
+        },
+
+        audioSource(media) {
+            if (!media || !media.path) {
+                return ['none'];
+            }
+            return [media.path];
+        },
+
         openFileDialog(id) {
             document.getElementById(id).click();
         },
@@ -458,16 +481,19 @@ export default {
                 }
             }
 
-            this.busyUploading = e.target.name;
+            let field = e.target.name;
+            this.busyUploading = field;
             this.form.busy = true;
 
             let f = new Form({
-                [e.target.name]: file,
+                [type]: file,
             })
 
-            f.submit('post', this.saveUrl + '/media', true)
-                .then(response => {
-                    this.$store.commit('tours/fetchTourSuccess', response.data.data);
+            f.submit('post', this.mediaUrl, true)
+                .then( ({data}) => {
+                    this.form[`${field}_id`] = data.data.id;
+                    this.form[field] = data.data;
+                    
                     this.form.busy = false;
                     this.busyUploading = '';
                     this.clearFile(e.target);
@@ -482,7 +508,7 @@ export default {
 
         clearFile(target) {
             target.value = null;
-            this.form[target.name] = '';
+            // this.form[target.name] = '';
         },
 
         submit() {

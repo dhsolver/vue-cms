@@ -1,7 +1,9 @@
 <template>
     <div @click="$emit('click')">
         <div v-if="url" class="image-box bg-fit" :style="{ background: bgImage }">
-            <delete-media-button type="tour" :id="id"></delete-media-button>
+            <div class="delete" @click.stop="$emit('delete')">
+                <fa :icon="['fas', 'times']" />
+            </div>
         </div>
         <div v-else class="image-box">
             <div class="label">

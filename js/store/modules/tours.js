@@ -13,6 +13,7 @@ export const getters = {
     current: state => state.current,
     saveUrl: state => `${state.url}tours/${state.current.id}`,
     createUrl: state => `${state.url}tours`,
+    mediaUrl: state => `${state.url}media/upload`,
 }
 
 export const mutations = {
@@ -38,6 +39,13 @@ export const mutations = {
 
     clearCurrentTour(state) {
         Vue.set(state, 'current', { stops: [] })
+    },
+
+    mediaUploadSuccess(state, {field, media}) {
+        let tour = state.current;
+        tour[`${field}_id`] = media.id;
+        tour[field] = media;
+        Vue.set(state, 'current', tour)
     },
 }
 

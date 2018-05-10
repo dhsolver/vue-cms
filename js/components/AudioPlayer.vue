@@ -26,7 +26,9 @@
                         <div class="lbl">UPLOAD</div>
                     </div>
                     <div v-else class="action remove">
-                        <delete-media-button type="tour" :id="id" @beforeDelete="reset()"></delete-media-button>
+                        <div class="delete" @click.stop="$emit('delete')">
+                            <fa :icon="['fas', 'times']" />
+                        </div>
                         <div class="lbl">REMOVE</div>
                     </div>
                 </div>

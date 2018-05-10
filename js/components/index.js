@@ -10,7 +10,6 @@ import TourBox from './TourBox';
 import StopBox from './StopBox';
 import ImageBox from './ImageBox';
 import AudioPlayer from './AudioPlayer';
-import DeleteMediaButton from './DeleteMediaButton';
 import YoutubeInput from './YoutubeInput';
 
 // Components that are registered globaly.
@@ -26,7 +25,6 @@ import YoutubeInput from './YoutubeInput';
     StopBox,
     ImageBox,
     AudioPlayer,
-    DeleteMediaButton,
     YoutubeInput,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
