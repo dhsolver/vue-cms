@@ -169,7 +169,7 @@
                 <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
                 <audio-player 
                     id="intro_audio"
-                    :sources="audioSource(form.intro_audio)"
+                    :source="audioSource(form.intro_audio)"
                     :busy="busyUploading == 'intro_audio'"
                     @upload="openFileDialog('intro_audio')"
                     @delete="deleteMedia('intro_audio')"
@@ -179,7 +179,7 @@
                 <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
                 <audio-player 
                     id="background_audio"
-                    :sources="audioSource(form.background_audio)" 
+                    :source="audioSource(form.background_audio)" 
                     :busy="busyUploading == 'background_audio'"
                     @upload="openFileDialog('background_audio')" 
                     @delete="deleteMedia('background_audio')"
@@ -440,21 +440,7 @@ export default {
             this.form[field] = null;
             this.form[`${field}_id`] = null;
         },
-
-        imagePath(media) {
-            if (!media || !media.path) {
-                return '';
-            }
-            return media.path;
-        },
-
-        audioSource(media) {
-            if (!media || !media.path) {
-                return ['none'];
-            }
-            return [media.path];
-        },
-
+        
         openFileDialog(id) {
             document.getElementById(id).click();
         },

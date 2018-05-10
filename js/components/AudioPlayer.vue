@@ -15,7 +15,7 @@
                             <fa :icon="['fas', 'volume-up']"/>
                         </div>
                         <div class="slidecontainer">
-                        <input type="range" min="0" max="100" v-model="volumeVal" class="slider" @change="changeVolume" ref="volumeSlider" />
+                        <input type="range" min="0" max="100" v-model="volume" class="slider" ref="volumeSlider" :disabled="isEmpty" />
                         </div>
                     </div>
                     <div v-if="isEmpty" class="action">
@@ -33,7 +33,7 @@
                     </div>
                 </div>
                 <div class="progress-bar">
-                    <input type="range" min="0" :max="duration" v-model="seekVal" class="slider" @change="changeSeek" ref="seekSlider" />
+                    <input type="range" min="0" :max="duration" v-model="seek" class="slider" @change="changeSeek" ref="seekSlider" :disabled="isEmpty" />
                 </div>
             </div>
         </div>  
@@ -41,46 +41,65 @@
 </template>
 
 <script>
-import VueHowler from 'vue-howler'
+import { Howl } from 'howler';
 
 export default {
     name: 'AudioPlayer',
     
-    mixins: [ VueHowler ],
-
     props: {
         busy: false,
         id: {
             type: String,
             required: true,
-        }
+        },
+        source: {
+            type: String,
+            default: '',
+        },
     },
 
     data: () => ({
-        volumeVal: 50,
-        seekVal: 0,
+        volume: 50,
+        howler: null,
+        seek: 0.0,
+        seekPoll: null,
     }),
 
     computed: {
         isEmpty() {
-            return (this.sources && this.sources[0] == 'none')
+            return this.source == '' || this.howler == null;
+        },
+
+        playing() {
+            if (this.isEmpty) {
+                return false;
+            }
+
+            return this.howler.playing();
+        },
+
+        duration() {
+            if (this.isEmpty) {
+                return 0;
+            }
+            
+            return this.howler.duration();
         },
     },
 
     methods: {
         changeSeek() {
             console.log(this.seek);
-            this.setSeek(parseInt(this.seekVal));
-            this.drawPlaybackProgress();
-        },
+            if (this.isEmpty) {
+                this.seek = 0;
+            }
 
-        changeVolume() {
-            this.setVolume(parseInt(this.volumeVal) / 100);
-            this.drawVolumeProgress();
+            this.howler.seek(parseInt(this.seek));
         },
 
         drawVolumeProgress() {
-            let val = parseInt(this.volumeVal) / 100;
+            console.log('volume: ' + this.volume);
+            let val = parseInt(this.volume) / 100;
             this.$refs.volumeSlider.style.backgroundImage =
                 '-webkit-gradient(linear, left top, right top, '
                 + 'color-stop(' + val + ', #79acd1), '
@@ -89,7 +108,7 @@ export default {
         },
 
         drawPlaybackProgress() {
-            let val = this.seekVal / this.duration;
+            let val = parseInt(this.duration) == 0 ? 0 : this.seek / this.duration;
             this.$refs.seekSlider.style.backgroundImage =
                 '-webkit-gradient(linear, left top, right top, '
                 + 'color-stop(' + val + ', #79acd1), '
@@ -97,20 +116,80 @@ export default {
                 + ')';
         },
 
-        reset() {
-            console.log('audio file deleted');
-            this.stop();
+        togglePlayback() {
+            if (this.isEmpty) {
+                return;
+            }
+
+            if (this.playing) {
+                console.log('pause');
+                this.howler.pause();
+            } else {
+                console.log('play');
+                this.howler.play();
+            }
         },
+
+        load() {
+            if (this.source == '') {
+                if (this.howler != null) {
+                    console.log('old source exists');
+                    // clear old source
+                    this.howler.stop();
+                    this.howler = null;
+                }
+                this.seek = 0;
+                this.drawPlaybackProgress()
+                return;
+            }
+
+            this.howler = new Howl({
+                src: [this.source],
+                loop: false,
+                volume: this.volume / 100,
+            });
+
+            this.drawVolumeProgress();
+        }
     },
 
     mounted() {
-        this.drawVolumeProgress();
+        if (this.source) {
+            this.load();
+        }
     },
 
     watch: {
-        seek(val) {
-            this.seekVal = val;
+        volume(val) {
+            if (! this.isEmpty) {
+                this.howler.volume(val / 100);
+                this.drawVolumeProgress();
+            }
+        },
+
+        seek(newVal, oldVal) {
             this.drawPlaybackProgress();
+        },
+
+        playing(playing) {
+            // Update the seek
+            this.seek = this.howler.seek();
+
+            if (playing) {
+                // Start the seek poll
+                this.seekPoll = setInterval(
+                    () => this.seek = this.isEmpty ? 0 : this.howler.seek(),
+                    1000 / 4
+                )
+            } else {
+                // Stop the seek poll
+                clearInterval(this.seekPoll)
+            }
+        },
+
+        source(val) {
+            console.log('source changed: ' + val);
+            this.load();
         },
     },
 }
@@ -182,6 +261,7 @@ $darkRed: #ad1a28 !default;
     height: 15px; 
     background-color: $audioGray; 
     border-top: 1px solid #fff; 
+    overflow: hidden;
 }
 
 .slidecontainer {

@@ -31,8 +31,10 @@ require('./mixins/filters');
 import Form from './classes/Form';
 window.Form = Form;
 
-import { urls } from './config';
+import MediaPaths from './mixins/MediaPaths';
+Vue.mixin(MediaPaths);
 
+import { urls } from './config';
 Vue.mixin({
     data: () => {
         return {

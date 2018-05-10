@@ -13,7 +13,7 @@ Vue.filter('nl2br', value => {
 Vue.filter('minsec', s => {
     s = parseFloat(s);
     if (s == NaN) {
-        s = parseFloat(0.0);
+        return '0:00';
     }
     return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + Math.floor(s);
 })
