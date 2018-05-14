@@ -3,7 +3,7 @@
         <spinner v-model="loading"></spinner>
 
         <!-- FORM --> 
-        <div v-show="! loading" class="bg-white right-side" style="overflow: auto">
+        <div v-show="! loading" class="bg-white right-side" style="overflow: auto" ref="formContainer">
             <div v-if="mode == 'tour'" class="d-flex">
                 <b-btn variant="info" class="square f-1" @click="openDashboard()">
                     Dashboard
@@ -30,7 +30,7 @@
                 <div v-if="tour.stops.length > 0">
                     <b-row v-for="i in Math.ceil(tour.stops.length / 4)" :key="i">
                         <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
-                            <stop-box :stop="item" @click="editStop(item)" @delete="deleteStop(item)"></stop-box>
+                            <stop-box :stop="item" @click="editStop(item)" @deleted="deleteStop(item)"></stop-box>
                         </b-col>
                     </b-row>
                 </div>
@@ -115,20 +115,21 @@ export default {
 
         showTourForm() {
             this.$store.commit('tours/setCurrentStop', {});
-            this.mode = 'tour';    
+            this.mode = 'tour';
+            this.$refs.formContainer.scrollTop = 0;
         },
 
         editStop(stop) {
             this.$store.commit('tours/setCurrentStop', stop);
             this.mode = 'stop';
+            this.$refs.formContainer.scrollTop = 0;
         },
 
         deleteStop(stop) {
-            alert('delete');
-        },
-
-        addStop() {
-            this.tour.stops.push( { id: this.tour.stops.length + 1, title: "Title of Stop" })
+            this.$store.commit('tours/removeStop', stop.id);            
+            this.$store.commit('tours/setCurrentStop', {});
+            this.mode = 'tour';
+            this.$refs.formContainer.scrollTop = 0;
         },
 
         stopModal() {

@@ -179,6 +179,8 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
 .bg-fit {
     background-repeat: no-repeat!important;
     background-size: cover!important;
+    background-position-x: center!important;
+    background-position-y: center!important;
 }
 .box-col { padding-left: 5px; padding-right: 5px!important; }
 .tour-box, .stop-box {
@@ -191,8 +193,6 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
     opacity: 0.80; /* css standard */
     filter: alpha(opacity=80); /* internet explorer */
 }
-
-
 
 .tour-box .heading {
     height: 185px;
@@ -241,7 +241,7 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
     vertical-align: bottom;
 }
 .stop-box {
-    height: 200px;
+    height: 185px;
     position: relative;
     background-color: $darkBlue;
     background: $darkBlue; /* Old browsers */
@@ -260,7 +260,7 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
     left: 0px;
 }
 .stop-box .title {
-    margin-top: 60px;
+    margin-top: 55px;
     padding: 5px;
     font-size: 18px;
     text-align: center;
@@ -284,7 +284,6 @@ a.skinny { font-weight: 500px; text-transform: uppercase; font-size: 14px; }
     border-radius:30px; 
     font-size:17px;
 }
-
 .delete {
     position: absolute;
     bottom: 10px;

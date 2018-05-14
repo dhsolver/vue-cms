@@ -1,11 +1,22 @@
 <template>
     <div>
         <div v-show="hasStop">
-            <div class="feature-box">
+            <!-- FEATURE IMAGE -->
+            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadMedia" hidden>
+            <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
-                <a href="#">
-                    <fa :icon="['fas', 'plus']" />
-                    <br>Add Feature Image</a>
+                    <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
+                    <fa v-else size="lg" :icon="['fas', 'plus']" />
+                    <br>Add Feature Image
+                </div>
+            </div>
+            <div v-else 
+                class="feature-box" 
+                @click.stop="openFileDialog('main_image')"
+                :style="{ 'background-image': `url('${imagePath(form.main_image)}')` }" 
+            >
+                <div class="delete" @click.stop="deleteMedia('main_image')">
+                    <fa :icon="['fas', 'times']" />
                 </div>
             </div>
         </div>
@@ -143,7 +154,7 @@
                     </b-form-input>
                     <input-help :form="form" field="geo_radius" text=""></input-help>
                 </b-form-group>
-                
+
                 <!-- AUDIO -->
                 <h4 class="info-heading">
                     Audio
@@ -151,7 +162,15 @@
                         <fa :icon="['fas', 'info']"/>
                     </span>
                 </h4>
-                <audio-player :sources="['none']"></audio-player>
+
+                <input id="audio" name="audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <audio-player 
+                    id="audio"
+                    :source="audioSource(form.audio)"
+                    :busy="busyUploading == 'audio'"
+                    @upload="openFileDialog('audio')"
+                    @delete="deleteMedia('audio')"
+                />
 
                 <!-- MEDIA -->
                 <h4 class="info-heading mt-3">
@@ -164,36 +183,40 @@
                 <!-- IMAGES  -->
                 <b-row class="image-row mb-3">
                     <b-col lg="4">
-                        <image-box url="/images/pix-3.jpg"></image-box>
+                        <input id="image1" name="image1" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="image1"
+                            :url="imagePath(form.image1)" 
+                            :busy="busyUploading == 'image1'"
+                            @click="openFileDialog('image1')" 
+                            @delete="deleteMedia('image1')"
+                        ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <image-box url=""></image-box>
+                        <input id="image2" name="image2" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="image2"
+                            :url="imagePath(form.image2)" 
+                            :busy="busyUploading == 'image2'"
+                            @click="openFileDialog('image2')" 
+                            @delete="deleteMedia('image2')"
+                        ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <image-box url=""></image-box>
+                        <input id="image3" name="image3" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <image-box 
+                            id="image3"
+                            :url="imagePath(form.image3)" 
+                            :busy="busyUploading == 'image3'"
+                            @click="openFileDialog('image3')" 
+                            @delete="deleteMedia('image3')"
+                        ></image-box>
                     </b-col>
                 </b-row>
+                <!-- /end IMAGES -->
 
                 <!-- YOUTUBE -->
-                <b-form-group>
-                    <div class="icon-input social-input d-flex">
-                        <span class="icon yt-circle">
-                            <fa size="xs" :icon="['fas', 'play']"/>
-                        </span>
-                        <input type="text" placeholder="Youtube Video URL" />
-                    </div>
-                </b-form-group>
-
-                <div class="image-box yt-placeholder">
-                    <div class="label">
-                        <div><fa size="4x" color="#e03d3f" :icon="['fab', 'youtube']"/></div>
-                        <div>Enter YouTube URL Above</div>
-                    </div>
-                </div>
-                <!-- <iframe id="ytplayer" type="text/html" style="width:100%; height: 200px;"
-                src="https://www.youtube.com/embed/M7lc1UVf-VE?autoplay=0&origin=http://example.com"
-                frameborder="0"></iframe> -->
-
+                <youtube-input :form="form" id="video_url" v-model="form.video_url"></youtube-input>
                 <!-- /end YOUTUBE -->
 
                 <!-- QUESTIONS -->
@@ -218,35 +241,35 @@
                 </b-form-group>
 
                 <b-tabs pills class="mt-3">
-                    <b-tab title="Fill-In-The-Blank" >
+                    <b-tab title="Fill-In-The-Blank" :active="! form.is_multiple_choice">
                         <h3 class="mt-3">Correct Answer</h3>
                         <b-form-group>
-                            <b-form-textarea id="answer"
+                            <b-form-textarea id="question_answer"
                                 :disabled="form.busy"
                                 type="text"
-                                v-model="form.answer"
+                                v-model="form.question_answer"
                                 required
                                 rows="4"
                                 placeholder="">
                             </b-form-textarea>
-                            <input-help :form="form" field="answer" text=""></input-help>
+                            <input-help :form="form" field="question_answer" text=""></input-help>
                         </b-form-group>
 
                         <h3>Success Message</h3>
                         <b-form-group>
-                            <b-form-textarea id="message"
+                            <b-form-textarea id="question_success"
                                 :disabled="form.busy"
                                 type="text"
-                                v-model="form.message"
+                                v-model="form.question_success"
                                 required
                                 rows="4"
                                 placeholder="">
                             </b-form-textarea>
-                            <input-help :form="form" field="message" text=""></input-help>
+                            <input-help :form="form" field="question_success" text=""></input-help>
                         </b-form-group>
                     </b-tab>
 
-                    <b-tab title="Multiple Choice" active>
+                    <b-tab title="Multiple Choice" :active="form.is_multiple_choice">
                         <!-- Multiple Choice -->
                         <h3 class="mt-3">Options</h3>
 
@@ -301,9 +324,9 @@
                 <!-- SAVE -->
                 <b-row class="mt-5">
                     <b-col lg="6">
-                        <b-btn variant="primary" class="w-100">
+                        <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save">
                             <fa :icon="['fas', 'check']"/>&nbsp;&nbsp;Save
-                        </b-btn>
+                        </busy-button>
                     </b-col>
                     <b-col lg="6">
                         <b-btn variant="secondary" class="w-100">
@@ -318,17 +341,35 @@
 
 <script>
 import { mapGetters } from 'vuex';
+import UploadsMedia from '../../mixins/UploadsMedia';
+
 export default {
+    mixins: [UploadsMedia],
+    
     data: () => ({
-        maxAudioSize: 100000000,
-        maxImageSize: 25000000,
-        busyUploading: '',
-
-
         form: new Form({
             id: null,
             title: '',
             description: '',
+
+            is_multiple_choice: false,
+            question: '',
+            question_answer: '',
+            question_success: '',
+            choices: [],    
+            video_url: '',
+
+            audio: '',
+            audio_id: '',
+            main_image: '',
+            main_image_id: '',
+            image1: '',
+            image1_id: '',
+            image2: '',
+            image2_id: '',
+            image3: '',
+            image3_id: '',
+
         }),
 
         locationType: 'gps',
@@ -340,7 +381,6 @@ export default {
             stop: 'tours/currentStop',
             createStopUrl: 'tours/createStopUrl',
             saveStopUrl: 'tours/saveStopUrl',
-            mediaUrl: 'tours/mediaUrl',
         }),
         
         hasStop() {
@@ -353,7 +393,7 @@ export default {
             let url = this.createStopUrl;
             let method = 'post';
 
-            if (this.hasTour) {
+            if (this.hasStop) {
                 url = this.saveStopUrl;
                 method = 'patch'
             }
@@ -365,79 +405,18 @@ export default {
             this.submit()
                 .then( ({ data }) => {
                     console.log(data);
-                    // this.$store.commit('tours/fetchTourSuccess', data.data);
+                    this.$store.commit('tours/updateStop', data.data);
                 })
                 .catch(e => {
-                    console.log('save tour error:');
+                    console.log('save stop error:');
                     console.log(e);
                 });
-        },
-
-        deleteMedia(field) {
-            this.form[field] = null;
-            this.form[`${field}_id`] = null;
-        },
-        
-        openFileDialog(id) {
-            document.getElementById(id).click();
-        },
-
-        uploadMedia(e, type = 'image') {
-            // validate file
-            let file = e.target.files[0];
-            if (! file) {
-                console.log('no file');
-                return;
-            }
-
-            if (type == 'audio') {
-                if (file.size > this.maxAudioSize) {
-                    this.clearFile(e.target);
-                    alerts.addMessage('error', 'Audio files must be less than 100 MB.');
-                    return;
-                }
-            } else {
-                if (file.size > this.maxImageSize) {
-                    this.clearFile(e.target);
-                    alerts.addMessage('error', 'Images must be less than 25 MB.');
-                    return;
-                }
-            }
-
-            let field = e.target.name;
-            this.busyUploading = field;
-            this.form.busy = true;
-
-            let f = new Form({
-                [type]: file,
-            })
-
-            f.submit('post', this.mediaUrl, true)
-                .then( ({data}) => {
-                    this.form[`${field}_id`] = data.data.id;
-                    this.form[field] = data.data;
-                    
-                    this.form.busy = false;
-                    this.busyUploading = '';
-                    this.clearFile(e.target);
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.form.busy = false;
-                    this.busyUploading = '';
-                    this.clearFile(e.target);
-                });
-        },
-
-        clearFile(target) {
-            target.value = null;
-            // this.form[target.name] = '';
         },
 
     },
 
     mounted() {
-        if (this.stop.id) {
+        if (this.hasStop) {
             this.form.fill(this.stop);
         }
     },

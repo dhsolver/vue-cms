@@ -89,7 +89,6 @@ export default {
 
     methods: {
         changeSeek() {
-            console.log(this.seek);
             if (this.isEmpty) {
                 this.seek = 0;
             }
@@ -98,7 +97,6 @@ export default {
         },
 
         drawVolumeProgress() {
-            console.log('volume: ' + this.volume);
             let val = parseInt(this.volume) / 100;
             this.$refs.volumeSlider.style.backgroundImage =
                 '-webkit-gradient(linear, left top, right top, '
@@ -122,10 +120,8 @@ export default {
             }
 
             if (this.playing) {
-                console.log('pause');
                 this.howler.pause();
             } else {
-                console.log('play');
                 this.howler.play();
             }
         },
@@ -133,7 +129,6 @@ export default {
         load() {
             if (this.source == '') {
                 if (this.howler != null) {
-                    console.log('old source exists');
                     // clear old source
                     this.howler.stop();
                     this.howler = null;

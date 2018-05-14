@@ -59,7 +59,22 @@ export const mutations = {
 
     setCurrentStop(state, stop) {
         state.currentStop = stop;
-    }
+    },
+
+    updateStop(state, stop) {
+        let index = state.current.stops.findIndex(obj => obj.id == stop.id);
+        if (index > -1) {
+            state.current.stops.splice(index, 1, stop);
+            Vue.set(state, 'currentStop', stop);
+        }
+    },
+
+    removeStop(state, stopId) {
+        let index = state.current.stops.findIndex(obj => obj.id == stopId);
+        if (index > -1) {
+            state.current.stops.splice(index, 1);
+        }
+    },
 }
 
 export const actions = {
@@ -89,6 +104,17 @@ export const actions = {
         } catch (e) {
             console.log(e);
             commit('clearCurrentTour')
+        }
+    },
+
+    async deleteStop ({ commit }, id) {
+        try {
+            const response = await axios.delete(getters.saveUrl(state) + `/stops/${id}`)
+            if (response.status == 200) {
+                return true;
+            } 
+        } catch (e) {
+            return e;
         }
     },
 }

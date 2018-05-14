@@ -6,8 +6,9 @@
             {{ stop.title }}
         </div>
 
-        <div class="delete" @click.stop="$emit('delete')">
-            <fa :icon="['fas', 'times']" />
+        <div class="delete" @click.stop="deleteStop">
+            <fa v-if="busy" class="fa-spin" :icon="['fas', 'spinner']" />
+            <fa v-else :icon="['fas', 'times']" />
         </div>
     </div>
 </template>
@@ -19,6 +20,7 @@
         props: ['stop'],
 
         data: () => ({
+            busy: false,
         }),
 
         computed: {
@@ -33,6 +35,13 @@
         },
 
         methods: {
+            async deleteStop() {
+                this.busy = true;
+                if (await this.$store.dispatch('tours/deleteStop', this.stop.id)) {
+                    this.$emit('deleted');
+                }
+                this.busy = false;
+            },
         },
     }
 </script>
