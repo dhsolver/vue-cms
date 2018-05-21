@@ -274,7 +274,7 @@
                         <h3 class="mt-3">Options</h3>
 
                         <stop-choice v-for="(item, index) in form.choices"
-                            :key="item.id"
+                            :key="index+item.id"
                             :busy="form.busy"
                             v-model="form.choices[index]"
                             @delete="deleteChoice(index)"
@@ -296,7 +296,7 @@
                         </busy-button>
                     </b-col>
                     <b-col lg="6">
-                        <b-btn variant="secondary" class="w-100">
+                        <b-btn variant="secondary" class="w-100" @click="addStop()">
                             <fa :icon="['fas', 'map-marker-alt']"/>&nbsp;&nbsp;Add a Stop
                         </b-btn>
                     </b-col>
@@ -413,6 +413,11 @@ export default {
 
         deleteChoice(index) {
             this.form.choices.splice(index, 1);
+        },
+
+        addStop() {
+            console.log('adding stop...');
+            this.$emit('addStop')
         },
     },
 

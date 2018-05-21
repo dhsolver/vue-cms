@@ -19,7 +19,7 @@
             </div>
 
             <transition :name="formTransition" mode="out-in">
-                <stop-form v-if="mode == 'stop'" ref="stopForm"></stop-form>
+                <stop-form v-if="mode == 'stop'" ref="stopForm" @addStop="stopModal()"></stop-form>
                 <tour-form v-else ref="editForm"></tour-form>
             </transition>
         </div>
@@ -28,9 +28,16 @@
         <div v-show="! loading" class="left-side">
             <div class="bg-gray compass-bg p-4 h-100">
                 <div v-if="tour.stops.length > 0">
-                    <b-row v-for="i in Math.ceil(tour.stops.length / 4)" :key="i">
+                    <b-row v-for="i in tourRows" :key="i">
                         <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
                             <stop-box :stop="item" @click="editStop(item)" @deleted="deleteStop(item)"></stop-box>
+                        </b-col>
+
+                        <b-col v-if="i == tourRows" xl="3" class="box-col">
+                            <div class="add-box bg-fit" @click="stopModal()">
+                                <fa :icon="['fas', 'plus']" size="3x" />
+                                <div class="title mt-3">ADD POINT</div>
+                            </div>
                         </b-col>
                     </b-row>
                 </div>
@@ -81,6 +88,10 @@ export default {
         formTransition() {
             return this.mode == 'stop' ? 'slide' : 'slide-right';
         },
+
+        tourRows() {
+            return Math.ceil( (this.tour.stops.length + 1) / 4);
+        }
     },
 
     async mounted() {
@@ -133,6 +144,8 @@ export default {
         },
 
         stopModal() {
+            this.showTourForm(); // if stop form is open it breaks the modal
+
             this.$refs.stopModalForm.form.reset();
             this.showStopModal = true;
         },
