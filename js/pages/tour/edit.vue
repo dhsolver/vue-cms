@@ -27,21 +27,18 @@
         <!-- STOP LIST -->
         <div v-show="! loading" class="left-side">
             <div class="bg-gray compass-bg p-4 h-100">
-                <div v-if="tour.stops.length > 0">
-                    <b-row v-for="i in tourRows" :key="i">
-                        <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
-                            <stop-box :stop="item" @click="editStop(item)" @deleted="deleteStop(item)"></stop-box>
-                        </b-col>
+                <b-row v-for="i in tourRows" :key="i">
+                    <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
+                        <stop-box :stop="item" @click="editStop(item)" @deleted="deleteStop(item)"></stop-box>
+                    </b-col>
 
-                        <b-col v-if="i == tourRows" xl="3" class="box-col">
-                            <div class="add-box bg-fit" @click="stopModal()">
-                                <fa :icon="['fas', 'plus']" size="3x" />
-                                <div class="title mt-3">ADD POINT</div>
-                            </div>
-                        </b-col>
-                    </b-row>
-                </div>
-                <div v-else class="no-results">No Stops</div>
+                    <b-col v-if="i == tourRows" xl="3" class="box-col">
+                        <div class="add-box bg-fit" @click="stopModal()">
+                            <fa :icon="['fas', 'plus']" size="3x" />
+                            <div class="title mt-3">ADD POINT</div>
+                        </div>
+                    </b-col>
+                </b-row>
             </div>
         </div>
 
