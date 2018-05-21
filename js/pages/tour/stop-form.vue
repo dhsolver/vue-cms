@@ -240,7 +240,7 @@
                     <input-help :form="form" field="question" text=""></input-help>
                 </b-form-group>
 
-                <b-tabs pills class="mt-3">
+                <b-tabs pills class="mt-3" v-model="isMultipleChoice">
                     <b-tab title="Fill-In-The-Blank" :active="! form.is_multiple_choice">
                         <h3 class="mt-3">Correct Answer</h3>
                         <b-form-group>
@@ -273,48 +273,15 @@
                         <!-- Multiple Choice -->
                         <h3 class="mt-3">Options</h3>
 
-                        <div class="icon-input question-input d-flex mb-2">
-                            <span class="icon">A.</span>
-                            <input type="text" placeholder="Answer" />
-                            <span class="icon-right"><fa :icon="['fas', 'times']"/></span>
-                        </div>
-                        <div class="icon-input answer-input d-flex">
-                            <span class="icon"><fa :icon="['fas', 'map-marker-alt']"/></span>
-                            <b-form-select :disabled="form.busy">
-                                <option value="">Location</option>
-                            </b-form-select>
-                        </div>
-
-                        <hr>
-
-                        <div class="icon-input question-input d-flex mb-2">
-                            <span class="icon">B.</span>
-                            <input type="text" placeholder="Answer" />
-                            <span class="icon-right"><fa :icon="['fas', 'times']"/></span>
-                        </div>
-                        <div class="icon-input answer-input d-flex">
-                            <span class="icon"><fa :icon="['fas', 'map-marker-alt']"/></span>
-                            <b-form-select :disabled="form.busy">
-                                <option value="">Location</option>
-                            </b-form-select>
-                        </div>
-
-                        <hr>
-
-                        <div class="icon-input question-input d-flex mb-2">
-                            <span class="icon">C.</span>
-                            <input type="text" placeholder="Answer" />
-                            <span class="icon-right"><fa :icon="['fas', 'times']"/></span>
-                        </div>
-                        <div class="icon-input answer-input d-flex">
-                            <span class="icon"><fa :icon="['fas', 'map-marker-alt']"/></span>
-                            <b-form-select :disabled="form.busy">
-                                <option value="">Location</option>
-                            </b-form-select>
-                        </div>
-
-                        <b-btn size="sm" variant="primary" class="w-100 mt-3">
-                            <fa :icon="['fas', 'map-marker-alt']"/>&nbsp;&nbsp;Add Decision Point</b-btn>
+                        <stop-choice v-for="(item, index) in form.choices"
+                            :key="item.id"
+                            :busy="form.busy"
+                            v-model="form.choices[index]"
+                            @delete="deleteChoice(index)"
+                        ></stop-choice>
+                        
+                        <b-btn size="sm" variant="primary" class="w-100 mt-3" @click="addChoice">
+                        <fa :icon="['fas', 'map-marker-alt']"/>&nbsp;&nbsp;Add Decision Point</b-btn>
                         <!-- /end Multiple Choice -->
                     </b-tab>
                 </b-tabs>
@@ -369,7 +336,6 @@ export default {
             image2_id: '',
             image3: '',
             image3_id: '',
-
         }),
 
         locationType: 'gps',
@@ -385,6 +351,15 @@ export default {
         
         hasStop() {
             return this.stop.id ? true : false;
+        },
+
+        isMultipleChoice: {
+            get: function () {
+                return this.form.is_multiple_choice ? 1 : 0;
+            },
+            set: function (newValue) {
+                this.form.is_multiple_choice = newValue == 1;
+            }
         },
     },
 
@@ -402,6 +377,19 @@ export default {
         },
 
         save() {
+            // remove other type of questions when switching type
+            if (this.isMultipleChoice) {
+                this.form.question_answer = '';
+                this.form.question_success = '';
+
+                // reset choice order
+                for (var i = 1; i <= this.form.choices.length; i++) {
+                    this.form.choices[i-1].order = i;
+                }
+            } else {
+                this.form.choices = [];
+            }
+
             this.submit()
                 .then( ({ data }) => {
                     console.log(data);
@@ -413,6 +401,19 @@ export default {
                 });
         },
 
+        addChoice() {
+            this.form.choices.push({
+                id: '',
+                tour_stop_id: this.stop.id,
+                order: this.form.choices.length + 1,
+                answer: '',
+                next_stop_id: -1,
+            });
+        },
+
+        deleteChoice(index) {
+            this.form.choices.splice(index, 1);
+        },
     },
 
     mounted() {

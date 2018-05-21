@@ -11,6 +11,7 @@ import StopBox from './StopBox';
 import ImageBox from './ImageBox';
 import AudioPlayer from './AudioPlayer';
 import YoutubeInput from './YoutubeInput';
+import StopChoice from './StopChoice';
 
 // Components that are registered globaly.
 [
@@ -26,6 +27,7 @@ import YoutubeInput from './YoutubeInput';
     ImageBox,
     AudioPlayer,
     YoutubeInput,
+    StopChoice,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

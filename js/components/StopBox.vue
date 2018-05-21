@@ -14,36 +14,46 @@
 </template>
 
 <script>
-    export default {
-        name: "StopBox",
+import { mapGetters } from 'vuex';
+export default {
+    name: "StopBox",
 
-        props: ['stop'],
+    props: ['stop'],
 
-        data: () => ({
-            busy: false,
+    data: () => ({
+        busy: false,
+    }),
+
+    computed: {
+        ...mapGetters({
+            saveTourUrl: 'tours/saveUrl',
         }),
-
-        computed: {
-            backgroundImage() {
-                let url = this.imagePath(this.stop.main_image);
-                if (url) {
-                    return `background: url(${url})`;
-                } else {
-                    return '';
-                }
-            },
+        
+        backgroundImage() {
+            let url = this.imagePath(this.stop.main_image);
+            if (url) {
+                return `background: url(${url})`;
+            } else {
+                return '';
+            }
         },
+    },
 
-        methods: {
-            async deleteStop() {
-                this.busy = true;
-                if (await this.$store.dispatch('tours/deleteStop', this.stop.id)) {
+    methods: {
+        deleteStop() {
+            this.busy = true;
+            axios.delete(this.saveTourUrl + `/stops/${this.stop.id}`)
+                .then( ({ data }) => {
                     this.$emit('deleted');
-                }
-                this.busy = false;
-            },
+                    this.busy = false;
+                })
+                .catch( e => {
+                    alerts.addMessage('error', e.response.data.message);
+                    this.busy = false;
+                })
         },
-    }
+    },
+}
 </script>
 
 <style>
