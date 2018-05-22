@@ -8,7 +8,7 @@ Junket CMS Frontend SPA using Vue
 - [Font Awesome Icons](https://fontawesome.com/)
 - [Bootstrap-Vue](https://bootstrap-vue.js.org/)
 - [Bootswatch Bootstrap Themes](https://bootswatch.com/)
-- [vue-howler for audio](https://github.com/mickdekkers/vue-howler)
+- [Howler for audio](https://github.com/goldfire/howler.js)
 
 ### Development Setup
 
