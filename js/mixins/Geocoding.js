@@ -5,7 +5,7 @@ export default {
 
     methods: {
         isCompleteAddress(obj) {
-            return (obj.address1 && obj.city && obj.state && obj.zipcode);
+            return (obj && obj.address1 && obj.city && obj.state && obj.zipcode);
         },
         
         getAddressString(obj) {

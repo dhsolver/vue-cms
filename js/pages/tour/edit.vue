@@ -19,8 +19,8 @@
             </div>
 
             <transition :name="formTransition" mode="out-in">
-                <stop-form v-if="mode == 'stop'" ref="stopForm" @addStop="stopModal()"></stop-form>
-                <tour-form v-else ref="editForm"></tour-form>
+                <stop-form v-if="mode == 'stop'" @addStop="stopModal()"></stop-form>
+                <tour-form v-else></tour-form>
             </transition>
         </div>
 
@@ -28,7 +28,7 @@
         <div v-show="! loading" class="left-side bg-gray compass-bg ">
 
             <!-- LIST MODE -->
-            <div v-show="stopMode == 'list'" class="p-4 h-100 flex flex-col">
+            <div v-if="stopMode == 'list'" class="p-4 h-100 flex flex-col">
                 <div class="f-1">
                     <b-row v-for="i in tourRows" :key="i">
                         <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
@@ -55,19 +55,18 @@
             </div>
 
             <!-- MAP MODE -->
-            <div v-show="stopMode == 'map'" class="bg-gray h-100" style="position: relative">
+            <div v-else class="bg-gray h-100" style="position: relative">
                 <div class="" style="position: absolute; bottom: 30px; left: 15px; z-index: 99">
                     <b-btn variant="secondary" class="btn-inline mr-2">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
-                    </b-btn> 
+                    </b-btn>
                     
                     <b-btn variant="secondary" class="btn-inline" @click="stopMode = 'list'">
                         <fa :icon="['fas', 'list']" />&nbsp;List Mode
                     </b-btn>
                 </div>
-                <div class="map-container h-100">
-                    <div class="h-100" ref="map"></div>
-                </div>
+                
+                <tour-map></tour-map>
             </div>
         </div>
 
@@ -89,6 +88,7 @@
 import { mapGetters } from 'vuex';
 import { urls } from '../../config';
 import TourForm from './form';
+import TourMap from './map';
 import StopForm from './stop-form';
 
 export default {
@@ -97,6 +97,7 @@ export default {
     components: {
         'tour-form': TourForm,
         'stop-form': StopForm,
+        'tour-map': TourMap,
     },
 
     metaInfo() {
@@ -109,7 +110,6 @@ export default {
         stopMode: 'map',
         busy: false,
         showStopModal: false,
-        map: {},
     }),
 
     computed: {
@@ -190,14 +190,6 @@ export default {
             // 404
             this.$router.push({ name: 'home' });
         }
-
-        var uluru = {lat: -25.363, lng: 131.044};
-
-
-        this.map = new google.maps.Map(this.$refs.map, {
-          zoom: 4,
-          center: new google.maps.LatLng(39.0, -93.0)
-        });
 
         this.loading = false;
     },
