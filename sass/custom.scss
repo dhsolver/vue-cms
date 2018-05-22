@@ -123,6 +123,7 @@ input:disabled {
 .form-control:disabled {
     background-color: $grayDisabled;
     border-color: $grayBorder;
+    color: darkgray;
 }
 
 .form-text { margin-left: 15px }

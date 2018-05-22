@@ -47,100 +47,7 @@
 
             <div v-show="hasStop">
                 <h4>Location</h4>
-                <b-tabs pills>
-                    <b-tab title="Address" active>
-                        
-                        <!-- STREET ADDRESS -->
-                        <b-form-group class="mt-3">
-                            <b-form-input id="address"
-                                :disabled="form.busy"
-                                type="text"
-                                v-model="form.address"
-                                required
-                                placeholder="Address">
-                            </b-form-input>
-                            <input-help :form="form" field="address" text=""></input-help>
-                        </b-form-group>
-                        
-                        <b-form-group>
-                            <b-form-input id="city"
-                                :disabled="form.busy"
-                                type="text"
-                                v-model="form.city"
-                                required
-                                placeholder="City">
-                            </b-form-input>
-                            <input-help :form="form" field="city" text=""></input-help>
-                        </b-form-group>
-
-                        <b-row class="mb-3">
-                            <b-col lg="8">
-                                <b-form-input id="state"
-                                    :disabled="form.busy"
-                                    type="text"
-                                    v-model="form.state"
-                                    required
-                                    placeholder="State">
-                                </b-form-input>
-                            </b-col>
-                            <b-col lg="4">
-                                <b-form-input id="zipcode"
-                                    :disabled="form.busy"
-                                    type="text"
-                                    v-model="form.zipcode"
-                                    required
-                                    placeholder="Zipcode">
-                                </b-form-input>
-                            </b-col>
-                            <input-help :form="form" field="zipcode" text=""></input-help>
-                            <input-help :form="form" field="state" text=""></input-help>
-                        </b-row>
-                        <!-- /end STREET ADDRESS -->
-                        
-                    </b-tab>
-                    <b-tab title="Use Map">
-                        <div class="m-5">
-                            Don't know what this would do?
-                        </div>
-                    </b-tab>
-                    <b-tab title="GPS">
-                        <!-- GPS -->
-
-                        <b-row class="mt-4">
-                            <b-col lg="3" class="pt-2">
-                                <label for="latitude">Latitude</label>
-                            </b-col>
-                            <b-col lg="9">
-                                <b-form-input id="latitude"
-                                    :disabled="form.busy"
-                                    type="text"
-                                    v-model="form.latitude"
-                                    placeholder="Latitude">
-                                </b-form-input>
-                                <input-help :form="form" field="latitude" text=""></input-help>
-                            </b-col>
-                        </b-row>
-
-                        <b-row class="mt-4">
-                            <b-col lg="3" class="pt-2">
-                                <label for="latitude">Longitude</label>
-                            </b-col>
-                            <b-col lg="9">
-                                <b-form-input id="longitude"
-                                    :disabled="form.busy"
-                                    type="text"
-                                    v-model="form.longitude"
-                                    placeholder="Longitude">
-                                </b-form-input>
-                                <input-help :form="form" field="longitude" text=""></input-help>
-                            </b-col>
-                        </b-row>
-
-                        <!-- /end GPS -->
-                    </b-tab>
-                </b-tabs>
-
-                <!-- /end LOCATION -->
+                <address-form :form="form" v-model="form.location"></address-form>
 
                 <h4 class="mt-4">Play Radius</h4>
 
@@ -319,6 +226,7 @@ export default {
             title: '',
             description: '',
 
+            location: {},
             is_multiple_choice: false,
             question: '',
             question_answer: '',
@@ -337,8 +245,6 @@ export default {
             image3: '',
             image3_id: '',
         }),
-
-        locationType: 'gps',
     }),
 
     computed: {

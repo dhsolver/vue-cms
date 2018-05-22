@@ -10,3 +10,5 @@ let urls = {
 export {
     urls,
 }
+
+let GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;

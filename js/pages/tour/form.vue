@@ -65,7 +65,7 @@
                 <input-help :form="form" field="pricing_type" text=""></input-help>
             </b-form-group>
 
-            <h4>Junket Info</h4>
+            <h4>Junket Type</h4>
             <b-form-group>    
                 <b-form-select 
                     v-model="form.type" 
@@ -78,53 +78,10 @@
                 <input-help :form="form" field="type" text=""></input-help>
             </b-form-group>
 
-            <div v-show="hasTour">
-                <b-form-group>
-                    <b-form-input id="address1"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.address1"
-                        required
-                        placeholder="Address">
-                    </b-form-input>
-                    <input-help :form="form" field="address1" text=""></input-help>
-                </b-form-group>
-                
-                <b-form-group>
-                    <b-form-input id="city"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.city"
-                        required
-                        placeholder="City">
-                    </b-form-input>
-                    <input-help :form="form" field="city" text=""></input-help>
-                </b-form-group>
+            <div v-if="hasTour">
+                <h4>Location</h4>
+                <address-form :form="form" v-model="form.location"></address-form>
 
-                <b-row class="mb-3">
-                    <b-col lg="8">
-                        <b-form-input id="state"
-                            :disabled="form.busy"
-                            type="text"
-                            v-model="form.state"
-                            required
-                            placeholder="State">
-                        </b-form-input>
-                    </b-col>
-                    <b-col lg="4">
-                        <b-form-input id="zipcode"
-                            :disabled="form.busy"
-                            type="text"
-                            v-model="form.zipcode"
-                            required
-                            placeholder="Zipcode">
-                        </b-form-input>
-                    </b-col>
-                    <input-help :form="form" field="zipcode" text=""></input-help>
-                    <input-help :form="form" field="state" text=""></input-help>
-                </b-row>
-                <!-- /end MAIN FORM -->
-                
                 <!-- SOCIAL URLS -->
                 <h4>Social</h4>
 
@@ -361,118 +318,122 @@
                 </b-row>
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import UploadsMedia from '../../mixins/UploadsMedia';
+import { mapGetters } from "vuex";
+import UploadsMedia from "../../mixins/UploadsMedia";
+import Geocoding from "../../mixins/Geocoding";
 
 export default {
-    mixins: [UploadsMedia],
-    
-    data: () => ({
-        form: new Form({
-            id: null,
-            title: '',
-            description: '',
-            type: '',
-            pricing_type: '',
+  mixins: [UploadsMedia, Geocoding],
 
-            address1: '',
-            address2: '',
-            background_audio: '',
-            background_audio_id: '',
-            city: '',
-            deleted_at: '',
-            description: '',
-            end_image: '',
-            end_message: '',
-            end_point: '',
-            end_video_url: '',
-            facebook_url: '',
-            image1: '',
-            image1_id: '',
-            image2: '',
-            image2_id: '',
-            image3: '',
-            image3_id: '',
-            instagram_url: '',
-            intro_audio: '',
-            intro_audio_id: '',
-            main_image: '',
-            main_image_id: '',
-            pricing_type: '',
-            prize_details: '',
-            prize_instructions: '',
-            published_at: '',
-            start_image: '',
-            start_message: '',
-            start_point: '',
-            start_video_url: '',
-            state: '',
-            stops: [],
-            title: '',
-            trophy_image: '',
-            trophy_image_id: '',
-            twitter_url: '',
-            type: '',
-            video_url: '',
-            zipcode: '',
-        }),
+  data: () => ({
+    form: new Form({
+      id: null,
+      title: "",
+      description: "",
+      type: "",
+      pricing_type: "",
+
+      location: {
+        latitude: "",
+        longitude: "",
+        address1: "",
+        address2: "",
+        city: "",
+        state: "",
+        zipcode: ""
+      },
+      background_audio: "",
+      background_audio_id: "",
+      deleted_at: "",
+      description: "",
+      end_image: "",
+      end_message: "",
+      end_point: "",
+      end_video_url: "",
+      facebook_url: "",
+      image1: "",
+      image1_id: "",
+      image2: "",
+      image2_id: "",
+      image3: "",
+      image3_id: "",
+      instagram_url: "",
+      intro_audio: "",
+      intro_audio_id: "",
+      main_image: "",
+      main_image_id: "",
+      pricing_type: "",
+      prize_details: "",
+      prize_instructions: "",
+      published_at: "",
+      start_image: "",
+      start_message: "",
+      start_point: "",
+      start_video_url: "",
+      stops: [],
+      title: "",
+      trophy_image: "",
+      trophy_image_id: "",
+      twitter_url: "",
+      type: "",
+      video_url: ""
+    })
+  }),
+
+  computed: {
+    ...mapGetters({
+      tour: "tours/current",
+      createUrl: "tours/createUrl",
+      saveUrl: "tours/saveUrl"
     }),
 
-    computed: {
-        ...mapGetters({
-            tour: 'tours/current',
-            createUrl: 'tours/createUrl',
-            saveUrl: 'tours/saveUrl',
-        }),
-        
-        hasTour() {
-            return this.tour.id ? true : false;
-        },
+    hasTour() {
+      return this.tour.id ? true : false;
+    }
+  },
+
+  methods: {
+    submit() {
+      let url = this.createUrl;
+      let method = "post";
+
+      if (this.hasTour) {
+        url = this.saveUrl;
+        method = "patch";
+      }
+
+      return this.form.submit(method, url);
     },
 
-    methods: {
-        submit() {
-            let url = this.createUrl;
-            let method = 'post';
+    save() {
+      this.submit()
+        .then(({ data }) => {
+          console.log(data);
+          this.$store.commit("tours/fetchTourSuccess", data.data);
+        })
+        .catch(e => {
+          console.log("save tour error:");
+          console.log(e);
+        });
+    }
+  },
 
-            if (this.hasTour) {
-                url = this.saveUrl;
-                method = 'patch'
-            }
+  mounted() {
+    if (this.tour.id) {
+      this.form.fill(this.tour);
+    }
+  },
 
-            return this.form.submit(method, url);
-        },
-
-        save() {
-            this.submit()
-                .then( ({ data }) => {
-                    console.log(data);
-                    this.$store.commit('tours/fetchTourSuccess', data.data);
-                })
-                .catch(e => {
-                    console.log('save tour error:');
-                    console.log(e);
-                });
-        },
-    },
-
-    mounted() {
-        if (this.tour.id) {
-            this.form.fill(this.tour);
-        }
-    },
-
-    watch: {
-        tour(newVal) {
-            if (newVal.id) {
-                this.form.fill(newVal);
-            }
-        },
-    },
-}
+  watch: {
+    tour(newVal) {
+      if (newVal.id) {
+        this.form.fill(newVal);
+      }
+    }
+  }
+};
 </script>
