@@ -25,20 +25,49 @@
         </div>
 
         <!-- STOP LIST -->
-        <div v-show="! loading" class="left-side">
-            <div class="bg-gray compass-bg p-4 h-100">
-                <b-row v-for="i in tourRows" :key="i">
-                    <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
-                        <stop-box :stop="item" @click="editStop(item)" @deleted="deleteStop(item)"></stop-box>
-                    </b-col>
+        <div v-show="! loading" class="left-side bg-gray compass-bg ">
 
-                    <b-col v-if="i == tourRows" xl="3" class="box-col">
-                        <div class="add-box bg-fit" @click="stopModal()">
-                            <fa :icon="['fas', 'plus']" size="3x" />
-                            <div class="title mt-3">ADD POINT</div>
-                        </div>
-                    </b-col>
-                </b-row>
+            <!-- LIST MODE -->
+            <div v-show="stopMode == 'list'" class="p-4 h-100 flex flex-col">
+                <div class="f-1">
+                    <b-row v-for="i in tourRows" :key="i">
+                        <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
+                            <stop-box :stop="item" @click="editStop(item)" @deleted="deleteStop(item)"></stop-box>
+                        </b-col>
+
+                        <b-col v-if="i == tourRows" xl="3" class="box-col">
+                            <div class="add-box bg-fit" @click="stopModal()">
+                                <fa :icon="['fas', 'plus']" size="3x" />
+                                <div class="title mt-3">ADD POINT</div>
+                            </div>
+                        </b-col>
+                    </b-row>
+                </div>
+                <div class="mt-4 mb-2" style="">
+                    <b-btn variant="secondary" class="btn-inline mr-3">
+                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
+                    </b-btn>
+                    
+                    <b-btn variant="secondary" class="btn-inline" @click="stopMode = 'map'">
+                        <fa :icon="['fas', 'list']" />&nbsp;Map Mode
+                    </b-btn>
+                </div>
+            </div>
+
+            <!-- MAP MODE -->
+            <div v-show="stopMode == 'map'" class="bg-gray h-100" style="position: relative">
+                <div class="" style="position: absolute; bottom: 30px; left: 15px; z-index: 99">
+                    <b-btn variant="secondary" class="btn-inline mr-2">
+                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
+                    </b-btn> 
+                    
+                    <b-btn variant="secondary" class="btn-inline" @click="stopMode = 'list'">
+                        <fa :icon="['fas', 'list']" />&nbsp;List Mode
+                    </b-btn>
+                </div>
+                <div class="map-container h-100">
+                    <div class="h-100" ref="map"></div>
+                </div>
             </div>
         </div>
 
@@ -74,6 +103,15 @@ export default {
         return { title: 'Edit Tour' }
     },
     
+    data: () => ({
+        loading: true,
+        mode: 'tour',
+        stopMode: 'map',
+        busy: false,
+        showStopModal: false,
+        map: {},
+    }),
+
     computed: {
         ...mapGetters({
             user: 'auth/user',
@@ -90,26 +128,6 @@ export default {
             return Math.ceil( (this.tour.stops.length + 1) / 4);
         }
     },
-
-    async mounted() {
-        this.$store.commit('tours/setUrl', urls.cms);
-        await this.$store.dispatch('tours/fetchTour', this.$route.params.id);
-
-        console.log(this.tour);;
-        if (!this.tour.id) {
-            // 404
-            this.$router.push({ name: 'home' });
-        }
-
-        this.loading = false;
-    },
-
-    data: () => ({
-        loading: true,
-        mode: 'tour',
-        busy: false,
-        showStopModal: false,
-    }),
 
     methods: {
         async logout () {
@@ -161,6 +179,27 @@ export default {
                     this.busy = false;
                 });
         },
+    },
+
+    async mounted() {
+        this.$store.commit('tours/setUrl', urls.cms);
+        await this.$store.dispatch('tours/fetchTour', this.$route.params.id);
+
+        console.log(this.tour);;
+        if (!this.tour.id) {
+            // 404
+            this.$router.push({ name: 'home' });
+        }
+
+        var uluru = {lat: -25.363, lng: 131.044};
+
+
+        this.map = new google.maps.Map(this.$refs.map, {
+          zoom: 4,
+          center: new google.maps.LatLng(39.0, -93.0)
+        });
+
+        this.loading = false;
     },
 }
 </script>
