@@ -238,6 +238,20 @@
 
                 <!-- START/END POINTS -->
                 <h4 class="mt-3">START POINT</h4>
+
+                <b-form-group>
+                    <b-form-select :disabled="form.busy" v-model="form.start_point">
+                        <option value="">-- Select Stop --</option>
+                        <option v-for="item in tour.stops" 
+                            :key="item.id" 
+                            :value="item.id"
+                            v-text="item.title"
+                        ></option>
+                    </b-form-select>
+                    
+                    <input-help :form="form" field="start_point" text=""></input-help>
+                </b-form-group>
+
                 <b-form-group>
                     <b-form-textarea id="start_message"
                         :disabled="form.busy"
@@ -267,6 +281,19 @@
                 <youtube-input :form="form" id="start_video_url" v-model="form.start_video_url"></youtube-input>
 
                 <h4 class="mt-3">END POINT</h4>
+                <b-form-group>
+                    <b-form-select :disabled="form.busy" v-model="form.end_point">
+                        <option value="">-- Select Stop --</option>
+                        <option v-for="item in tour.stops" 
+                            :key="item.id" 
+                            :value="item.id"
+                            v-text="item.title"
+                        ></option>
+                    </b-form-select>
+                    
+                    <input-help :form="form" field="end_point" text=""></input-help>
+                </b-form-group>
+
                 <b-form-group>
                     <b-form-textarea id="end_message"
                         :disabled="form.busy"
