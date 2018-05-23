@@ -60,14 +60,14 @@
                 <h4 class="mt-4">Play Radius</h4>
 
                 <b-form-group>
-                    <b-form-input id="geo_radius"
+                    <b-form-input id="play_radius"
                         :disabled="form.busy"
                         type="text"
-                        v-model="form.geo_radius"
+                        v-model="form.play_radius"
                         required
                         placeholder="Geofence Radius">
                     </b-form-input>
-                    <input-help :form="form" field="geo_radius" text=""></input-help>
+                    <input-help :form="form" field="play_radius" text=""></input-help>
                 </b-form-group>
 
                 <!-- AUDIO -->
@@ -245,6 +245,7 @@ export default {
 
             audio: '',
             audio_id: '',
+            play_radius: '',
             main_image: '',
             main_image_id: '',
             image1: '',
