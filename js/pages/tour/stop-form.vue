@@ -211,13 +211,18 @@
                         </busy-button>
                     </b-col>
                     <b-col lg="6">
-                        <b-btn variant="secondary" class="w-100" @click="addStop()">
-                            <fa :icon="['fas', 'map-marker-alt']"/>&nbsp;&nbsp;Add a Stop
-                        </b-btn>
+                        <busy-button :busy="form.busy" variant="danger" class="w-100" @click="deleteStop">
+                            <fa :icon="['fas', 'times']"/>&nbsp;&nbsp;Delete
+                        </busy-button>
                     </b-col>
                 </b-row>
             </div>
         </div>
+
+        <!-- Confirmation modal -->
+        <confirm-modal ref="confirm" yesButton="Delete">
+            Are you sure you want to delete this stop?
+        </confirm-modal>
     </div>
 </template>
 
@@ -266,6 +271,7 @@ export default {
             createStopUrl: 'tours/createStopUrl',
             saveStopUrl: 'tours/saveStopUrl',
             clickedPoint: 'map/clickedPoint',
+            saveTourUrl: 'tours/saveUrl',
         }),
         
         hasStop() {
@@ -352,6 +358,21 @@ export default {
          */
         selectMapPoint() {
             this.useMapForLocation = true;
+        },
+
+        deleteStop(confirm = true) {
+            this.$refs.confirm.confirm(() => {
+                this.form.busy = true;
+                axios.delete(this.saveTourUrl + `/stops/${this.stop.id}`)
+                    .then( ({ data }) => {
+                        this.$emit('deleted');
+                        this.form.busy = false;
+                    })
+                    .catch( e => {
+                        alerts.addMessage('error', e.response.data.message);
+                        this.form.busy = false;
+                    })
+            });
         },
     },
 

@@ -19,7 +19,7 @@
             </div>
 
             <transition :name="formTransition" mode="out-in">
-                <stop-form v-if="mode == 'stop'" @addStop="stopModal()"></stop-form>
+                <stop-form v-if="mode == 'stop'" @addStop="stopModal()" @deleted="deleteStop(currentStop)"></stop-form>
                 <tour-form v-else></tour-form>
             </transition>
         </div>

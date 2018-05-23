@@ -240,7 +240,7 @@
                 <h4 class="mt-3">START POINT</h4>
 
                 <b-form-group>
-                    <b-form-select :disabled="form.busy" v-model="form.start_point">
+                    <b-form-select :disabled="form.busy" v-model="form.start_point_id">
                         <option value="">-- Select Stop --</option>
                         <option v-for="item in tour.stops" 
                             :key="item.id" 
@@ -249,7 +249,7 @@
                         ></option>
                     </b-form-select>
                     
-                    <input-help :form="form" field="start_point" text=""></input-help>
+                    <input-help :form="form" field="start_point_id" text=""></input-help>
                 </b-form-group>
 
                 <b-form-group>
@@ -282,7 +282,7 @@
 
                 <h4 class="mt-3">END POINT</h4>
                 <b-form-group>
-                    <b-form-select :disabled="form.busy" v-model="form.end_point">
+                    <b-form-select :disabled="form.busy" v-model="form.end_point_id">
                         <option value="">-- Select Stop --</option>
                         <option v-for="item in tour.stops" 
                             :key="item.id" 
@@ -291,7 +291,7 @@
                         ></option>
                     </b-form-select>
                     
-                    <input-help :form="form" field="end_point" text=""></input-help>
+                    <input-help :form="form" field="end_point_id" text=""></input-help>
                 </b-form-group>
 
                 <b-form-group>
@@ -338,13 +338,18 @@
                         </busy-button>
                     </b-col>
                     <b-col lg="6">
-                        <b-btn variant="danger" class="w-100">
+                        <busy-button :busy="form.busy" variant="danger" class="w-100" @click="destroy()">
                             <fa :icon="['fas', 'times']"/>&nbsp;&nbsp;Delete
-                        </b-btn>
+                        </busy-button>
                     </b-col>
                 </b-row>
             </div>
         </div>
+
+        <!-- Confirmation modal -->
+        <confirm-modal ref="confirmDelete">
+            Are you sure you want to delete this Tour?
+        </confirm-modal>
     </div>
 </template>
 
@@ -379,7 +384,7 @@ export default {
             description: "",
             end_image: "",
             end_message: "",
-            end_point: "",
+            end_point_id: "",
             end_video_url: "",
             facebook_url: "",
             image1: "",
@@ -399,7 +404,7 @@ export default {
             published_at: "",
             start_image: "",
             start_message: "",
-            start_point: "",
+            start_point_id: "",
             start_video_url: "",
             stops: [],
             title: "",
@@ -451,6 +456,21 @@ export default {
         updateLocation() {
             console.log('tour location changed');
             this.$store.commit('tours/setCurrent', this.form.data());
+        },
+
+        destroy() {
+            this.$refs.confirmDelete.confirm(() => {
+                this.form.busy = true;
+                let f = new Form({});
+                f.delete(this.saveUrl)
+                    .then( ({ data }) => {
+                        this.$router.push({ name: 'home' });
+                        this.form.busy = false;
+                    }).catch( e => {
+                        alerts.addMessage('error', e.response.data.message);
+                        this.form.busy = false;
+                    });
+            });
         },
     },
 

@@ -62,11 +62,9 @@ export default {
             this.$refs.confirmDelete.confirm(() => {
                 this.deleting = true;
                 let f = new Form({});
-                console.log(this.$refs.adminForm.url);
                 f.delete(this.$refs.adminForm.url)
                     .then( ({ data }) => {
                         this.deleting = false;
-                        console.log('redirect back');
                         this.$router.push({ name: 'admin.admins' });
                     }).catch( e => {
                         this.deleting = false;
