@@ -25,5 +25,18 @@ export default {
                 });
             });
         },
+
+        reverseLookup(lat, lng) {
+            return new Promise((resolve, reject) => {
+                var latlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
+                this.geocoder.geocode({'latLng': latlng}, function(results, status) {
+                    if (status == 'OK') {
+                        resolve(results);
+                    } else {
+                        reject(status);
+                    }
+                });
+            });
+        },
     }
 }

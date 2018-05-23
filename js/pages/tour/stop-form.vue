@@ -45,9 +45,17 @@
                 <input-help :form="form" field="description" text=""></input-help>
             </b-form-group>
 
-            <div v-show="hasStop">
-                <h4>Location</h4>
-                <address-form :form="form" v-model="form.location"></address-form>
+            <div v-if="hasStop">
+                <div class="flex align-items-base">
+                    <h4 class="f-1">Location</h4>
+                    <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMapForLocation = true">
+                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Use Map
+                    </a>
+                    <a v-else href="#" class="reverse mr-2" @click.prevent="useMapForLocation = false">
+                        Cancel
+                    </a>
+                </div>
+                <address-form :form="form" v-model="form.location" @input="updateLocation" :overlay="useMapForLocation"></address-form>
 
                 <h4 class="mt-4">Play Radius</h4>
 
@@ -216,9 +224,10 @@
 <script>
 import { mapGetters } from 'vuex';
 import UploadsMedia from '../../mixins/UploadsMedia';
+import Geocoding from '../../mixins/Geocoding';
 
 export default {
-    mixins: [UploadsMedia],
+    mixins: [ UploadsMedia, Geocoding ],
     
     data: () => ({
         form: new Form({
@@ -245,6 +254,8 @@ export default {
             image3: '',
             image3_id: '',
         }),
+
+        useMapForLocation: false,
     }),
 
     computed: {
@@ -253,6 +264,7 @@ export default {
             stop: 'tours/currentStop',
             createStopUrl: 'tours/createStopUrl',
             saveStopUrl: 'tours/saveStopUrl',
+            clickedPoint: 'map/clickedPoint',
         }),
         
         hasStop() {
@@ -300,6 +312,7 @@ export default {
                 .then( ({ data }) => {
                     console.log(data);
                     this.$store.commit('tours/updateStop', data.data);
+                    this.form.fill(this.stop);
                 })
                 .catch(e => {
                     console.log('save stop error:');
@@ -325,6 +338,19 @@ export default {
             console.log('adding stop...');
             this.$emit('addStop')
         },
+        
+        updateLocation() {
+            console.log('location changed');
+            this.$store.commit('tours/setCurrentStop', this.form.data());
+        },
+
+        /**
+         * Enables mode to allow user to select a location by clicking 
+         * anywhere on the map.
+         */
+        selectMapPoint() {
+            this.useMapForLocation = true;
+        },
     },
 
     mounted() {
@@ -334,9 +360,43 @@ export default {
     },
 
     watch: {
-        stop(newVal) {
-            if (newVal.id) {
+        stop(newVal, oldVal) {
+            if (newVal.id != oldVal.id) {
+                console.log('reload stop form');
                 this.form.fill(newVal);
+            }
+        },
+
+        clickedPoint(newVal, oldVal) {
+            if (this.useMapForLocation) {
+                console.log('clicked point:');
+                console.log(newVal);
+
+                // this.reverseLookup(newVal.latitude, newVal.longitude)
+                //     .then(results => {
+                //         console.log('reverse lookup results:');
+                //         console.log(results);
+                //     })
+                //     .catch(e => {
+                //         if (e == 'ZERO_RESULTS') {
+                //             // poor location
+                //         }
+                //         console.log('error looking up coors: ' + e);
+                //     })
+
+                this.form.location = {
+                    ...this.form.location,
+                    latitude: newVal.latitude,
+                    longitude: newVal.longitude,
+                    address1: '',
+                    address2: '',
+                    city: '',
+                    state: '',
+                    zipcode: '',
+                }
+
+                this.useMapForLocation = false;
+                this.updateLocation();
             }
         },
     },

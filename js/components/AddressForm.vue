@@ -1,5 +1,9 @@
 <template>
-    <div>
+    <div class="p-relative">
+        <div v-if="overlay" class="overlay flex justify-center items-center">
+            <p>Select a location on the map</p>
+        </div>
+
         <b-form-group>
             <b-form-input id="address1"
                 :disabled="form.busy"
@@ -104,6 +108,7 @@ export default {
     props: {
         form: { type: Object, default: {} },
         value: { type: Object, default: {} },
+        overlay: { type: Boolean, default: false },
     },
 
     data: () => ({
@@ -184,3 +189,15 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+.overlay {
+    position: absolute;
+    background-color: #e20e24;
+    width: 100%;
+    height: 100%;
+    z-index: 99;
+    color: #fff;
+    opacity: 0.6;
+}
+</style>

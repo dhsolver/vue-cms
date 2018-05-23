@@ -20,6 +20,7 @@ export default {
     computed: {
         ...mapGetters({
             tour: 'tours/current',
+            stop: 'tours/currentStop',
         }),
 
         allMarkers() {
@@ -61,19 +62,37 @@ export default {
             }
         },
 
+        clearMarkers() {
+            this.stopMarkers.forEach(item => {
+                item.setMap(null);
+            });
+            this.stopMarkers.length = 0;
+        },
+
         loadStopMarkers() {
-            this.stopMarkers = [];
-            this.tour.stops.forEach(stop => {
-                let m = new google.maps.Marker({
-                    map: this.map,
-                    title: stop.title,
-                    label: String(stop.order),
-                    position: { lat: parseFloat(stop.location.latitude), lng: parseFloat(stop.location.longitude) }
-                    // icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
-                });
+            this.clearMarkers();
+            this.tour.stops.forEach(item => {
+                let m = null;
+
+                if (item.id == this.stop.id) {
+                    // use current stop object to reflect live data
+                    m = new google.maps.Marker({
+                        map: this.map,
+                        title: this.stop.title,
+                        label: String(this.stop.order),
+                        position: { lat: parseFloat(this.stop.location.latitude), lng: parseFloat(this.stop.location.longitude) }
+                    });
+                } else {
+                    m = new google.maps.Marker({
+                        map: this.map,
+                        title: item.title,
+                        label: String(item.order),
+                        position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) }
+                    });
+                }
 
                 m.addListener('click', () => {
-                    this.onClickMarker(m, stop);
+                    this.onClickMarker(m, item);
                 });
 
                 this.stopMarkers.push(m);
@@ -104,14 +123,24 @@ export default {
             }
 
             this.map = new google.maps.Map(element, defaultPosition);
+            google.maps.event.addListener(this.map, "click", this.onClickMap);
+
             this.loadTourMarker();
             this.loadStopMarkers();
             this.zoomToFitMarkers();
         },
 
         onClickMarker(marker, stop) {
-            console.log('clicked marker for stop: ' + stop.order);
-            this.$emit('clickStop', stop);
+            if (stop.id != this.stop.id) {
+                this.$emit('clickStop', stop);
+            }
+        },
+
+        onClickMap(event) {
+            this.$store.commit('map/setClickedPoint', {
+                latitude: event.latLng.lat(),
+                longitude: event.latLng.lng(),
+            });
         },
     },
 
@@ -124,9 +153,13 @@ export default {
     watch: {
         tour(newVal, oldVal) {
             // reload map when tour is changed
-            if (newVal.id != oldVal) {
+            if (newVal.id != oldVal.id) {
                 this.initMap(this.$refs.map);
             }
+        },
+
+        stop(newVal, oldVal) {
+            this.loadStopMarkers();
         },
     },
 }
