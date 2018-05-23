@@ -44,7 +44,7 @@
                     </b-row>
                 </div>
                 <div class="mt-4 mb-2" style="">
-                    <b-btn variant="secondary" class="btn-inline mr-3">
+                    <b-btn variant="secondary" class="btn-inline mr-3" @click="stopModal()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
                     </b-btn>
                     
@@ -57,7 +57,7 @@
             <!-- MAP MODE -->
             <div v-else class="bg-gray h-100" style="position: relative">
                 <div class="" style="position: absolute; bottom: 30px; left: 15px; z-index: 99">
-                    <b-btn variant="secondary" class="btn-inline mr-2">
+                    <b-btn variant="secondary" class="btn-inline mr-2" @click="stopModal()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
                     </b-btn>
                     

@@ -101,7 +101,7 @@ export default {
             });
         },
 
-        zoomToFitMarkers() {
+        zoomToFitMarkers(initial = false) {
             let markers = this.allMarkers;
             if (markers.length) {
                 let bounds = new google.maps.LatLngBounds();
@@ -109,11 +109,14 @@ export default {
                     bounds.extend(markers[i].getPosition());
                 }
 
-                // google.maps.event.addListener(this.map, 'idle', () => {
-                //     console.log('fit to bounds');
-                this.map.fitBounds(bounds);
-                //     google.maps.event.clearListeners(this.map, 'idle');
-                // });
+                if (initial) { 
+                    google.maps.event.addListener(this.map, 'idle', () => {
+                        this.map.fitBounds(bounds);
+                        google.maps.event.clearListeners(this.map, 'idle');
+                    });
+                } else {
+                    this.map.fitBounds(bounds);
+                }
             }
         },
 
@@ -131,7 +134,7 @@ export default {
 
             this.loadTourMarker();
             this.loadStopMarkers();
-            this.zoomToFitMarkers();
+            this.zoomToFitMarkers(true);
         },
 
         onClickMarker(marker, stop) {
