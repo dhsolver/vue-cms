@@ -4,6 +4,10 @@ export default {
     }),
 
     methods: {
+        objHasCoordinates(obj) {
+            return obj && obj.longitude && obj.latitude;
+        },
+
         isCompleteAddress(obj) {
             return (obj && obj.address1 && obj.city && obj.state && obj.zipcode);
         },

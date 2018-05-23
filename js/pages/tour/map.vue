@@ -31,7 +31,7 @@ export default {
         },
 
         tourLocation() {
-            if (this.isCompleteAddress(this.tour.location)) {
+            if (this.objHasCoordinates(this.tour.location)) {
                 return {
                     lat: parseFloat(this.tour.location.latitude),
                     lng: parseFloat(this.tour.location.longitude),
@@ -74,28 +74,30 @@ export default {
             this.tour.stops.forEach(item => {
                 let m = null;
 
-                if (item.id == this.stop.id) {
-                    // use current stop object to reflect live data
-                    m = new google.maps.Marker({
-                        map: this.map,
-                        title: this.stop.title,
-                        label: String(this.stop.order),
-                        position: { lat: parseFloat(this.stop.location.latitude), lng: parseFloat(this.stop.location.longitude) }
+                if (this.objHasCoordinates(item.location)) {
+                    if (item.id == this.stop.id) {
+                        // use current stop object to reflect live data
+                        m = new google.maps.Marker({
+                            map: this.map,
+                            title: this.stop.title,
+                            label: String(this.stop.order),
+                            position: { lat: parseFloat(this.stop.location.latitude), lng: parseFloat(this.stop.location.longitude) }
+                        });
+                    } else {
+                        m = new google.maps.Marker({
+                            map: this.map,
+                            title: item.title,
+                            label: String(item.order),
+                            position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) }
+                        });
+                    }
+
+                    m.addListener('click', () => {
+                        this.onClickMarker(m, item);
                     });
-                } else {
-                    m = new google.maps.Marker({
-                        map: this.map,
-                        title: item.title,
-                        label: String(item.order),
-                        position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) }
-                    });
+
+                    this.stopMarkers.push(m);
                 }
-
-                m.addListener('click', () => {
-                    this.onClickMarker(m, item);
-                });
-
-                this.stopMarkers.push(m);
             });
         },
 
@@ -107,9 +109,11 @@ export default {
                     bounds.extend(markers[i].getPosition());
                 }
 
-                google.maps.event.addListenerOnce(this.map, 'idle', () => {
-                    this.map.fitBounds(bounds);
-                });
+                // google.maps.event.addListener(this.map, 'idle', () => {
+                //     console.log('fit to bounds');
+                this.map.fitBounds(bounds);
+                //     google.maps.event.clearListeners(this.map, 'idle');
+                // });
             }
         },
 
@@ -159,7 +163,9 @@ export default {
         },
 
         stop(newVal, oldVal) {
+            console.log('stop changed');
             this.loadStopMarkers();
+            this.zoomToFitMarkers();
         },
     },
 }

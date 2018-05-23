@@ -291,6 +291,7 @@ export default {
                 method = 'patch'
             }
 
+            console.log(this.form.originalData);
             return this.form.submit(method, url);
         },
 
@@ -361,7 +362,7 @@ export default {
 
     watch: {
         stop(newVal, oldVal) {
-            if (newVal.id != oldVal.id) {
+            if (newVal.id && newVal.id != oldVal.id) {
                 console.log('reload stop form');
                 this.form.fill(newVal);
             }

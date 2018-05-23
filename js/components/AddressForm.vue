@@ -73,9 +73,9 @@
             </b-col>
             <b-col lg="9">
                 <b-form-input id="latitude"
-                    :disabled="true"
                     type="text"
-                    :value="latitudeDisplay"
+                    v-model="address.latitude"
+                    @change="$emit('input', address)"
                     placeholder="Latitude">
                 </b-form-input>
                 <input-help :form="form" field="latitude" text=""></input-help>
@@ -87,9 +87,9 @@
             </b-col>
             <b-col lg="9">
                 <b-form-input id="longitude"
-                    :disabled="true"
                     type="text"
-                    :value="longitudeDisplay"
+                    v-model="address.longitude"
+                    @change="$emit('input', address)"
                     placeholder="Longitude">
                 </b-form-input>
                 <input-help :form="form" field="longitude" text=""></input-help>
@@ -176,7 +176,6 @@ export default {
             });
         },
     },
-
 
     mounted() {
         this.address = this.value;
