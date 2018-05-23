@@ -79,30 +79,30 @@ export default {
             this.tour.stops.forEach(item => {
                 let m = null;
 
-                if (this.objHasCoordinates(item.location)) {
-                    if (item.id == this.stop.id) {
-                        // use current stop object to reflect live data
-                        m = new google.maps.Marker({
-                            map: this.map,
-                            title: this.stop.title,
-                            label: String(this.stop.order),
-                            position: { lat: parseFloat(this.stop.location.latitude), lng: parseFloat(this.stop.location.longitude) }
-                        });
-                    } else {
-                        m = new google.maps.Marker({
-                            map: this.map,
-                            title: item.title,
-                            label: String(item.order),
-                            position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) }
-                        });
-                    }
-
-                    m.addListener('click', () => {
-                        this.onClickMarker(m, item);
+                if (item.id == this.stop.id && this.objHasCoordinates(this.stop.location)) {
+                    // use current stop object to reflect live data
+                    m = new google.maps.Marker({
+                        map: this.map,
+                        title: this.stop.title,
+                        label: String(this.stop.order),
+                        position: { lat: parseFloat(this.stop.location.latitude), lng: parseFloat(this.stop.location.longitude) }
                     });
-
-                    this.stopMarkers.push(m);
+                } else if (this.objHasCoordinates(item.location)) {
+                    m = new google.maps.Marker({
+                        map: this.map,
+                        title: item.title,
+                        label: String(item.order),
+                        position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) }
+                    });
+                } else {
+                    return;
                 }
+
+                m.addListener('click', () => {
+                    this.onClickMarker(m, item);
+                });
+
+                this.stopMarkers.push(m);
             });
         },
 
