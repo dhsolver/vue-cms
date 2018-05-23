@@ -66,7 +66,7 @@
                     </b-btn>
                 </div>
                 
-                <tour-map></tour-map>
+                <tour-map @clickStop="editStop" @clickTour="showTourForm"></tour-map>
             </div>
         </div>
 
@@ -185,7 +185,6 @@ export default {
         this.$store.commit('tours/setUrl', urls.cms);
         await this.$store.dispatch('tours/fetchTour', this.$route.params.id);
 
-        console.log(this.tour);;
         if (!this.tour.id) {
             // 404
             this.$router.push({ name: 'home' });
