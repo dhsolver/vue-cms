@@ -38,7 +38,7 @@ export const mutations = {
         state.list.push(tour)
     },
 
-    fetchTourSuccess(state, tour) {
+    setCurrent(state, tour) {
         Vue.set(state, 'current', tour)
     },
 
@@ -98,7 +98,7 @@ export const actions = {
             const response = await axios.get(state.url + `tours/${id}`)
             
             if (response.status == 200) {
-                commit('fetchTourSuccess', response.data)
+                commit('setCurrent', response.data)
             } 
             
         } catch (e) {

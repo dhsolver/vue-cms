@@ -342,7 +342,7 @@ export default {
         },
         
         updateLocation() {
-            console.log('location changed');
+            console.log('stop location changed');
             this.$store.commit('tours/setCurrentStop', this.form.data());
         },
 

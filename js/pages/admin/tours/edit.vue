@@ -51,7 +51,7 @@ export default {
             this.saving = true;
             this.$refs.tourForm.submit()
                 .then( ({data}) => {
-                    this.$store.commit('tours/fetchTourSuccess', data.data);
+                    this.$store.commit('tours/setCurrent', data.data);
                     this.saving = false;
                 }).catch( e => {
                     this.saving = false;

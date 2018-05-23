@@ -80,7 +80,7 @@
 
             <div v-if="hasTour">
                 <h4>Location</h4>
-                <address-form :form="form" v-model="form.location"></address-form>
+                <address-form :form="form" v-model="form.location" @input="updateLocation"></address-form>
 
                 <!-- SOCIAL URLS -->
                 <h4>Social</h4>
@@ -327,113 +327,118 @@ import UploadsMedia from "../../mixins/UploadsMedia";
 import Geocoding from "../../mixins/Geocoding";
 
 export default {
-  mixins: [UploadsMedia, Geocoding],
+    mixins: [UploadsMedia, Geocoding],
 
-  data: () => ({
-    form: new Form({
-      id: null,
-      title: "",
-      description: "",
-      type: "",
-      pricing_type: "",
+    data: () => ({
+        form: new Form({
+            id: null,
+            title: "",
+            description: "",
+            type: "",
+            pricing_type: "",
 
-      location: {
-        latitude: "",
-        longitude: "",
-        address1: "",
-        address2: "",
-        city: "",
-        state: "",
-        zipcode: ""
-      },
-      background_audio: "",
-      background_audio_id: "",
-      deleted_at: "",
-      description: "",
-      end_image: "",
-      end_message: "",
-      end_point: "",
-      end_video_url: "",
-      facebook_url: "",
-      image1: "",
-      image1_id: "",
-      image2: "",
-      image2_id: "",
-      image3: "",
-      image3_id: "",
-      instagram_url: "",
-      intro_audio: "",
-      intro_audio_id: "",
-      main_image: "",
-      main_image_id: "",
-      pricing_type: "",
-      prize_details: "",
-      prize_instructions: "",
-      published_at: "",
-      start_image: "",
-      start_message: "",
-      start_point: "",
-      start_video_url: "",
-      stops: [],
-      title: "",
-      trophy_image: "",
-      trophy_image_id: "",
-      twitter_url: "",
-      type: "",
-      video_url: ""
-    })
-  }),
-
-  computed: {
-    ...mapGetters({
-      tour: "tours/current",
-      createUrl: "tours/createUrl",
-      saveUrl: "tours/saveUrl"
+            location: {
+                latitude: "",
+                longitude: "",
+                address1: "",
+                address2: "",
+                city: "",
+                state: "",
+                zipcode: ""
+            },
+            background_audio: "",
+            background_audio_id: "",
+            deleted_at: "",
+            description: "",
+            end_image: "",
+            end_message: "",
+            end_point: "",
+            end_video_url: "",
+            facebook_url: "",
+            image1: "",
+            image1_id: "",
+            image2: "",
+            image2_id: "",
+            image3: "",
+            image3_id: "",
+            instagram_url: "",
+            intro_audio: "",
+            intro_audio_id: "",
+            main_image: "",
+            main_image_id: "",
+            pricing_type: "",
+            prize_details: "",
+            prize_instructions: "",
+            published_at: "",
+            start_image: "",
+            start_message: "",
+            start_point: "",
+            start_video_url: "",
+            stops: [],
+            title: "",
+            trophy_image: "",
+            trophy_image_id: "",
+            twitter_url: "",
+            type: "",
+            video_url: ""
+        })
     }),
 
-    hasTour() {
-      return this.tour.id ? true : false;
-    }
-  },
+    computed: {
+        ...mapGetters({
+            tour: "tours/current",
+            createUrl: "tours/createUrl",
+            saveUrl: "tours/saveUrl"
+        }),
 
-  methods: {
-    submit() {
-      let url = this.createUrl;
-      let method = "post";
-
-      if (this.hasTour) {
-        url = this.saveUrl;
-        method = "patch";
-      }
-
-      return this.form.submit(method, url);
+        hasTour() {
+            return this.tour.id ? true : false;
+        }
     },
 
-    save() {
-      this.submit()
-        .then(({ data }) => {
-          console.log(data);
-          this.$store.commit("tours/fetchTourSuccess", data.data);
-        })
-        .catch(e => {
-          console.log("save tour error:");
-          console.log(e);
-        });
-    }
-  },
+    methods: {
+        submit() {
+            let url = this.createUrl;
+            let method = "post";
 
-  mounted() {
-    if (this.tour.id) {
-      this.form.fill(this.tour);
-    }
-  },
+            if (this.hasTour) {
+                url = this.saveUrl;
+                method = "patch";
+            }
 
-  watch: {
-    tour(newVal) {
-      if (newVal.id) {
-        this.form.fill(newVal);
-      }
+            return this.form.submit(method, url);
+        },
+
+        save() {
+            this.submit()
+                .then(({ data }) => {
+                    console.log(data);
+                    this.$store.commit("tours/setCurrent", data.data);
+                })
+                .catch(e => {
+                    console.log("save tour error:");
+                    console.log(e);
+                });
+        },
+
+        updateLocation() {
+            console.log('tour location changed');
+            this.$store.commit('tours/setCurrent', this.form.data());
+        },
+    },
+
+    mounted() {
+        if (this.tour.id) {
+            this.form.fill(this.tour);
+        }
+    },
+
+    watch: {
+        tour(newVal) {
+            if (newVal.id) {
+                this.form.fill(newVal);
+            }
+        }
     }
-  }
 };
 </script>

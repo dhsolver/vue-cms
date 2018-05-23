@@ -44,6 +44,11 @@ export default {
 
     methods: {
         loadTourMarker() {
+            if (this.tourMarker) {
+                this.tourMarker.setMap(null);
+                this.tourMarker = null;
+            }
+            
             if (this.tourLocation) {
                 this.tourMarker = new google.maps.Marker({
                     position: {
@@ -152,15 +157,16 @@ export default {
     },
 
     mounted() {
-
         this.initMap(this.$refs.map);
-    
     },
 
     watch: {
         tour(newVal, oldVal) {
+            console.log('tour changed');
+            this.loadTourMarker();
+            this.zoomToFitMarkers();
             // reload map when tour is changed
-            if (newVal.id != oldVal.id) {
+            if (newVal.id && newVal.id != oldVal.id) {
                 this.initMap(this.$refs.map);
             }
         },
