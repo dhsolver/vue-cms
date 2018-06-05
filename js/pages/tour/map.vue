@@ -72,7 +72,7 @@ export default {
                     icon: this.pinIcon,
                     labelAnchor: new google.maps.Point(13, 68),
                     labelClass: "pin_label", // the CSS class for the label
-                    labelContent: 'A',
+                    labelContent: 'T',
                     // icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
                 });
 
@@ -108,8 +108,10 @@ export default {
                 let m = null;
 
                 if (item.id == this.stop.id && this.objHasCoordinates(this.stop.location)) {
-                    this.drawMarker(this.stop);
+                    // draw from current stop object so it reflect the live form data
+                    this.drawMarker(this.stop, true);
                 } else if (this.objHasCoordinates(item.location)) {
+                    // draw from object in stop list
                     this.drawMarker(item);
                 } else {
                     console.log(item);
@@ -118,7 +120,7 @@ export default {
             });
         },
 
-        drawMarker(stop) {
+        drawMarker(stop, isCurrent = false) {
             let m = new MarkerWithLabel({
                 map: this.map,
                 title: stop.title,
@@ -126,7 +128,7 @@ export default {
                 position: { lat: parseFloat(stop.location.latitude), lng: parseFloat(stop.location.longitude) },
                 icon: this.pinIcon,
                 labelAnchor: new google.maps.Point(13, 68),
-                labelClass: "pin_label", // the CSS class for the label
+                labelClass: isCurrent ? "pin_label_active" : "pin_label", // the CSS class for the label
                 labelContent: String(stop.order),
             });
 
@@ -232,6 +234,16 @@ export default {
     padding: 2px 4px;
     border-radius: 20px;
     color: #000;
+    font-size: 13px;
+    width: 25px;
+    text-align: center;
+}
+.pin_label_active {
+    background-color: #ff5050;
+    border: 1px solid #9e9e9e;
+    padding: 2px 4px;
+    border-radius: 20px;
+    color: #fff;
     font-size: 13px;
     width: 25px;
     text-align: center;
