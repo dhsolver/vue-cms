@@ -29,6 +29,7 @@
         "js-cookie": "^2.2.0",
         "laravel-mix": "^2.0",
         "lodash": "^4.17.4",
+        "markerwithlabel": "arkhipovandrei/node-MarkerWithLabel#master",
         "moment": "^2.22.1",
         "vue": "^2.5.7",
         "vue-google-autocomplete": "^1.1.0",

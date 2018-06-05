@@ -55,9 +55,14 @@
                         Cancel
                     </a>
                 </div>
-                <address-form :form="form" v-model="form.location" @input="updateLocation" :overlay="useMapForLocation"></address-form>
+                <address-form :form="form" v-model="form.location" @input="updateCurrentStop" :overlay="useMapForLocation"></address-form>
 
-                <h4 class="mt-4">Play Radius</h4>
+                <h4 class="mt-4 info-heading">
+                    Location Trigger
+                    <span class="info-icon" v-b-tooltip.hover title="Radius in meters">
+                        <fa :icon="['fas', 'info']"/>
+                    </span>
+                </h4>
 
                 <b-form-group>
                     <b-form-input id="play_radius"
@@ -65,7 +70,8 @@
                         type="text"
                         v-model="form.play_radius"
                         required
-                        placeholder="Geofence Radius">
+                        @input="updateCurrentStop"
+                        placeholder="Location Trigger">
                     </b-form-input>
                     <input-help :form="form" field="play_radius" text=""></input-help>
                 </b-form-group>
@@ -347,7 +353,7 @@ export default {
             this.$emit('addStop')
         },
         
-        updateLocation() {
+        updateCurrentStop() {
             console.log('stop location changed');
             this.$store.commit('tours/setCurrentStop', this.form.data());
         },
@@ -419,7 +425,7 @@ export default {
                 }
 
                 this.useMapForLocation = false;
-                this.updateLocation();
+                this.updateCurrentStop();
             }
         },
     },

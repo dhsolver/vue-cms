@@ -7,6 +7,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import Geocoding from '../../mixins/Geocoding';
+var MarkerWithLabel = require('markerwithlabel')(google.maps);
 
 export default {
     mixins: [ Geocoding ],
@@ -15,6 +16,7 @@ export default {
         map: {},
         tourMarker: null,
         stopMarkers: [],
+        radiusCircles: [],
     }),
 
     computed: {
@@ -40,6 +42,15 @@ export default {
 
             return false;
         },
+
+        pinIcon() {
+            return {
+                url: 'https://www.itourmobile.com/APIv2/tourfiles/782ghost_active.png',
+                size: new google.maps.Size(48, 48),
+                scaledSize: new google.maps.Size(48, 48),
+                // labelOrigin: new google.maps.Point(24, -5),
+            }
+        },
     },
 
     methods: {
@@ -50,14 +61,18 @@ export default {
             }
             
             if (this.tourLocation) {
-                this.tourMarker = new google.maps.Marker({
+                this.tourMarker = new MarkerWithLabel({
                     position: {
                         lat: parseFloat(this.tour.location.latitude),
                         lng: parseFloat(this.tour.location.longitude),
                     },
                     map: this.map,
                     title: 'Junket Location',
-                    label: 'A',
+                    // label: 'A',
+                    icon: this.pinIcon,
+                    labelAnchor: new google.maps.Point(13, 68),
+                    labelClass: "pin_label", // the CSS class for the label
+                    labelContent: 'A',
                     // icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
                 });
 
@@ -69,41 +84,67 @@ export default {
 
         clearMarkers() {
             this.stopMarkers.forEach(item => {
-                item.setMap(null);
+                if (item) {
+                    item.setMap(null);
+                }
             });
             this.stopMarkers.length = 0;
         },
 
+        clearRadiusCircles() {
+            this.radiusCircles.forEach(item => {
+                if (item) {
+                    item.setMap(null);
+                }
+            });
+            this.radiusCircles.length = 0;
+        },
+
         loadStopMarkers() {
+            this.clearRadiusCircles();
             this.clearMarkers();
+            
             this.tour.stops.forEach(item => {
                 let m = null;
 
                 if (item.id == this.stop.id && this.objHasCoordinates(this.stop.location)) {
-                    // use current stop object to reflect live data
-                    m = new google.maps.Marker({
-                        map: this.map,
-                        title: this.stop.title,
-                        label: String(this.stop.order),
-                        position: { lat: parseFloat(this.stop.location.latitude), lng: parseFloat(this.stop.location.longitude) }
-                    });
+                    this.drawMarker(this.stop);
                 } else if (this.objHasCoordinates(item.location)) {
-                    m = new google.maps.Marker({
-                        map: this.map,
-                        title: item.title,
-                        label: String(item.order),
-                        position: { lat: parseFloat(item.location.latitude), lng: parseFloat(item.location.longitude) }
-                    });
+                    this.drawMarker(item);
                 } else {
+                    console.log(item);
                     return;
                 }
-
-                m.addListener('click', () => {
-                    this.onClickMarker(m, item);
-                });
-
-                this.stopMarkers.push(m);
             });
+        },
+
+        drawMarker(stop) {
+            let m = new MarkerWithLabel({
+                map: this.map,
+                title: stop.title,
+                // label: String(stop.order),
+                position: { lat: parseFloat(stop.location.latitude), lng: parseFloat(stop.location.longitude) },
+                icon: this.pinIcon,
+                labelAnchor: new google.maps.Point(13, 68),
+                labelClass: "pin_label", // the CSS class for the label
+                labelContent: String(stop.order),
+            });
+
+            var radiusCircle = new google.maps.Circle({
+                map: this.map,
+                radius: stop.play_radius ? parseFloat(stop.play_radius) : 0,  // in metres
+                fillColor: '#0099ff',
+                fillOpacity: 0.40,
+                strokeWeight: 1,
+            });
+            radiusCircle.bindTo('center', m, 'position');
+            this.radiusCircles.push(radiusCircle);
+
+            m.addListener('click', () => {
+                this.onClickMarker(m, stop);
+            });
+
+            this.stopMarkers.push(m);
         },
 
         zoomToFitMarkers(initial = false) {
@@ -114,7 +155,7 @@ export default {
                     bounds.extend(markers[i].getPosition());
                 }
 
-                if (initial) { 
+                if (initial) {
                     google.maps.event.addListener(this.map, 'idle', () => {
                         this.map.fitBounds(bounds);
                         google.maps.event.clearListeners(this.map, 'idle');
@@ -122,6 +163,8 @@ export default {
                 } else {
                     this.map.fitBounds(bounds);
                 }
+            } else {
+                console.log("no markers?");
             }
         },
 
@@ -164,6 +207,7 @@ export default {
         tour(newVal, oldVal) {
             console.log('tour changed');
             this.loadTourMarker();
+            this.loadStopMarkers();
             this.zoomToFitMarkers();
             // reload map when tour is changed
             if (newVal.id && newVal.id != oldVal.id) {
@@ -179,3 +223,17 @@ export default {
     },
 }
 </script>
+
+
+<style>
+.pin_label {
+    background-color: #fff;
+    border: 1px solid #9e9e9e;
+    padding: 2px 4px;
+    border-radius: 20px;
+    color: #000;
+    font-size: 13px;
+    width: 25px;
+    text-align: center;
+}
+</style>
