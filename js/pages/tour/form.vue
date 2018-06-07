@@ -407,6 +407,7 @@ export default {
             start_point_id: "",
             start_video_url: "",
             stops: [],
+            routes: [],
             title: "",
             trophy_image: "",
             trophy_image_id: "",

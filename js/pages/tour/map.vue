@@ -17,12 +17,15 @@ export default {
         tourMarker: null,
         stopMarkers: [],
         radiusCircles: [],
+        routeLine: {},
     }),
 
     computed: {
         ...mapGetters({
             tour: 'tours/current',
             stop: 'tours/currentStop',
+            routes: 'routes/current',
+            routeMode: 'routes/mode',
         }),
 
         allMarkers() {
@@ -62,10 +65,7 @@ export default {
             
             if (this.tourLocation) {
                 this.tourMarker = new MarkerWithLabel({
-                    position: {
-                        lat: parseFloat(this.tour.location.latitude),
-                        lng: parseFloat(this.tour.location.longitude),
-                    },
+                    position: this.tourLocation,
                     map: this.map,
                     title: 'Junket Location',
                     // label: 'A',
@@ -76,8 +76,8 @@ export default {
                     // icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
                 });
 
-                this.tourMarker.addListener('click', () => {
-                    this.$emit('clickTour');
+                this.tourMarker.addListener('click', e => {
+                    this.onClickTourMarker(e);
                 });
             }
         },
@@ -185,19 +185,52 @@ export default {
             this.loadTourMarker();
             this.loadStopMarkers();
             this.zoomToFitMarkers(true);
+            this.drawRoutes();
+        },
+
+        onClickTourMarker(event) {
+            if (this.routeMode == 'edit') {
+                this.$store.commit('routes/add', event.latLng);
+                return;
+            }
+            this.$emit('clickTour');
         },
 
         onClickMarker(marker, stop) {
+            if (this.routeMode == 'edit') {
+                this.$store.commit('routes/add', {
+                    lat: stop.location.latitude,
+                    lng: stop.location.longitude,
+                });
+                return;
+            }
+
             if (stop.id != this.stop.id) {
                 this.$emit('clickStop', stop);
             }
         },
 
         onClickMap(event) {
+            if (this.routeMode == 'edit') {
+                this.$store.commit('routes/add', event.latLng);
+                return;
+            }
+
             this.$store.commit('map/setClickedPoint', {
                 latitude: event.latLng.lat(),
                 longitude: event.latLng.lng(),
             });
+        },
+
+        drawRoutes() {
+            this.routeLine = new google.maps.Polyline({
+                path: this.routes,
+                geodesic: true,
+                strokeColor: '#0099ff',
+                strokeOpacity: 0.75,
+                strokeWeight: 5,
+            });
+            this.routeLine.setMap(this.map);
         },
     },
 
@@ -206,6 +239,12 @@ export default {
     },
 
     watch: {
+        routes(newVal, oldVal) {
+            this.routeLine.setPath(newVal);
+            // var path = this.routeLine.getPath();
+            // path.push(event.latLng);
+        },
+
         tour(newVal, oldVal) {
             console.log('tour changed');
             this.loadTourMarker();
@@ -225,7 +264,6 @@ export default {
     },
 }
 </script>
-
 
 <style>
 .pin_label {

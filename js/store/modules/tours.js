@@ -3,7 +3,7 @@ import Vue from 'vue';
 
 export const state = {
     list: [],
-    current: { stops: [] },
+    current: { stops: [], routes: [] },
     url: '',
 
     currentStop: {},
@@ -43,7 +43,7 @@ export const mutations = {
     },
 
     clearCurrentTour(state) {
-        Vue.set(state, 'current', { stops: [] })
+        Vue.set(state, 'current', { stops: [], routes: [], })
     },
 
     mediaUploadSuccess(state, {field, media}) {

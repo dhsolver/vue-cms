@@ -141,73 +141,94 @@
                 <!-- /end YOUTUBE -->
 
                 <!-- QUESTIONS -->
-                <h4 class="info-heading mt-3">
-                    Connections
-                    <span class="info-icon" v-b-tooltip.hover title="need info for this">
-                        <fa :icon="['fas', 'info']"/>
-                    </span>
-                </h4>
+                <div v-if="tour.type == 'adventure'">
+                    <h4 class="info-heading mt-3">
+                        Connections
+                        <span class="info-icon" v-b-tooltip.hover title="need info for this">
+                            <fa :icon="['fas', 'info']"/>
+                        </span>
+                    </h4>
 
-                <h3>Question Prompt</h3>
-                <b-form-group>
-                    <b-form-textarea id="question"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.question"
-                        required
-                        rows="4"
-                        placeholder="">
-                    </b-form-textarea>
-                    <input-help :form="form" field="question" text=""></input-help>
-                </b-form-group>
+                    <h3>Question Prompt</h3>
+                    <b-form-group>
+                        <b-form-textarea id="question"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.question"
+                            required
+                            rows="4"
+                            placeholder="">
+                        </b-form-textarea>
+                        <input-help :form="form" field="question" text=""></input-help>
+                    </b-form-group>
 
-                <b-tabs pills class="mt-3" v-model="isMultipleChoice">
-                    <b-tab title="Fill-In-The-Blank" :active="! form.is_multiple_choice">
-                        <h3 class="mt-3">Correct Answer</h3>
-                        <b-form-group>
-                            <b-form-textarea id="question_answer"
-                                :disabled="form.busy"
-                                type="text"
-                                v-model="form.question_answer"
-                                required
-                                rows="4"
-                                placeholder="">
-                            </b-form-textarea>
-                            <input-help :form="form" field="question_answer" text=""></input-help>
-                        </b-form-group>
+                    <b-tabs pills class="mt-3" v-model="isMultipleChoice">
+                        <b-tab title="Fill-In-The-Blank" :active="! form.is_multiple_choice">
+                            <h3 class="mt-3">Correct Answer</h3>
+                            <b-form-group>
+                                <b-form-textarea id="question_answer"
+                                    :disabled="form.busy"
+                                    type="text"
+                                    v-model="form.question_answer"
+                                    required
+                                    rows="4"
+                                    placeholder="">
+                                </b-form-textarea>
+                                <input-help :form="form" field="question_answer" text=""></input-help>
+                            </b-form-group>
 
-                        <h3>Success Message</h3>
-                        <b-form-group>
-                            <b-form-textarea id="question_success"
-                                :disabled="form.busy"
-                                type="text"
-                                v-model="form.question_success"
-                                required
-                                rows="4"
-                                placeholder="">
-                            </b-form-textarea>
-                            <input-help :form="form" field="question_success" text=""></input-help>
-                        </b-form-group>
-                    </b-tab>
+                            <h3>Success Message</h3>
+                            <b-form-group>
+                                <b-form-textarea id="question_success"
+                                    :disabled="form.busy"
+                                    type="text"
+                                    v-model="form.question_success"
+                                    required
+                                    rows="4"
+                                    placeholder="">
+                                </b-form-textarea>
+                                <input-help :form="form" field="question_success" text=""></input-help>
+                            </b-form-group>
+                        </b-tab>
 
-                    <b-tab title="Multiple Choice" :active="form.is_multiple_choice">
-                        <!-- Multiple Choice -->
-                        <h3 class="mt-3">Options</h3>
+                        <b-tab title="Multiple Choice" :active="form.is_multiple_choice">
+                            <!-- Multiple Choice -->
+                            <h3 class="mt-3">Options</h3>
 
-                        <stop-choice v-for="(item, index) in form.choices"
-                            :key="index+item.id"
-                            :busy="form.busy"
-                            v-model="form.choices[index]"
-                            @delete="deleteChoice(index)"
-                        ></stop-choice>
-                        
-                        <b-btn size="sm" variant="primary" class="w-100 mt-3" @click="addChoice">
-                        <fa :icon="['fas', 'map-marker-alt']"/>&nbsp;&nbsp;Add Decision Point</b-btn>
-                        <!-- /end Multiple Choice -->
-                    </b-tab>
-                </b-tabs>
+                            <stop-choice v-for="(item, index) in form.choices"
+                                :key="index+item.id"
+                                :busy="form.busy"
+                                v-model="form.choices[index]"
+                                @delete="deleteChoice(index)"
+                            ></stop-choice>
+                            
+                            <b-btn size="sm" variant="primary" class="w-100 mt-3" @click="addChoice">
+                            <fa :icon="['fas', 'map-marker-alt']"/>&nbsp;&nbsp;Add Decision Point</b-btn>
+                            <!-- /end Multiple Choice -->
+                        </b-tab>
+                    </b-tabs>
 
-                <!-- /end QUESTIONS -->
+                    <!-- /end QUESTIONS -->
+                </div>
+                <div v-if="tour.type == 'outdoor'">
+                    <h4 class="info-heading mt-3">
+                        Next Stop
+                        <span class="info-icon" v-b-tooltip.hover title="Set the route to the next stop here">
+                            <fa :icon="['fas', 'info']"/>
+                        </span>
+                    </h4>
+
+                    <!-- <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMapForLocation = true"> -->
+                    <b-btn v-if="routeMode != 'edit'" size="sm" variant="primary" class="w-100 mt-3" @click="editRoute()">
+                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Set Route
+                    </b-btn>
+                    <b-btn v-if="routeMode == 'edit'" size="sm" variant="primary" class="w-100 mt-3" @click="saveRoute()">
+                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Save Route
+                    </b-btn>
+                    <b-btn v-if="routeMode == 'edit'" size="sm" variant="danger" class="w-100 mt-3" @click="cancelEditRoute()">
+                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Cancel
+                    </b-btn>
+                </div>
 
                 <!-- SAVE -->
                 <b-row class="mt-5">
@@ -278,6 +299,9 @@ export default {
             saveStopUrl: 'tours/saveStopUrl',
             clickedPoint: 'map/clickedPoint',
             saveTourUrl: 'tours/saveUrl',
+
+            routes: 'routes/current',
+            routeMode: 'routes/mode',
         }),
         
         hasStop() {
@@ -379,6 +403,21 @@ export default {
                         this.form.busy = false;
                     })
             });
+        },
+
+        editRoute() {
+            this.$store.commit('routes/startEditing', {
+                lat: this.stop.location.latitude,
+                lng: this.stop.location.longitude,
+            });
+        },
+
+        saveRoute() {
+
+        },
+
+        cancelEditRoute() {
+            this.$store.commit('routes/hide');
         },
     },
 
