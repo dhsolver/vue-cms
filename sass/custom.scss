@@ -356,8 +356,21 @@ a.reverse:active { color: $darkBlue }
 .addlink{color:#fff; text-decoration:none; text-align:center; width:100%; padding:50px 0; font-size:17px;}
 
 .circbox { position:relative; margin-top:-65px; z-index:2; }
-.addrescir{
-    border:1px solid $inputBorder; border-radius:50%; background-color: $bg; text-align:center; width:140px; margin:0 auto; padding-top:42px; height:140px;
+.addrescir {
+    border: 1px solid $inputBorder; 
+    border-radius: 50%;
+    background-color: $bg;
+    text-align: center;
+    width: 90px;
+    margin: 0 auto;
+    padding-top: 21px;
+    height: 90px;
+    cursor: pointer;
+    position: relative;
+}
+.addrescir .delete {
+    right: -10px!important;
+    bottom: -10px!important;
 }
 .info-icon{background-color:$bg; width:25px; height:25px; color:#fff; text-align:center; border-radius:20px; color:$darkBlue; display:inline-block; margin-left:10px; margin-right:2px;} 
 

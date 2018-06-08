@@ -47,8 +47,12 @@ export default {
         },
 
         pinIcon() {
+            if (! this.tour.pin_image_id) {
+                return null;
+            }
+
             return {
-                url: 'https://www.itourmobile.com/APIv2/tourfiles/782ghost_active.png',
+                url: this.tour.pin_image.path,
                 size: new google.maps.Size(48, 48),
                 scaledSize: new google.maps.Size(48, 48),
                 // labelOrigin: new google.maps.Point(24, -5),

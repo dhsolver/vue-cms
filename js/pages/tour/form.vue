@@ -20,9 +20,15 @@
                 </div>
             </div>
 
-            <div class="circbox">
+            <div class="circbox"
+                @click.stop="openFileDialog('pin_image')">
+                <input id="pin_image" name="pin_image" type="file" class="input-file" @change="uploadMedia" hidden>
                 <div class="addrescir">
-                    <fa :icon="['fas', 'map-marker-alt']" size="4x" style="color: #79acd1"/>
+                    <fa v-if="! form.pin_image" :icon="['fas', 'plus']" size="3x" style="color: #79acd1" />
+                    <img v-if="form.pin_image" :src="imagePath(form.pin_image)" width="48" height="48"/>
+                    <div v-if="form.pin_image" class="delete" @click.stop="deleteMedia('pin_image')">
+                        <fa :icon="['fas', 'times']" />
+                    </div>
                 </div>
             </div>
             <!-- /end FEATURE IMAGE -->
@@ -398,6 +404,8 @@ export default {
             intro_audio_id: "",
             main_image: "",
             main_image_id: "",
+            pin_image: "",
+            pin_image_id: "",
             pricing_type: "",
             prize_details: "",
             prize_instructions: "",
