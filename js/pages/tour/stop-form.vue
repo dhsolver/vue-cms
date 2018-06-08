@@ -2,7 +2,7 @@
     <div>
         <div v-show="hasStop">
             <!-- FEATURE IMAGE -->
-            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadMedia" hidden>
+            <input id="main_image" name="main_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
             <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
                     <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
@@ -46,35 +46,37 @@
             </b-form-group>
 
             <div v-if="hasStop">
-                <div class="flex align-items-base">
-                    <h4 class="f-1">Location</h4>
-                    <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMapForLocation = true">
-                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Use Map
-                    </a>
-                    <a v-else href="#" class="reverse mr-2" @click.prevent="useMapForLocation = false">
-                        Cancel
-                    </a>
+                <div v-if="tour.type != 'indoor'">
+                    <div class="flex align-items-base">
+                        <h4 class="f-1">Location</h4>
+                        <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMapForLocation = true">
+                            <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Use Map
+                        </a>
+                        <a v-else href="#" class="reverse mr-2" @click.prevent="useMapForLocation = false">
+                            Cancel
+                        </a>
+                    </div>
+                    <address-form :form="form" v-model="form.location" @input="updateCurrentStop" :overlay="useMapForLocation"></address-form>
+
+                    <h4 class="mt-4 info-heading">
+                        Location Trigger
+                        <span class="info-icon" v-b-tooltip.hover title="Radius in meters">
+                            <fa :icon="['fas', 'info']"/>
+                        </span>
+                    </h4>
+
+                    <b-form-group>
+                        <b-form-input id="play_radius"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.play_radius"
+                            required
+                            @input="updateCurrentStop"
+                            placeholder="Location Trigger">
+                        </b-form-input>
+                        <input-help :form="form" field="play_radius" text=""></input-help>
+                    </b-form-group>
                 </div>
-                <address-form :form="form" v-model="form.location" @input="updateCurrentStop" :overlay="useMapForLocation"></address-form>
-
-                <h4 class="mt-4 info-heading">
-                    Location Trigger
-                    <span class="info-icon" v-b-tooltip.hover title="Radius in meters">
-                        <fa :icon="['fas', 'info']"/>
-                    </span>
-                </h4>
-
-                <b-form-group>
-                    <b-form-input id="play_radius"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.play_radius"
-                        required
-                        @input="updateCurrentStop"
-                        placeholder="Location Trigger">
-                    </b-form-input>
-                    <input-help :form="form" field="play_radius" text=""></input-help>
-                </b-form-group>
 
                 <!-- AUDIO -->
                 <h4 class="info-heading">
@@ -83,16 +85,29 @@
                         <fa :icon="['fas', 'info']"/>
                     </span>
                 </h4>
-
-                <input id="audio" name="audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                
+                <div v-if="tour.type == 'indoor'">
+                    <h3>Intro Audio</h3>
+                    <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                    <audio-player 
+                        id="intro_audio"
+                        :source="audioSource(form.intro_audio)"
+                        :busy="busyUploading == 'intro_audio'"
+                        @upload="openFileDialog('intro_audio')"
+                        @delete="deleteMedia('intro_audio')"
+                    />
+                </div>
+                
+                <h3 v-if="tour.type == 'indoor'">Background Audio</h3>
+                <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
                 <audio-player 
-                    id="audio"
-                    :source="audioSource(form.audio)"
-                    :busy="busyUploading == 'audio'"
-                    @upload="openFileDialog('audio')"
-                    @delete="deleteMedia('audio')"
+                    id="background_audio"
+                    :source="audioSource(form.background_audio)" 
+                    :busy="busyUploading == 'background_audio'"
+                    @upload="openFileDialog('background_audio')" 
+                    @delete="deleteMedia('background_audio')"
                 />
-
+                
                 <!-- MEDIA -->
                 <h4 class="info-heading mt-3">
                     Media
@@ -104,7 +119,7 @@
                 <!-- IMAGES  -->
                 <b-row class="image-row mb-3">
                     <b-col lg="4">
-                        <input id="image1" name="image1" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image1"
                             :url="imagePath(form.image1)" 
@@ -114,7 +129,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image2" name="image2" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image2"
                             :url="imagePath(form.image2)" 
@@ -124,7 +139,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image3" name="image3" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image3"
                             :url="imagePath(form.image3)" 
@@ -275,8 +290,10 @@ export default {
             choices: [],    
             video_url: '',
 
-            audio: '',
-            audio_id: '',
+            intro_audio: "",
+            intro_audio_id: "",
+            background_audio: "",
+            background_audio_id: "",
             play_radius: '',
             main_image: '',
             main_image_id: '',

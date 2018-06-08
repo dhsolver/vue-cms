@@ -48,7 +48,7 @@
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
                     </b-btn>
                     
-                    <b-btn variant="secondary" class="btn-inline" @click="stopMode = 'map'">
+                    <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="btn-inline" @click="stopMode = 'map'">
                         <fa :icon="['fas', 'list']" />&nbsp;Map Mode
                     </b-btn>
                 </div>
@@ -188,6 +188,10 @@ export default {
         if (!this.tour.id) {
             // 404
             this.$router.push({ name: 'home' });
+        }
+
+        if (this.tour.type == 'indoor') {
+            this.stopMode = 'list';
         }
 
         this.loading = false;

@@ -2,7 +2,7 @@
     <div>
         <div v-show="hasTour">
             <!-- FEATURE IMAGE -->
-            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadMedia" hidden>
+            <input id="main_image" name="main_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
             <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
                     <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
@@ -21,8 +21,9 @@
             </div>
 
             <div class="circbox"
+                v-if="tour.type != 'indoor'"
                 @click.stop="openFileDialog('pin_image')">
-                <input id="pin_image" name="pin_image" type="file" class="input-file" @change="uploadMedia" hidden>
+                <input id="pin_image" name="pin_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'icon')" hidden>
                 <div class="addrescir">
                     <fa v-if="! form.pin_image" :icon="['fas', 'plus']" size="3x" style="color: #79acd1" />
                     <img v-if="form.pin_image" :src="imagePath(form.pin_image)" width="48" height="48"/>
@@ -159,7 +160,7 @@
                 <!-- IMAGES  -->
                 <b-row class="image-row mb-3">
                     <b-col lg="4">
-                        <input id="image1" name="image1" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image1"
                             :url="imagePath(form.image1)" 
@@ -169,7 +170,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image2" name="image2" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image2"
                             :url="imagePath(form.image2)" 
@@ -179,7 +180,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image3" name="image3" type="file" class="input-file" @change="uploadMedia" hidden>
+                        <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image3"
                             :url="imagePath(form.image3)" 
@@ -199,7 +200,7 @@
                 <h4 class="mt-3">Trophy</h4>
 
                 <div class="trophy-box d-flex">
-                    <input id="trophy_image" name="trophy_image" type="file" class="input-file" @change="uploadMedia" hidden>
+                    <input id="trophy_image" name="trophy_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'icon')" hidden>
 
                     <img v-if="! form.trophy_image" src="/images/trophy.png" width="100" height="100" class="mr-3" />
                     <div v-else 
@@ -243,91 +244,92 @@
                 <!-- /end PRIZE -->
 
                 <!-- START/END POINTS -->
-                <h4 class="mt-3">START POINT</h4>
+                <div v-if="tour.type == 'adventure'">
+                    <h4 class="mt-3">START POINT</h4>
 
-                <b-form-group>
-                    <b-form-select :disabled="form.busy" v-model="form.start_point_id">
-                        <option value="">-- Select Stop --</option>
-                        <option v-for="item in tour.stops" 
-                            :key="item.id" 
-                            :value="item.id"
-                            v-text="item.title"
-                        ></option>
-                    </b-form-select>
-                    
-                    <input-help :form="form" field="start_point_id" text=""></input-help>
-                </b-form-group>
+                    <b-form-group>
+                        <b-form-select :disabled="form.busy" v-model="form.start_point_id">
+                            <option value="">-- Select Stop --</option>
+                            <option v-for="item in tour.stops" 
+                                :key="item.id" 
+                                :value="item.id"
+                                v-text="item.title"
+                            ></option>
+                        </b-form-select>
+                        
+                        <input-help :form="form" field="start_point_id" text=""></input-help>
+                    </b-form-group>
 
-                <b-form-group>
-                    <b-form-textarea id="start_message"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.start_message"
-                        required
-                        rows="3"
-                        placeholder="Start Point Message">
-                    </b-form-textarea>
-                    <input-help :form="form" field="start_message" text=""></input-help>
-                </b-form-group>
+                    <b-form-group>
+                        <b-form-textarea id="start_message"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.start_message"
+                            required
+                            rows="3"
+                            placeholder="Start Point Message">
+                        </b-form-textarea>
+                        <input-help :form="form" field="start_message" text=""></input-help>
+                    </b-form-group>
 
-                <h3>Start Point Media</h3>
-                <b-row class="image-row mb-3">
-                    <b-col lg="4">
-                        <input id="start_image" name="start_image" type="file" class="input-file" @change="uploadMedia" hidden>
-                        <image-box 
-                            id="start_image"
-                            :url="imagePath(form.start_image)" 
-                            :busy="busyUploading == 'start_image'"
-                            @click="openFileDialog('start_image')" 
-                            @delete="deleteMedia('start_image')"
-                        ></image-box>
-                    </b-col>
-                </b-row>
+                    <h3>Start Point Media</h3>
+                    <b-row class="image-row mb-3">
+                        <b-col lg="4">
+                            <input id="start_image" name="start_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                            <image-box 
+                                id="start_image"
+                                :url="imagePath(form.start_image)" 
+                                :busy="busyUploading == 'start_image'"
+                                @click="openFileDialog('start_image')" 
+                                @delete="deleteMedia('start_image')"
+                            ></image-box>
+                        </b-col>
+                    </b-row>
 
-                <youtube-input :form="form" id="start_video_url" v-model="form.start_video_url"></youtube-input>
+                    <youtube-input :form="form" id="start_video_url" v-model="form.start_video_url"></youtube-input>
 
-                <h4 class="mt-3">END POINT</h4>
-                <b-form-group>
-                    <b-form-select :disabled="form.busy" v-model="form.end_point_id">
-                        <option value="">-- Select Stop --</option>
-                        <option v-for="item in tour.stops" 
-                            :key="item.id" 
-                            :value="item.id"
-                            v-text="item.title"
-                        ></option>
-                    </b-form-select>
-                    
-                    <input-help :form="form" field="end_point_id" text=""></input-help>
-                </b-form-group>
+                    <h4 class="mt-3">END POINT</h4>
+                    <b-form-group>
+                        <b-form-select :disabled="form.busy" v-model="form.end_point_id">
+                            <option value="">-- Select Stop --</option>
+                            <option v-for="item in tour.stops" 
+                                :key="item.id" 
+                                :value="item.id"
+                                v-text="item.title"
+                            ></option>
+                        </b-form-select>
+                        
+                        <input-help :form="form" field="end_point_id" text=""></input-help>
+                    </b-form-group>
 
-                <b-form-group>
-                    <b-form-textarea id="end_message"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.end_message"
-                        required
-                        rows="3"
-                        placeholder="End Point Message">
-                    </b-form-textarea>
-                    <input-help :form="form" field="end_message" text=""></input-help>
-                </b-form-group>
+                    <b-form-group>
+                        <b-form-textarea id="end_message"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.end_message"
+                            required
+                            rows="3"
+                            placeholder="End Point Message">
+                        </b-form-textarea>
+                        <input-help :form="form" field="end_message" text=""></input-help>
+                    </b-form-group>
 
-                <h3>End Point Media</h3>
-                <b-row class="image-row mb-3">
-                    <b-col lg="4">
-                        <input id="end_image" name="end_image" type="file" class="input-file" @change="uploadMedia" hidden>
-                        <image-box 
-                            id="end_image"
-                            :url="imagePath(form.end_image)" 
-                            :busy="busyUploading == 'end_image'"
-                            @click="openFileDialog('end_image')" 
-                            @delete="deleteMedia('end_image')"
-                        ></image-box>
-                    </b-col>
-                </b-row>
+                    <h3>End Point Media</h3>
+                    <b-row class="image-row mb-3">
+                        <b-col lg="4">
+                            <input id="end_image" name="end_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                            <image-box 
+                                id="end_image"
+                                :url="imagePath(form.end_image)" 
+                                :busy="busyUploading == 'end_image'"
+                                @click="openFileDialog('end_image')" 
+                                @delete="deleteMedia('end_image')"
+                            ></image-box>
+                        </b-col>
+                    </b-row>
 
-                <youtube-input :form="form" id="end_video_url" v-model="form.end_video_url"></youtube-input>
-
+                    <youtube-input :form="form" id="end_video_url" v-model="form.end_video_url"></youtube-input>
+                </div>
                 <!-- /end START/END POINTS -->
                 
                 <!-- SAVE BUTTONS -->
