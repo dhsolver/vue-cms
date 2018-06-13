@@ -194,7 +194,10 @@ export default {
 
         onClickTourMarker(event) {
             if (this.routeMode == 'edit') {
-                this.$store.commit('routes/add', event.latLng);
+                this.$store.commit('routes/add', {
+                    lng: event.latLng.lng(),
+                    lat: event.latLng.lat(),
+                });
                 return;
             }
             this.$emit('clickTour');
@@ -216,7 +219,10 @@ export default {
 
         onClickMap(event) {
             if (this.routeMode == 'edit') {
-                this.$store.commit('routes/add', event.latLng);
+                this.$store.commit('routes/add', {
+                    lng: event.latLng.lng(),
+                    lat: event.latLng.lat(),
+                });
                 return;
             }
 
@@ -254,6 +260,12 @@ export default {
             this.loadTourMarker();
             this.loadStopMarkers();
             this.zoomToFitMarkers();
+
+            // show route if outdoor tour
+            if (this.tour.type == 'outdoor') {
+                this.$store.commit('routes/show', this.tour.route);
+            }
+            
             // reload map when tour is changed
             if (newVal.id && newVal.id != oldVal.id) {
                 this.initMap(this.$refs.map);

@@ -44,26 +44,45 @@
                     </b-row>
                 </div>
                 <div class="mt-4 mb-2" style="">
-                    <b-btn variant="secondary" class="btn-inline mr-3" @click="stopModal()">
+                    <b-btn variant="secondary" class="d-inline mr-3" @click="stopModal()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
                     </b-btn>
                     
-                    <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="btn-inline" @click="stopMode = 'map'">
+                    <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="stopMode = 'map'">
                         <fa :icon="['fas', 'list']" />&nbsp;Map Mode
                     </b-btn>
                 </div>
             </div>
 
             <!-- MAP MODE -->
-            <div v-else class="bg-gray h-100" style="position: relative">
-                <div class="" style="position: absolute; bottom: 30px; left: 15px; z-index: 99">
-                    <b-btn variant="secondary" class="btn-inline mr-2" @click="stopModal()">
+            <div v-else class="bg-gray h-100 p-relative">
+                <div class="map-toolbar">
+                    <b-btn variant="secondary" class="d-inline" @click="stopModal()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
                     </b-btn>
                     
-                    <b-btn variant="secondary" class="btn-inline" @click="stopMode = 'list'">
+                    <b-btn variant="secondary" class="d-inline" @click="stopMode = 'list'">
                         <fa :icon="['fas', 'list']" />&nbsp;List Mode
                     </b-btn>
+                    
+                    <div v-if="tour.type == 'outdoor'" class="d-inline">
+                        <b-btn v-if="routeMode != 'edit'" variant="secondary" class="d-inline" @click="editRoute()">
+                            <fa :icon="['fas', 'pencil-alt']" />&nbsp;Draw Route
+                        </b-btn>
+
+                        <b-btn v-if="routeMode != 'edit'" variant="secondary" class="d-inline" @click="toggleRoute()">
+                            <span v-if="routeMode == 'hide'"><fa :icon="['fas', 'eye']" />&nbsp; Show Route</span>
+                            <span v-else><fa :icon="['fas', 'eye-slash']" />&nbsp;Hide Route</span>
+                        </b-btn>
+
+                        <b-btn v-if="routeMode == 'edit'" variant="success" class="d-inline" @click="saveRoute()">
+                            <fa :icon="['fas', 'save']" />&nbsp;Save Route
+                        </b-btn>
+
+                        <b-btn v-if="routeMode == 'edit'" variant="danger" class="d-inline" @click="cancelRoute()">
+                            <fa :icon="['fas', 'times']" />&nbsp;Cancel
+                        </b-btn>
+                    </div>
                 </div>
                 
                 <tour-map @clickStop="editStop" @clickTour="showTourForm"></tour-map>
@@ -118,6 +137,8 @@ export default {
             isAdmin: 'auth/isAdmin',
             tour: 'tours/current',
             currentStop: 'tours/currentStop',
+            routeMode: 'routes/mode',
+            route: 'routes/current',
         }),
 
         formTransition() {
@@ -179,6 +200,27 @@ export default {
                     this.busy = false;
                 });
         },
+
+        editRoute() {
+            this.$store.commit('routes/startEditing');
+        },
+
+        saveRoute() {
+            this.$store.commit('tours/setTourRoute', this.route);
+            this.$store.commit('routes/stopEditing', {revert: false, hide: false} );
+        },
+
+        cancelRoute() {
+            this.$store.commit('routes/stopEditing', {revert: true, hide: false} );
+        },
+
+        toggleRoute() {
+            if (this.routeMode == 'show') {
+                this.$store.commit('routes/hide');
+            } else {
+                this.$store.commit('routes/show', this.tour.route);
+            }
+        },
     },
 
     async mounted() {
@@ -198,6 +240,3 @@ export default {
     },
 }
 </script>
-
-<style>
-</style>
