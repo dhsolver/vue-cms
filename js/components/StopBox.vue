@@ -39,7 +39,7 @@ export default {
         }),
         
         backgroundImage() {
-            let url = this.imagePath(this.stop.main_image);
+            let url = this.imagePath(this.stop.main_image, 'sm');
             if (url) {
                 return `background: url(${url})`;
             } else {

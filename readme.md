@@ -42,3 +42,17 @@ npm run prod
 ```
 
 3. Upload contents of dist directory to server or CDN
+
+### Config
+
+For configuring media requirements, e.g. file size / image size limits:
+
+The following data files correspond to the junket-api config values
+
+File: /js/mixins/UploadsMedia.js
+```
+maxAudioSize: 30, // MB
+maxImageSize: 15, // MB
+minImageSize: 400,
+minIconSize: 48,
+```

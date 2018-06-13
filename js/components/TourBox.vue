@@ -44,7 +44,7 @@
             },
 
             backgroundImage() {
-                let url = this.imagePath(this.tour.main_image);
+                let url = this.imagePath(this.tour.main_image, 'sm');
                 if (url) {
                     return `background: url(${url})`;
                 } else {
