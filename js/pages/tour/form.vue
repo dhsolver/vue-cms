@@ -152,7 +152,7 @@
                 <!-- MEDIA -->
                 <h4 class="info-heading mt-3">
                     Media
-                    <span class="info-icon" v-b-tooltip.hover title="Images must be at least X by X">
+                    <span class="info-icon" v-b-tooltip.hover :title="`Images must be at least ${minImageSize}x${minImageSize}`">
                         <fa :icon="['fas', 'info']"/>
                     </span>
                 </h4>

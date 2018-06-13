@@ -2,8 +2,10 @@ import { mapGetters } from 'vuex';
 
 export default {
     data: () => ({
-        maxAudioSize: 100000000,
-        maxImageSize: 25000000,
+        maxAudioSize: 30, // MB
+        maxImageSize: 15, // MB
+        minImageSize: 400,
+        minIconSize: 48,
         busyUploading: '',
     }),
 
@@ -32,15 +34,15 @@ export default {
             }
 
             if (type == 'audio') {
-                if (file.size > this.maxAudioSize) {
+                if (file.size > (this.maxAudioSize * 100000)) {
                     this.clearFile(e.target);
-                    alerts.addMessage('error', 'Audio files must be less than 100 MB.');
+                    alerts.addMessage('error', `Audio files must be less than ${this.maxAudioSize} MB.`);
                     return;
                 }
             } else {
-                if (file.size > this.maxImageSize) {
+                if (file.size > (this.maxImageSize * 100000)) {
                     this.clearFile(e.target);
-                    alerts.addMessage('error', 'Images must be less than 25 MB.');
+                    alerts.addMessage('error', `Images must be less than ${this.maxImageSize} MB.`);
                     return;
                 }
             }
