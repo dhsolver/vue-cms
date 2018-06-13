@@ -13,7 +13,7 @@
             <div v-else 
                 class="feature-box" 
                 @click.stop="openFileDialog('main_image')"
-                :style="{ 'background-image': `url('${imagePath(form.main_image)}')` }" 
+                :style="{ 'background-image': `url('${imagePath(form.main_image, 'sm')}')` }" 
             >
                 <div class="delete" @click.stop="deleteMedia('main_image')">
                     <fa :icon="['fas', 'times']" />
@@ -26,7 +26,7 @@
                 <input id="pin_image" name="pin_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'icon')" hidden>
                 <div class="addrescir">
                     <fa v-if="! form.pin_image" :icon="['fas', 'plus']" size="3x" style="color: #79acd1" />
-                    <img v-if="form.pin_image" :src="imagePath(form.pin_image)" width="48" height="48"/>
+                    <img v-if="form.pin_image" :src="imagePath(form.pin_image, 'ico')" width="48" height="48"/>
                     <div v-if="form.pin_image" class="delete" @click.stop="deleteMedia('pin_image')">
                         <fa :icon="['fas', 'times']" />
                     </div>
@@ -163,7 +163,7 @@
                         <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image1"
-                            :url="imagePath(form.image1)" 
+                            :url="imagePath(form.image1, 'sm')" 
                             :busy="busyUploading == 'image1'"
                             @click="openFileDialog('image1')" 
                             @delete="deleteMedia('image1')"
@@ -173,7 +173,7 @@
                         <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image2"
-                            :url="imagePath(form.image2)" 
+                            :url="imagePath(form.image2, 'sm')" 
                             :busy="busyUploading == 'image2'"
                             @click="openFileDialog('image2')" 
                             @delete="deleteMedia('image2')"
@@ -183,7 +183,7 @@
                         <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image3"
-                            :url="imagePath(form.image3)" 
+                            :url="imagePath(form.image3, 'sm')" 
                             :busy="busyUploading == 'image3'"
                             @click="openFileDialog('image3')" 
                             @delete="deleteMedia('image3')"
@@ -278,7 +278,7 @@
                             <input id="start_image" name="start_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                             <image-box 
                                 id="start_image"
-                                :url="imagePath(form.start_image)" 
+                                :url="imagePath(form.start_image, 'sm')" 
                                 :busy="busyUploading == 'start_image'"
                                 @click="openFileDialog('start_image')" 
                                 @delete="deleteMedia('start_image')"
@@ -320,7 +320,7 @@
                             <input id="end_image" name="end_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                             <image-box 
                                 id="end_image"
-                                :url="imagePath(form.end_image)" 
+                                :url="imagePath(form.end_image, 'sm')" 
                                 :busy="busyUploading == 'end_image'"
                                 @click="openFileDialog('end_image')" 
                                 @delete="deleteMedia('end_image')"

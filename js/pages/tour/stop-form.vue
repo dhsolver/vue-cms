@@ -13,7 +13,7 @@
             <div v-else 
                 class="feature-box" 
                 @click.stop="openFileDialog('main_image')"
-                :style="{ 'background-image': `url('${imagePath(form.main_image)}')` }" 
+                :style="{ 'background-image': `url('${imagePath(form.main_image, 'sm')}')` }" 
             >
                 <div class="delete" @click.stop="deleteMedia('main_image')">
                     <fa :icon="['fas', 'times']" />
@@ -122,7 +122,7 @@
                         <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image1"
-                            :url="imagePath(form.image1)" 
+                            :url="imagePath(form.image1, 'sm')" 
                             :busy="busyUploading == 'image1'"
                             @click="openFileDialog('image1')" 
                             @delete="deleteMedia('image1')"
@@ -132,7 +132,7 @@
                         <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image2"
-                            :url="imagePath(form.image2)" 
+                            :url="imagePath(form.image2, 'sm')" 
                             :busy="busyUploading == 'image2'"
                             @click="openFileDialog('image2')" 
                             @delete="deleteMedia('image2')"
@@ -142,7 +142,7 @@
                         <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
                         <image-box 
                             id="image3"
-                            :url="imagePath(form.image3)" 
+                            :url="imagePath(form.image3, 'sm')" 
                             :busy="busyUploading == 'image3'"
                             @click="openFileDialog('image3')" 
                             @delete="deleteMedia('image3')"
