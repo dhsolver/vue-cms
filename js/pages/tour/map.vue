@@ -52,7 +52,7 @@ export default {
             }
 
             return {
-                url: this.tour.pin_image.path,
+                url: this.tour.pin_image.icon_path,
                 size: new google.maps.Size(48, 48),
                 scaledSize: new google.maps.Size(48, 48),
                 // labelOrigin: new google.maps.Point(24, -5),
