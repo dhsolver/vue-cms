@@ -34,13 +34,13 @@ export default {
             }
 
             if (type == 'audio') {
-                if (file.size > (this.maxAudioSize * 100000)) {
+                if (file.size > (this.maxAudioSize * 1000000)) {
                     this.clearFile(e.target);
                     alerts.addMessage('error', `Audio files must be less than ${this.maxAudioSize} MB.`);
                     return;
                 }
             } else {
-                if (file.size > (this.maxImageSize * 100000)) {
+                if (file.size > (this.maxImageSize * 1000000)) {
                     this.clearFile(e.target);
                     alerts.addMessage('error', `Images must be less than ${this.maxImageSize} MB.`);
                     return;
