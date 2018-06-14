@@ -30,7 +30,7 @@
             <!-- LIST MODE -->
             <div v-if="stopMode == 'list'" class="p-4 h-100 flex flex-col">
                 <div class="f-1">
-                    <draggable :list="tour.stops" @end="stopOrderChanged" class="stop-list">
+                    <draggable :list="tour.stops" @change="stopOrderChanged" class="stop-list">
                         <stop-box v-for="item in tour.stops"
                             :key="item.id" 
                             :stop="item" 
@@ -61,7 +61,6 @@
             <!-- MAP MODE -->
             <div v-else class="bg-gray h-100 p-relative">
                 <div class="map-toolbar">
-
                     <b-btn v-if="!useMapForLocation" variant="secondary" class="d-inline" @click="createStopFromPoint()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
                     </b-btn>
@@ -137,6 +136,7 @@ export default {
             routeMode: 'routes/mode',
             route: 'routes/current',
             clickedPoint: 'map/clickedPoint',
+            orderUrl: "tours/orderUrl",
         }),
 
         formTransition() {
@@ -211,7 +211,21 @@ export default {
 
         stopOrderChanged(e) {
             console.log('stop order changed');
-            console.log(e);
+
+            let stopOrder = this.tour.stops.map(s => {
+                return s.id;
+            })
+            
+            axios.put(this.orderUrl, { order: stopOrder })
+                .then(({ data }) => {
+                    this.$store.commit("tours/updateStopOrder", data.data.order);
+                })
+                .catch(e => {
+                    console.log("save order error:");
+                    console.log(e);
+                });
+
+            console.log(stopOrder);
         },
     },
 

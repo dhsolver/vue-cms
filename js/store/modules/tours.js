@@ -17,6 +17,7 @@ export const getters = {
     createUrl: state => `${state.url}tours`,
     mediaUrl: state => `${state.url}media/upload`,
     createStopUrl: state => `${state.url}tours/${state.current.id}/stops`,
+    orderUrl: state => `${state.url}tours/${state.current.id}/stop-order`,
     saveStopUrl: state => `${state.url}tours/${state.current.id}/stops/${state.currentStop.id}`,
     currentStop: state => state.currentStop,
 }
@@ -108,7 +109,25 @@ export const mutations = {
             image3: '',
             image3_id: '',
         });
-    }
+    },
+
+    updateStopOrder(state, order) {
+        let i = 0;
+
+        order.forEach(id => {
+            i++;
+            
+            let index = state.current.stops.findIndex(obj => obj.id == id);
+            if (index > -1) {
+                let stop = state.current.stops[index];
+                state.current.stops.splice(index, 1, {...stop, order: i});
+            }
+            if (state.currentStop.id == id) {
+                Vue.set(state, 'currentStop', {...state.currentStop, order: i});
+            }
+        });
+
+    },
 }
 
 export const actions = {

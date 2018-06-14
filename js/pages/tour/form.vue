@@ -432,7 +432,7 @@ export default {
         ...mapGetters({
             tour: "tours/current",
             createUrl: "tours/createUrl",
-            saveUrl: "tours/saveUrl"
+            saveUrl: "tours/saveUrl",
         }),
 
         hasTour() {
