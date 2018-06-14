@@ -502,3 +502,14 @@ hr { border: 1px solid $grayBorder; width: 60%; margin-top: 1.2rem; margin-botto
     margin-bottom: 0.3rem;
     font-size: 0.8rem;
 }
+
+.stop-list {
+    display: flex;
+    flex-wrap: wrap;
+    vertical-align: top;
+}
+.stop-list-child {
+    display: inline-block; 
+    margin: 10px 0 0 10px; 
+    width: calc(100% * (1/4) - 10px - 1px);
+}

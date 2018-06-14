@@ -26,6 +26,9 @@ Vue.config.productionTip = false
 import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
 Vue.component('fa', FontAwesomeIcon);
 
+import draggable from 'vuedraggable';
+Vue.component('draggable', draggable);
+
 require('./mixins/filters');
 
 import Form from './classes/Form';

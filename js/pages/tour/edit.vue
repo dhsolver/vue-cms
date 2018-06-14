@@ -30,18 +30,22 @@
             <!-- LIST MODE -->
             <div v-if="stopMode == 'list'" class="p-4 h-100 flex flex-col">
                 <div class="f-1">
-                    <b-row v-for="i in tourRows" :key="i">
-                        <b-col xl="3" class="box-col" v-for="item in tour.stops.slice((i - 1) * 4, i * 4)" :key="item.id">
-                            <stop-box :stop="item" @click="editStop(item)" @deleted="deleteStop(item)"></stop-box>
-                        </b-col>
+                    <draggable :list="tour.stops" @end="stopOrderChanged" class="stop-list">
+                        <stop-box v-for="item in tour.stops"
+                            :key="item.id" 
+                            :stop="item" 
+                            @click="editStop(item)" 
+                            @deleted="deleteStop(item)"
+                            class="stop-list-child"
+                        />
 
-                        <b-col v-if="i == tourRows" xl="3" class="box-col">
+                        <div class="stop-list-child">
                             <div class="add-box bg-fit" @click="createStop()">
                                 <fa :icon="['fas', 'plus']" size="3x" />
                                 <div class="title mt-3">ADD STOP</div>
                             </div>
-                        </b-col>
-                    </b-row>
+                        </div>
+                    </draggable>
                 </div>
                 <div class="mt-4 mb-2" style="">
                     <b-btn variant="secondary" class="d-inline mr-3" @click="createStop()">
@@ -116,6 +120,7 @@ export default {
     },
     
     data: () => ({
+        stopOrders: [],
         loading: true,
         mode: 'tour',
         stopMode: 'list', //'map',
@@ -202,6 +207,11 @@ export default {
             } else {
                 this.$store.commit('routes/show', this.tour.route);
             }
+        },
+
+        stopOrderChanged(e) {
+            console.log('stop order changed');
+            console.log(e);
         },
     },
 
