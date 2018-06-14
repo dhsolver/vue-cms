@@ -79,6 +79,36 @@ export const mutations = {
     setTourRoute(state, route) {
         Vue.set(state, 'current', {...state.current, route});
     },
+
+    setEmptyStop(state, location = {}) {
+        Vue.set(state, 'currentStop', {
+            id: null,
+            title: '',
+            description: '',
+
+            location: location,
+            is_multiple_choice: false,
+            question: '',
+            question_answer: '',
+            question_success: '',
+            choices: [],    
+            video_url: '',
+
+            intro_audio: "",
+            intro_audio_id: "",
+            background_audio: "",
+            background_audio_id: "",
+            play_radius: 0,
+            main_image: '',
+            main_image_id: '',
+            image1: '',
+            image1_id: '',
+            image2: '',
+            image2_id: '',
+            image3: '',
+            image3_id: '',
+        });
+    }
 }
 
 export const actions = {

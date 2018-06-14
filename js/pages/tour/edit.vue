@@ -8,7 +8,7 @@
                 <b-btn variant="info" class="square f-1" @click="openDashboard()">
                     Dashboard
                 </b-btn>
-                <b-btn variant="info" class="square f-1" style="margin-left: 1px" @click="stopModal()">
+                <b-btn variant="info" class="square f-1" style="margin-left: 1px" @click="createStop()">
                     Add Stop
                 </b-btn>
             </div>
@@ -19,7 +19,7 @@
             </div>
 
             <transition :name="formTransition" mode="out-in">
-                <stop-form v-if="mode == 'stop'" @addStop="stopModal()" @deleted="deleteStop(currentStop)"></stop-form>
+                <stop-form v-if="mode == 'stop'" @addStop="createStop()" @deleted="deleteStop(currentStop)"></stop-form>
                 <tour-form v-else></tour-form>
             </transition>
         </div>
@@ -36,16 +36,16 @@
                         </b-col>
 
                         <b-col v-if="i == tourRows" xl="3" class="box-col">
-                            <div class="add-box bg-fit" @click="stopModal()">
+                            <div class="add-box bg-fit" @click="createStop()">
                                 <fa :icon="['fas', 'plus']" size="3x" />
-                                <div class="title mt-3">ADD POINT</div>
+                                <div class="title mt-3">ADD STOP</div>
                             </div>
                         </b-col>
                     </b-row>
                 </div>
                 <div class="mt-4 mb-2" style="">
-                    <b-btn variant="secondary" class="d-inline mr-3" @click="stopModal()">
-                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
+                    <b-btn variant="secondary" class="d-inline mr-3" @click="createStop()">
+                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Stop
                     </b-btn>
                     
                     <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="stopMode = 'map'">
@@ -57,8 +57,12 @@
             <!-- MAP MODE -->
             <div v-else class="bg-gray h-100 p-relative">
                 <div class="map-toolbar">
-                    <b-btn variant="secondary" class="d-inline" @click="stopModal()">
+
+                    <b-btn v-if="!useMapForLocation" variant="secondary" class="d-inline" @click="createStopFromPoint()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
+                    </b-btn>
+                    <b-btn v-else variant="danger" class="d-inline" @click="useMapForLocation = false">
+                        <fa :icon="['fas', 'times']" />&nbsp;Cancel
                     </b-btn>
                     
                     <b-btn variant="secondary" class="d-inline" @click="stopMode = 'list'">
@@ -88,18 +92,6 @@
                 <tour-map @clickStop="editStop" @clickTour="showTourForm"></tour-map>
             </div>
         </div>
-
-        <!-- ADD STOP MODAL -->
-        <b-modal title="Add a Stop" v-model="showStopModal">
-            <stop-form ref="stopModalForm"></stop-form>
-
-            <div slot="modal-footer" class="w-100">
-                <busy-button class="float-right" variant="primary" :busy="busy" @click="addStop">Create Stop</busy-button>
-                <b-btn variant="secondary" @click="showStopModal = false">Cancel</b-btn>
-            </div>
-        </b-modal>
-        <!-- /end ADD STOP MODAL -->
-
     </div>
 </template>
 
@@ -126,9 +118,9 @@ export default {
     data: () => ({
         loading: true,
         mode: 'tour',
-        stopMode: 'map',
+        stopMode: 'list', //'map',
         busy: false,
-        showStopModal: false,
+        useMapForLocation: false,
     }),
 
     computed: {
@@ -139,6 +131,7 @@ export default {
             currentStop: 'tours/currentStop',
             routeMode: 'routes/mode',
             route: 'routes/current',
+            clickedPoint: 'map/clickedPoint',
         }),
 
         formTransition() {
@@ -173,32 +166,21 @@ export default {
         },
 
         deleteStop(stop) {
-            this.$store.commit('tours/removeStop', stop.id);            
+            this.$store.commit('tours/removeStop', stop.id);
             this.$store.commit('tours/setCurrentStop', {});
             this.mode = 'tour';
             this.$refs.formContainer.scrollTop = 0;
         },
 
-        stopModal() {
-            this.showTourForm(); // if stop form is open it breaks the modal
-
-            this.$refs.stopModalForm.form.reset();
-            this.showStopModal = true;
+        createStop(location = {}) {
+            this.$store.commit('tours/setCurrentStop', {});
+            this.$store.commit('tours/setEmptyStop', location);
+            this.mode = 'stop';
+            this.$refs.formContainer.scrollTop = 0;
         },
 
-        addStop() {
-            this.busy = true;
-            this.$refs.stopModalForm.submit()
-                .then( ({ data }) => {
-                    this.$store.commit('tours/pushStop', data.data);
-                    this.busy = false;
-                    this.showStopModal = false;
-                    this.editStop(data.data);
-                })
-                .catch(e => {
-                    console.log(e);
-                    this.busy = false;
-                });
+        createStopFromPoint() {
+            this.useMapForLocation = true;
         },
 
         editRoute() {
@@ -237,6 +219,26 @@ export default {
         }
 
         this.loading = false;
+    },
+
+    watch: {
+        clickedPoint(newVal, oldVal) {
+            if (this.useMapForLocation) {
+                this.useMapForLocation = false;
+
+                let location = {
+                    latitude: newVal.latitude,
+                    longitude: newVal.longitude,
+                    address1: '',
+                    address2: '',
+                    city: '',
+                    state: '',
+                    zipcode: '',
+                }
+
+                this.createStop(location);    
+            }
+        },
     },
 }
 </script>

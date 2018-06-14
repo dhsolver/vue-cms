@@ -18,6 +18,7 @@ export default {
         stopMarkers: [],
         radiusCircles: [],
         routeLine: {},
+        tempMarker: {},
     }),
 
     computed: {
@@ -122,6 +123,11 @@ export default {
                     return;
                 }
             });
+
+            // load a temp marker if the create form has a location
+            if (! this.stop.id && this.objHasCoordinates(this.stop.location)) {
+                this.drawMarker(this.stop, true);
+            }
         },
 
         drawMarker(stop, isCurrent = false) {
@@ -133,7 +139,7 @@ export default {
                 icon: this.pinIcon,
                 labelAnchor: new google.maps.Point(13, 68),
                 labelClass: isCurrent ? "pin_label_active" : "pin_label", // the CSS class for the label
-                labelContent: String(stop.order),
+                labelContent: String(stop.order ? stop.order : 'N'),
             });
 
             var radiusCircle = new google.maps.Circle({
@@ -273,7 +279,6 @@ export default {
         },
 
         stop(newVal, oldVal) {
-            console.log('stop changed');
             this.loadStopMarkers();
             this.zoomToFitMarkers();
         },
