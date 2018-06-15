@@ -42,5 +42,21 @@ export default {
                 });
             });
         },
+
+        /**
+         * Converts Google address data to a usable address object.
+         * @param {object} addr Google address data objecft
+         * @return {object} Formatted address object with coordinates 
+         */
+        convertAddress(addr) {
+            return {
+                latitude: addr.latitude,
+                longitude: addr.longitude,
+                address1: addr.street_number ? `${addr.street_number} ${addr.route}` : addr.route,
+                city: addr.locality,
+                state: addr.administrative_area_level_1,
+                zipcode: addr.postal_code,
+            };
+        },
     }
 }

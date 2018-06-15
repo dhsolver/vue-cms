@@ -121,7 +121,7 @@ export default {
     data: () => ({
         stopOrders: [],
         loading: true,
-        mode: 'tour',
+        mode: 'map',
         stopMode: 'list', //'map',
         busy: false,
         useMapForLocation: false,

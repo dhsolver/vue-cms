@@ -13,6 +13,7 @@ import AudioPlayer from './AudioPlayer';
 import YoutubeInput from './YoutubeInput';
 import StopChoice from './StopChoice';
 import AddressForm from './AddressForm';
+import GoogleAddressSearch from './GoogleAddressSearch';
 
 // Components that are registered globaly.
 [
@@ -30,6 +31,7 @@ import AddressForm from './AddressForm';
     YoutubeInput,
     StopChoice,
     AddressForm,
+    GoogleAddressSearch,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

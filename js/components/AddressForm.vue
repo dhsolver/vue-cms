@@ -4,97 +4,26 @@
             <p>Select a location on the map</p>
         </div>
 
-        <b-form-group>
-            <b-form-input id="address1"
-                :disabled="form.busy"
-                type="text"
-                v-model="address.address1"
-                required
-                placeholder="Address"
-                @change="geocode()"
-            ></b-form-input>
-            <input-help :form="form" field="address1" text=""></input-help>
-        </b-form-group>
-        
-        <b-form-group>
-            <b-form-input id="address2"
-                :disabled="form.busy"
-                type="text"
-                @change="geocode()"
-                v-model="address.address2"
-                required
-                placeholder="Address Line 2 (Optional)">
-            </b-form-input>
-            <input-help :form="form" field="address2" text=""></input-help>
-        </b-form-group>
-        
-        <b-form-group>
-            <b-form-input id="city"
-                :disabled="form.busy"
-                type="text"
-                v-model="address.city"
-                required
-                @change="geocode()"
-                placeholder="City">
-            </b-form-input>
-            <input-help :form="form" field="city" text=""></input-help>
-        </b-form-group>
+        <google-address-search
+            id="map"
+            classname="form-control"
+            placeholder="Search..."
+            @placechanged="getAddressData"
+            v-model="search"
+            :country="['us']"
+            ref="vga"
+            :clearOnChange="true"
+        />
 
-        <b-row class="mb-3">
-            <b-col lg="8">
-                <b-form-input id="state"
-                    :disabled="form.busy"
-                    type="text"
-                    v-model="address.state"
-                    required
-                    @change="geocode()"
-                    placeholder="State">
-                </b-form-input>
-            </b-col>
-            <b-col lg="4">
-                <b-form-input id="zipcode"
-                    :disabled="form.busy"
-                    type="text"
-                    v-model="address.zipcode"
-                    required
-                    @change="geocode()"
-                    placeholder="Zipcode">
-                </b-form-input>
-            </b-col>
-            <input-help :form="form" field="zipcode" text=""></input-help>
-            <input-help :form="form" field="state" text=""></input-help>
-        </b-row>
-        <!-- /end LOCATION & ADDRESS -->
-
-        <!-- GPS -->
-        <b-row class="mb-2 pl-2">
-            <b-col lg="3" class="pt-2">
-                <label for="latitude">Latitude</label>
-            </b-col>
-            <b-col lg="9">
-                <b-form-input id="latitude"
-                    type="text"
-                    v-model="address.latitude"
-                    @change="$emit('input', address)"
-                    placeholder="Latitude">
-                </b-form-input>
-                <input-help :form="form" field="latitude" text=""></input-help>
-            </b-col>
-        </b-row>
-        <b-row class="mb-3 pl-2">
-            <b-col lg="3" class="pt-2">
-                <label for="longitude">Longitude</label>
-            </b-col>
-            <b-col lg="9">
-                <b-form-input id="longitude"
-                    type="text"
-                    v-model="address.longitude"
-                    @change="$emit('input', address)"
-                    placeholder="Longitude">
-                </b-form-input>
-                <input-help :form="form" field="longitude" text=""></input-help>
-            </b-col>
-        </b-row>
+        <b-container v-if="this.address.address1">
+            <b-row>
+                <b-col class="mt-3 mb-3">
+                    <p>{{ address.address1 }}</p>
+                    <p>{{ address.city }}, {{ address.state }} {{ address.zipcode }}</p>
+                    <!-- <p class="gray">{{ address.latitude }} / {{ address.longitude }}</p> -->
+                </b-col>
+            </b-row>
+        </b-container>
     </div>
 </template>
 
@@ -121,6 +50,7 @@ export default {
             state: '',
             zipcode: '',
         },
+        search: '',
     }),
     
     computed: {
@@ -134,8 +64,13 @@ export default {
     },
 
     methods: {
-        geocode() {
+        getAddressData(addressData, placeResultData, id) {
+            console.log('address changed');
+            this.address = this.convertAddress(addressData);
+            this.$emit('input', this.address);
+        },
 
+        geocode() {
             if (! this.isCompleteAddress(this.address)) {
                 // address not fully filled out yet
                 this.$emit('input', this.address);
