@@ -19,7 +19,12 @@
             </div>
 
             <transition :name="formTransition" mode="out-in">
-                <stop-form v-if="mode == 'stop'" @addStop="createStop()" @deleted="deleteStop(currentStop)"></stop-form>
+                <stop-form 
+                    v-if="mode == 'stop'" 
+                    @addStop="createStop()" 
+                    @deleted="deleteStop(currentStop)"
+                    @changeMode="changeStopMode"
+                />
                 <tour-form v-else></tour-form>
             </transition>
         </div>
@@ -229,6 +234,12 @@ export default {
                 });
 
             console.log(stopOrder);
+        },
+
+        changeStopMode(mode) {
+            if (this.stopMode != mode) {
+                this.stopMode = mode
+            }
         },
     },
 

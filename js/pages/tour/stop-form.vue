@@ -46,7 +46,7 @@
             <div v-if="tour.type != 'indoor'">
                 <div class="flex align-items-base">
                     <h4 class="f-1">Location</h4>
-                    <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMapForLocation = true">
+                    <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMap()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Use Map
                     </a>
                     <a v-else href="#" class="reverse mr-2" @click.prevent="useMapForLocation = false">
@@ -436,6 +436,11 @@ export default {
 
         cancelEditRoute() {
             this.$store.commit('routes/hide');
+        },
+
+        useMap() {
+            this.useMapForLocation = true;
+            this.$emit('changeMode', 'map');
         },
     },
 
