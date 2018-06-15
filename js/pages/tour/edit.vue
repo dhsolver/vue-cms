@@ -30,10 +30,10 @@
         </div>
 
         <!-- STOP LIST -->
-        <div v-show="! loading" class="left-side bg-gray compass-bg ">
-
+        <div v-if="! loading" class="left-side bg-gray compass-bg ">
+            <transition name="fade" mode="out-in">
             <!-- LIST MODE -->
-            <div v-if="stopMode == 'list'" class="p-2 h-100 flex flex-col">
+            <div v-if="stopMode == 'list'" class="p-2 h-100 flex flex-col" key="list">
                 <div class="f-1">
                     <draggable :list="tour.stops" @change="stopOrderChanged" class="stop-list">
                         <stop-box v-for="item in tour.stops"
@@ -65,7 +65,7 @@
             </div>
 
             <!-- MAP MODE -->
-            <div v-else class="bg-gray h-100 p-relative">
+            <div v-else class="bg-gray h-100 p-relative" key="map">
                 <div class="map-toolbar">
                     <b-btn v-if="!useMapForLocation" variant="secondary" class="d-inline" @click="createStopFromPoint()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
@@ -100,6 +100,7 @@
                 
                 <tour-map @clickStop="editStop" @clickTour="showTourForm"></tour-map>
             </div>
+        </transition>
         </div>
     </div>
 </template>
