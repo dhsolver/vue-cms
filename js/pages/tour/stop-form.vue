@@ -20,6 +20,7 @@
         </div>
 
         <div class="p-3">
+            <h4>Title</h4>
             <b-form-group>
                 <b-form-input id="title"
                     :disabled="form.busy"
@@ -31,6 +32,7 @@
                 <input-help :form="form" field="title" text=""></input-help>
             </b-form-group>
             
+            <h4>Description</h4>
             <b-form-group>
                 <b-form-textarea id="description"
                     :disabled="form.busy"
