@@ -33,7 +33,7 @@
         <div v-show="! loading" class="left-side bg-gray compass-bg ">
 
             <!-- LIST MODE -->
-            <div v-if="stopMode == 'list'" class="p-4 h-100 flex flex-col">
+            <div v-if="stopMode == 'list'" class="p-2 h-100 flex flex-col">
                 <div class="f-1">
                     <draggable :list="tour.stops" @change="stopOrderChanged" class="stop-list">
                         <stop-box v-for="item in tour.stops"
@@ -131,7 +131,7 @@ export default {
         stopOrders: [],
         loading: true,
         mode: 'tour', // tour / stop
-        stopMode: 'list', // map / list
+        stopMode: 'map', // map / list
         busy: false,
         useMapForLocation: false,
     }),

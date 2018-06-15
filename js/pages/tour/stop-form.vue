@@ -157,7 +157,7 @@
             <!-- QUESTIONS -->
             <div v-if="tour.type == 'adventure'">
                 <h4 class="info-heading mt-3">
-                    Connections
+                    Decisions
                     <span class="info-icon" v-b-tooltip.hover title="need info for this">
                         <fa :icon="['fas', 'info']"/>
                     </span>

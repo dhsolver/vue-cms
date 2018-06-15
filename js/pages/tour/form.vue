@@ -335,12 +335,6 @@
                 <!-- /end START/END POINTS -->
                 
                 <!-- SAVE BUTTONS -->
-                <h4 class="info-heading mt-4">
-                    Save
-                    <span class="info-icon" v-b-tooltip.hover title="Safe info">
-                        <fa :icon="['fas', 'info']"/>
-                    </span>
-                </h4>
                 <b-row>
                     <b-col lg="6">
                         <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save">
