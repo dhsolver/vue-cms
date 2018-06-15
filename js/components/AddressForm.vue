@@ -24,6 +24,9 @@
                 </b-col>
             </b-row>
         </b-container>
+        <div v-else class="p-2 gray text-center">
+            No Address
+        </div>
     </div>
 </template>
 
@@ -53,62 +56,11 @@ export default {
         search: '',
     }),
     
-    computed: {
-        latitudeDisplay() {
-            return this.address.latitude == '' ? 'Invalid Address' : this.address.latitude;
-        },
-
-        longitudeDisplay() {
-            return this.address.longitude == '' ? 'Invalid Address' : this.address.longitude;
-        },
-    },
-
     methods: {
         getAddressData(addressData, placeResultData, id) {
             console.log('address changed');
             this.address = this.convertAddress(addressData);
             this.$emit('input', this.address);
-        },
-
-        geocode() {
-            if (! this.isCompleteAddress(this.address)) {
-                // address not fully filled out yet
-                this.$emit('input', this.address);
-                return;
-            }
-
-            this.geocodeLookup(this.address)
-                .then(results => {
-                    console.log(results);
-                    if (results.length == 1) {
-                        // all good
-                        if (results[0].partial_match === true) {
-                            this.setCoordinates('', '');
-                            return;
-                        }
-                        this.setCoordinates(results[0].geometry.location.lat(), results[0].geometry.location.lng());
-                    } else {
-                        // multiple results - error for now
-                        this.setCoordinates('', '');
-                    }
-                })
-                .catch(e => {
-                    if (e == 'ZERO_RESULTS') {
-                        this.setCoordinates('', '');
-                        return;
-                    }
-                    console.log('geocoding error: ');
-                    console.log(e);
-                });
-        },
-
-        setCoordinates(lat, lon) {
-            console.log('wtf : ' + lat + ' / ' + lon);
-            this.$emit('input', {
-                ...this.address,
-                latitude: lat,
-                longitude: lon,
-            });
         },
     },
 

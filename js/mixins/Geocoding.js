@@ -34,18 +34,24 @@ export default {
             return new Promise((resolve, reject) => {
                 var latlng = new google.maps.LatLng(parseFloat(lat), parseFloat(lng));
                 this.geocoder.geocode({'latLng': latlng}, function(results, status) {
-                    if (status == 'OK') {
-                        resolve(results);
+                    if (status == 'OK' && results.length > 0) {
+                        resolve(this.buildAddressFromComponents(results[0].address_components));
                     } else {
-                        reject(status);
+                        resolve({
+                            address1: '',
+                            address2: '',
+                            city: '',
+                            state: '',
+                            zipcode: '',
+                        });
                     }
-                });
+                }.bind(this));
             });
         },
 
         /**
-         * Converts Google address data to a usable address object.
-         * @param {object} addr Google address data objecft
+         * Converts Google address autocomplete data to a usable address object.
+         * @param {object} addr Google address data object
          * @return {object} Formatted address object with coordinates 
          */
         convertAddress(addr) {
@@ -57,6 +63,35 @@ export default {
                 state: addr.administrative_area_level_1,
                 zipcode: addr.postal_code,
             };
+        },
+
+        /**
+         * Converts Google reverse lookup results to a usable address object.
+         * @param {object} addr Google address_components result object
+         * @return {object} Formatted address object with coordinates
+         */
+        buildAddressFromComponents(components) {
+            let streetNo = this.getComponentType(components, 'street_number');
+            let route = this.getComponentType(components, 'route');
+
+            return {
+                address1: streetNo ? `${streetNo} ${route}` : route,
+                city: this.getComponentType(components, 'locality'),
+                state: this.getComponentType(components, 'administrative_area_level_1'),
+                zipcode: this.getComponentType(components, 'postal_code'),
+            };
+        },
+
+        getComponentType(components, type) {
+            let result = null;
+
+            components.forEach(item => {
+                if (item.types.indexOf(type) > -1) {
+                    result = item.short_name;
+                }
+            });
+
+            return result;
         },
     }
 }

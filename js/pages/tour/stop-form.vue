@@ -457,41 +457,24 @@ export default {
             }
         },
 
-        clickedPoint(newVal, oldVal) {
+        async clickedPoint(newVal, oldVal) {
             if (this.useMapForLocation) {
+                this.useMapForLocation = false;
+
                 console.log('clicked point:');
                 console.log(newVal);
 
-                // this.reverseLookup(newVal.latitude, newVal.longitude)
-                //     .then(results => {
-                //         console.log('reverse lookup results:');
-                //         console.log(results);
-                //     })
-                //     .catch(e => {
-                //         if (e == 'ZERO_RESULTS') {
-                //             // poor location
-                //         }
-                //         console.log('error looking up coors: ' + e);
-                //     })
+                let address = await this.reverseLookup(newVal.latitude, newVal.longitude)
 
                 this.form.location = {
-                    ...this.form.location,
+                    ...address,
                     latitude: newVal.latitude,
                     longitude: newVal.longitude,
-                    address1: '',
-                    address2: '',
-                    city: '',
-                    state: '',
-                    zipcode: '',
                 }
 
-                this.useMapForLocation = false;
                 this.updateCurrentStop();
             }
         },
     },
 }
 </script>
-
-<style>
-</style>
