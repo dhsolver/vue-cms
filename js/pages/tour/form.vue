@@ -246,7 +246,7 @@
                 <!-- /end PRIZE -->
 
                 <!-- START/END POINTS -->
-                <div v-if="tour.type == 'adventure'">
+                <div v-if="tour.type == 'adventure'" class="mb-3">
                     <h4 class="mt-3">START POINT</h4>
 
                     <b-form-group>
