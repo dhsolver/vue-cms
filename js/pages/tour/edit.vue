@@ -104,6 +104,7 @@ import { urls } from '../../config';
 import TourForm from './form';
 import TourMap from './map';
 import StopForm from './stop-form';
+import Geocoding from '../../mixins/Geocoding';
 
 export default {
     middleware: 'auth',
@@ -113,6 +114,8 @@ export default {
         'stop-form': StopForm,
         'tour-map': TourMap,
     },
+
+    mixins: [ Geocoding ],
 
     metaInfo() {
         return { title: 'Edit Tour' }
@@ -246,18 +249,16 @@ export default {
     },
 
     watch: {
-        clickedPoint(newVal, oldVal) {
+        async clickedPoint(newVal, oldVal) {
             if (this.useMapForLocation) {
                 this.useMapForLocation = false;
 
+                let address = await this.reverseLookup(newVal.latitude, newVal.longitude)
+
                 let location = {
+                    ...address,
                     latitude: newVal.latitude,
                     longitude: newVal.longitude,
-                    address1: '',
-                    address2: '',
-                    city: '',
-                    state: '',
-                    zipcode: '',
                 }
 
                 this.createStop(location);    
