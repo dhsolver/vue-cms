@@ -314,6 +314,7 @@ export default {
 
             routes: 'routes/current',
             routeMode: 'routes/mode',
+            draggedMarker: 'map/draggedMarker',
         }),
         
         hasStop() {
@@ -479,6 +480,22 @@ export default {
 
                 this.updateCurrentStop();
             }
+        },
+
+        async draggedMarker(newVal, oldVal) {
+            if (newVal.stop.id != this.stop.id) {
+                return;
+            }
+
+            let address = await this.reverseLookup(newVal.latLng.lat, newVal.latLng.lng)
+
+            this.form.location = {
+                ...address,
+                latitude: newVal.latLng.lat,
+                longitude: newVal.latLng.lng,
+            }
+
+            this.updateCurrentStop();
         },
     },
 }

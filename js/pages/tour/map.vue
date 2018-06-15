@@ -140,6 +140,7 @@ export default {
                 labelAnchor: new google.maps.Point(13, 68),
                 labelClass: isCurrent ? "pin_label_active" : "pin_label", // the CSS class for the label
                 labelContent: String(stop.order ? stop.order : 'N'),
+                draggable: isCurrent,
             });
 
             var radiusCircle = new google.maps.Circle({
@@ -154,6 +155,10 @@ export default {
 
             m.addListener('click', () => {
                 this.onClickMarker(m, stop);
+            });
+
+            m.addListener('dragend', (e) => {
+                this.onDragMarker(e, m, stop);
             });
 
             this.stopMarkers.push(m);
@@ -221,6 +226,16 @@ export default {
             if (stop.id != this.stop.id) {
                 this.$emit('clickStop', stop);
             }
+        },
+
+        async onDragMarker(event, marker, stop) {
+            this.$store.commit('map/setDraggedMarker', {
+                latLng: {
+                    lat: event.latLng.lat(),
+                    lng: event.latLng.lng(),
+                },
+                stop,
+            })
         },
 
         onClickMap(event) {
