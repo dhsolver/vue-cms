@@ -52,8 +52,9 @@
                         </div>
                     </draggable>
                 </div>
-                <div class="mt-4 mb-2" style="">
-                    <b-btn variant="secondary" class="d-inline mr-3" @click="createStop()">
+                <div class="map-toolbar">
+                <!-- <div class="mt-4 mb-2" style=""> -->
+                    <b-btn variant="secondary" class="d-inline" @click="createStop()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Stop
                     </b-btn>
                     
@@ -73,7 +74,7 @@
                         <fa :icon="['fas', 'times']" />&nbsp;Cancel
                     </b-btn>
                     
-                    <b-btn variant="secondary" class="d-inline" @click="stopMode = 'list'">
+                    <b-btn variant="secondary" class="d-inline" @click="cancelRoute(); stopMode = 'list'">
                         <fa :icon="['fas', 'list']" />&nbsp;List Mode
                     </b-btn>
                     
@@ -130,7 +131,7 @@ export default {
         stopOrders: [],
         loading: true,
         mode: 'tour', // tour / stop
-        stopMode: 'map', // map / list
+        stopMode: 'list', // map / list
         busy: false,
         useMapForLocation: false,
     }),
