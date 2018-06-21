@@ -459,15 +459,13 @@ export default {
 
     watch: {
         stop(newVal, oldVal) {
-            console.log("stop form stop changed");
-            if (newVal.id != oldVal.id) {
-                console.log(newVal);
-                this.form.fill(newVal);
-            }
-            else if (! newVal.id) {
-                console.log('yay');
+            if (! newVal.id) {
                 this.form = new Form(newVal);
             }
+
+            console.log("stop form stop changed");
+            console.log(newVal);
+            this.form.fill(newVal);
         },
 
         async clickedPoint(newVal, oldVal) {
