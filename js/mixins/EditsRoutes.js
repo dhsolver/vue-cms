@@ -10,7 +10,7 @@ export default {
 
     methods: {
         editRoute() {
-            this.$store.commit('routes/startEditing');
+            this.$store.commit('routes/startDrawing');
         },
 
         saveRoute(type = 'tour', stop_id = null, next_id = null) {

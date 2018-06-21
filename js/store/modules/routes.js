@@ -33,9 +33,14 @@ export const mutations = {
         Vue.set(state, 'mode', 'hide');
     },
 
-    startEditing(state, initialPoint = null) {
+    startDrawing(state, initialPoint = null) {
         Vue.set(state, 'old', state.current);
         Vue.set(state, 'current', initialPoint ? [initialPoint] : []);
+        Vue.set(state, 'mode', 'edit');
+    },
+
+    startEditing(state) {
+        Vue.set(state, 'old', state.current);
         Vue.set(state, 'mode', 'edit');
     },
 

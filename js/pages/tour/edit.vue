@@ -198,7 +198,7 @@ export default {
         },
 
         editRoute() {
-            this.$store.commit('routes/startEditing');
+            this.$store.commit('routes/startDrawing');
         },
 
         saveRoute() {

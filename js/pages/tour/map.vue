@@ -254,14 +254,43 @@ export default {
         },
 
         drawRoutes() {
+            if (this.routeLine) {
+                // google.maps.event.clearListeners(this.routeLine, 'dragend');
+            }
+
             this.routeLine = new google.maps.Polyline({
                 path: this.routes,
                 geodesic: true,
                 strokeColor: '#0099ff',
                 strokeOpacity: 0.75,
                 strokeWeight: 5,
+                editable: true,
             });
+
+            google.maps.event.addListener(this.routeLine, "dragend", this.updateRoutes);
+            google.maps.event.addListener(this.routeLine.getPath(), "insert_at", this.updateRoutes);
+            google.maps.event.addListener(this.routeLine.getPath(), "remove_at", this.updateRoutes);
+            google.maps.event.addListener(this.routeLine.getPath(), "set_at", this.updateRoutes);
+
             this.routeLine.setMap(this.map);
+        },
+
+        updateRoutes() {
+            if (this.routeMode != 'edit') {
+                this.$store.commit('routes/startEditing');
+            }
+
+            var path = this.routeLine.getPath();
+            var len = path.getLength();
+            var coordStr = "";
+
+            let routes = [];
+            for (var i = 0; i < len; i++) {
+                routes.push({ lat: path.getAt(i).lat(), lng: path.getAt(i).lng() });
+            }
+
+            this.$store.commit('routes/setCurrent', routes);
+            // this.routes = this.routeLine.getPath();
         },
     },
 
@@ -273,6 +302,13 @@ export default {
         routes(newVal, oldVal) {
             console.log('route obj changed');
             this.routeLine.setPath(newVal);
+
+            google.maps.event.clearListeners(this.routeLine.getPath(), 'insert_at');
+            google.maps.event.clearListeners(this.routeLine.getPath(), 'remove_at');
+            google.maps.event.clearListeners(this.routeLine.getPath(), 'set_at');
+            google.maps.event.addListener(this.routeLine.getPath(), "insert_at", this.updateRoutes);
+            google.maps.event.addListener(this.routeLine.getPath(), "remove_at", this.updateRoutes);
+            google.maps.event.addListener(this.routeLine.getPath(), "set_at", this.updateRoutes);
             // var path = this.routeLine.getPath();
             // path.push(event.latLng);
         },

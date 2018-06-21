@@ -94,7 +94,7 @@ export default {
         },
         createRoute() {
             this.$store.commit('routes/setId', this.next_stop_id);
-            this.$store.commit('routes/startEditing', {
+            this.$store.commit('routes/startDrawing', {
                 lat: this.stop.location.latitude,
                 lng: this.stop.location.longitude,
             });
