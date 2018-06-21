@@ -234,17 +234,6 @@
                         <fa :icon="['fas', 'info']"/>
                     </span>
                 </h4>
-
-                <!-- <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMapForLocation = true"> -->
-                <b-btn v-if="routeMode != 'edit'" size="sm" variant="primary" class="w-100 mt-3" @click="editRoute()">
-                    <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Set Route
-                </b-btn>
-                <b-btn v-if="routeMode == 'edit'" size="sm" variant="primary" class="w-100 mt-3" @click="saveRoute()">
-                    <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Save Route
-                </b-btn>
-                <b-btn v-if="routeMode == 'edit'" size="sm" variant="danger" class="w-100 mt-3" @click="cancelEditRoute()">
-                    <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Cancel
-                </b-btn>
             </div>
 
             <!-- SAVE -->
@@ -356,6 +345,7 @@ export default {
         save() {
             // remove other type of questions when switching type
             if (this.isMultipleChoice) {
+                this.form.next_stop_id = '';
                 this.form.question_answer = '';
                 this.form.question_success = '';
 
@@ -430,21 +420,6 @@ export default {
                         this.form.busy = false;
                     })
             });
-        },
-
-        editRoute() {
-            this.$store.commit('routes/startEditing', {
-                lat: this.stop.location.latitude,
-                lng: this.stop.location.longitude,
-            });
-        },
-
-        saveRoute() {
-
-        },
-
-        cancelEditRoute() {
-            this.$store.commit('routes/hide');
         },
 
         useMap() {
