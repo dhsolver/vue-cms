@@ -169,7 +169,7 @@ export default {
         },
 
         showTourForm() {
-            this.$store.commit('tours/setCurrentStop', {});
+            this.$store.commit('tours/setEmptyStop');
             this.mode = 'tour';
             this.$refs.formContainer.scrollTop = 0;
         },
@@ -182,13 +182,12 @@ export default {
 
         deleteStop(stop) {
             this.$store.commit('tours/removeStop', stop.id);
-            this.$store.commit('tours/setCurrentStop', {});
+            this.$store.commit('tours/setEmptyStop');
             this.mode = 'tour';
             this.$refs.formContainer.scrollTop = 0;
         },
 
         createStop(location = {}) {
-            this.$store.commit('tours/setCurrentStop', {});
             this.$store.commit('tours/setEmptyStop', location);
             this.mode = 'stop';
             this.$refs.formContainer.scrollTop = 0;

@@ -271,6 +271,7 @@ export default {
 
     watch: {
         routes(newVal, oldVal) {
+            console.log('route obj changed');
             this.routeLine.setPath(newVal);
             // var path = this.routeLine.getPath();
             // path.push(event.latLng);

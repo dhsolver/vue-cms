@@ -414,7 +414,6 @@ export default {
             start_video_url: "",
             stops: [],
             route: [],
-            // stop_routes: [],
             title: "",
             trophy_image: "",
             trophy_image_id: "",

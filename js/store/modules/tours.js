@@ -3,10 +3,10 @@ import Vue from 'vue';
 
 export const state = {
     list: [],
-    current: { stops: [], route: [], stop_routes: [] },
+    current: { stops: [], route: [], },
     url: '',
 
-    currentStop: {},
+    currentStop: { routes: [], },
 }
 
 export const getters = {
@@ -21,17 +21,20 @@ export const getters = {
     saveStopUrl: state => `${state.url}tours/${state.current.id}/stops/${state.currentStop.id}`,
     currentStop: state => state.currentStop,
     currentStopRoutes: (state) => {
-        return state.current.stop_routes.filter(obj => {
+        return state.currentStop.routes.filter(obj => {
             return obj.stop_id == state.currentStop.id;
         });
     },
-    getStopRoute: (state) => (stop_id, next_id) => {
-        let item = state.current.stop_routes.find(obj => {
-            return obj.stop_id == stop_id && obj.next_stop_id == next_id;
+    getStopRoute: (state) => (next_id) => {
+        let item = state.currentStop.routes.filter(obj => {
+            return obj.next_stop_id == next_id;
         });
 
-        if (item && item.route) {
-            return item.route;
+        console.log('route found');
+        console.log(item);
+
+        if (item) {
+            return item;
         }
         
         return [];
@@ -40,20 +43,19 @@ export const getters = {
 
 export const mutations = {
     setStopRoute(state, stopRoute) {
-        let index = state.current.stop_routes.findIndex(obj => {
-            return obj.stop_id == stopRoute.stop_id 
-                && obj.next_stop_id == stopRoute.next_stop_id;
+        let index = state.currentStop.routes.findIndex(obj => {
+            return obj.next_stop_id == stopRoute.next_stop_id;
         });
         if (index > -1) {
             // update current
             console.log("updating route");
-            state.current.stop_routes.splice(index, 1, stopRoute);
+            state.currentStop.routes.splice(index, 1, stopRoute);
             return;
         }
 
         // add new
         console.log("adding new route");
-        state.current.stop_routes.push(stopRoute);
+        state.currentStop.routes.push(stopRoute);
     },
 
     setUrl(state, url) {
@@ -77,7 +79,7 @@ export const mutations = {
     },
 
     clearCurrentTour(state) {
-        Vue.set(state, 'current', { stops: [], route: [], stop_routes: [], })
+        Vue.set(state, 'current', { stops: [], route: [], })
     },
 
     mediaUploadSuccess(state, {field, media}) {
@@ -125,6 +127,7 @@ export const mutations = {
             question: '',
             question_answer: '',
             question_success: '',
+            next_stop_id: '',
             choices: [],    
             video_url: '',
 
@@ -141,6 +144,8 @@ export const mutations = {
             image2_id: '',
             image3: '',
             image3_id: '',
+
+            routes: [],
         });
     },
 

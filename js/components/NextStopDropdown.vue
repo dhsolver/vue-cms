@@ -40,12 +40,12 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import EditsRoutes from '../mixins/EditsRoutes';
+// import EditsRoutes from '../mixins/EditsRoutes';
 
 export default {
     name: 'NextStopDropdown',
     
-    mixins: [ EditsRoutes ],
+    // mixins: [ EditsRoutes ],
 
     props: {
         busy: { type: Boolean, default: false },
@@ -56,7 +56,6 @@ export default {
         ...mapGetters({
             tour: 'tours/current',
             stop: 'tours/currentStop',
-            stop_routes: 'tours/currentStopRoutes',
             drawingRoute: 'routes/current',
             routeMode: 'routes/mode',
         }),
@@ -74,7 +73,7 @@ export default {
                 return [];
             }
 
-            return this.$store.getters['tours/getStopRoute'](this.stop.id, this.next_stop_id) || [];
+            return this.$store.getters['tours/getStopRoute'](this.next_stop_id) || [];
         },
 
         hasRoute() {
@@ -98,17 +97,14 @@ export default {
 
         },
         toggleRoute() {
-            if (routeMode == 'hide') {
-                this.$store.commit('routes/setCurrent', this.route);
-                this.$state.commit('routes/show');
+            if (this.routeMode == 'show') {
+                this.$store.commit('routes/hide');
             } else {
-                this.$state.commit('routes/hide');
+                this.$store.commit('routes/show', this.route);
             }
         },
         saveRoute() {
             this.$store.commit('tours/setStopRoute', {
-                tour_id: this.tour.id,
-                stop_id: this.stop.id,
                 next_stop_id: this.next_stop_id,
                 route: this.drawingRoute,
             });
