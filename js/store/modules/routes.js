@@ -5,14 +5,20 @@ export const state = {
     old: [],
     current: [],
     mode: 'hide', // hide / show / edit
+    id: null,
 }
 
 export const getters = {
     current: state => state.current,
     mode: state => state.mode,
+    id: state => state.id,
 }
 
 export const mutations = {
+    setId(state, id) {
+        Vue.set(state, 'id', id);
+    },
+
     setMode(state, mode) {
         Vue.set(state, 'mode', mode);
     },

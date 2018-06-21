@@ -13,26 +13,26 @@
             </b-form-select>
         </div>
 
-        <b-row v-if="routeMode == 'edit'">
+        <b-row v-if="routeMode == 'edit' && routeId == next_stop_id">
             <b-col xs="6">
-                <b-button variant="success" @click="saveRoute(stop.id, next_stop_id)">SAVE ROUTE</b-button>
+                <b-button variant="success" size="sm" @click="saveRoute()">SAVE ROUTE</b-button>
             </b-col>
             <b-col xs="6">
-                <b-button variant="danger" class="ml-auto" @click="cancelRoute()">CANCEL</b-button>
+                <b-button variant="danger" size="sm" class="ml-auto" @click="cancelRoute()">CANCEL</b-button>
             </b-col>
         </b-row>
         <b-row v-if="hasRoute && routeMode != 'edit'">
             <b-col xs="6">
-                <b-button v-if="routeMode == 'hide'" variant="info" @click="toggleRoute()">SHOW ROUTE</b-button>
-                <b-button v-if="routeMode == 'show'" variant="info" @click="toggleRoute()">HIDE ROUTE</b-button>
+                <b-button v-if="(routeId == next_stop_id && routeMode == 'hide') || routeId != next_stop_id" variant="info" size="sm" @click="toggleRoute()">SHOW ROUTE</b-button>
+                <b-button v-if="routeId == next_stop_id && routeMode == 'show'" variant="info" size="sm" @click="toggleRoute()">HIDE ROUTE</b-button>
             </b-col>
             <b-col xs="6">
-                <b-button variant="warning" class="ml-auto" @click="clearRoute()">CLEAR ROUTE</b-button>
+                <b-button variant="warning" size="sm" class="ml-auto" @click="clearRoute()">CLEAR ROUTE</b-button>
             </b-col>
         </b-row>
         <b-row v-if="! hasRoute && routeMode != 'edit'">
             <b-col xs="6">
-                <b-button variant="info" @click="createRoute()">SET ROUTE</b-button>
+                <b-button variant="info" size="sm" @click="createRoute()">SET ROUTE</b-button>
             </b-col>
         </b-row>
     </div>
@@ -58,6 +58,7 @@ export default {
             stop: 'tours/currentStop',
             drawingRoute: 'routes/current',
             routeMode: 'routes/mode',
+            routeId: 'routes/id',
         }),
         
         /**
@@ -73,7 +74,9 @@ export default {
                 return [];
             }
 
-            return this.$store.getters['tours/getStopRoute'](this.next_stop_id) || [];
+            let routeObj = this.$store.getters['tours/getStopRoute'](this.next_stop_id);
+
+            return routeObj && routeObj.route ? routeObj.route : [];
         },
 
         hasRoute() {
@@ -90,16 +93,28 @@ export default {
             this.$emit('input', this.next_stop_id);
         },
         createRoute() {
-            this.$store.commit('routes/setCurrent', this.route);
-            this.$store.commit('routes/startEditing');
+            this.$store.commit('routes/setId', this.next_stop_id);
+            this.$store.commit('routes/startEditing', {
+                lat: this.stop.location.latitude,
+                lng: this.stop.location.longitude,
+            });
         },
         clearRoute() {
-
+            this.$store.commit('tours/clearStopRoute', this.next_stop_id);
+            this.$store.commit('routes/clearCurrent');
         },
         toggleRoute() {
+            if (this.routeMode == 'show' && this.routeId != this.next_stop_id) {
+                // hide any other route showing
+                this.$store.commit('routes/setId', null);
+                this.$store.commit('routes/hide');
+            }
+
             if (this.routeMode == 'show') {
+                this.$store.commit('routes/setId', null);
                 this.$store.commit('routes/hide');
             } else {
+                this.$store.commit('routes/setId', this.next_stop_id);
                 this.$store.commit('routes/show', this.route);
             }
         },
@@ -111,7 +126,7 @@ export default {
             this.$store.commit('routes/stopEditing', {revert: false, hide: false} );
         },
         cancelRoute() {
-
+            this.$store.commit('routes/stopEditing', {revert: true, hide: false} );
         },
     },
 

@@ -20,28 +20,27 @@ export const getters = {
     orderUrl: state => `${state.url}tours/${state.current.id}/stop-order`,
     saveStopUrl: state => `${state.url}tours/${state.current.id}/stops/${state.currentStop.id}`,
     currentStop: state => state.currentStop,
-    currentStopRoutes: (state) => {
-        return state.currentStop.routes.filter(obj => {
-            return obj.stop_id == state.currentStop.id;
-        });
-    },
     getStopRoute: (state) => (next_id) => {
-        let item = state.currentStop.routes.filter(obj => {
+        return state.currentStop.routes.find(obj => {
             return obj.next_stop_id == next_id;
         });
-
-        console.log('route found');
-        console.log(item);
-
-        if (item) {
-            return item;
-        }
-        
-        return [];
     },
 }
 
 export const mutations = {
+    clearStopRoute(state, next_id) {
+        let routes = state.currentStop.routes.filter(obj => {
+            return obj.next_stop_id != next_id;
+        })
+
+        console.log('modified routes:');
+        console.log(routes);
+        Vue.set(state, 'currentStop', {
+            ...state.currentStop,
+            routes,
+        });
+    },
+
     setStopRoute(state, stopRoute) {
         let index = state.currentStop.routes.findIndex(obj => {
             return obj.next_stop_id == stopRoute.next_stop_id;
