@@ -305,6 +305,8 @@ export default {
             image2_id: '',
             image3: '',
             image3_id: '',
+
+            stop_routes: [],
         }),
         useMapForLocation: false,
     }),
@@ -346,6 +348,11 @@ export default {
                 url = this.saveStopUrl;
                 method = 'patch'
             }
+
+            // update stop routes object to reflect from the tour object
+            this.form.stop_routes = this.$store.getters['tours/currentStopRoutes'];
+            console.log('stop routes:');
+            console.log(this.form.stop_routes);
 
             console.log(this.form.originalData);
             return this.form.submit(method, url);
@@ -459,13 +466,15 @@ export default {
         stop(newVal, oldVal) {
             console.log("stop form stop changed");
             if (newVal.id != oldVal.id) {
-                console.log('reload stop form');
                 console.log(newVal);
                 this.form.fill(newVal);
             }
             else if (! newVal.id) {
                 console.log('yay');
-                this.form = new Form(newVal);
+                this.form = new Form({
+                    ...newVal,
+                    stop_routes: [],
+                });
             }
         },
 

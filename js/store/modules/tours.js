@@ -21,18 +21,41 @@ export const getters = {
     saveStopUrl: state => `${state.url}tours/${state.current.id}/stops/${state.currentStop.id}`,
     currentStop: state => state.currentStop,
     currentStopRoutes: (state) => {
-        return state.current.stop_routes.filter(item => {
-            return item.id == state.currentStop.id;
+        return state.current.stop_routes.filter(obj => {
+            return obj.stop_id == state.currentStop.id;
         });
     },
     getStopRoute: (state) => (stop_id, next_id) => {
-        return state.current.stop_routes.find(item => {
-            return item.stop_id == stop_id && item.next_stop_id == next_id;
+        let item = state.current.stop_routes.find(obj => {
+            return obj.stop_id == stop_id && obj.next_stop_id == next_id;
         });
-    }
+
+        if (item && item.route) {
+            return item.route;
+        }
+        
+        return [];
+    },
 }
 
 export const mutations = {
+    setStopRoute(state, stopRoute) {
+        let index = state.current.stop_routes.findIndex(obj => {
+            return obj.stop_id == stopRoute.stop_id 
+                && obj.next_stop_id == stopRoute.next_stop_id;
+        });
+        if (index > -1) {
+            // update current
+            console.log("updating route");
+            state.current.stop_routes.splice(index, 1, stopRoute);
+            return;
+        }
+
+        // add new
+        console.log("adding new route");
+        state.current.stop_routes.push(stopRoute);
+    },
+
     setUrl(state, url) {
         Vue.set(state, 'url', url);
     },
@@ -85,10 +108,6 @@ export const mutations = {
         if (index > -1) {
             state.current.stops.splice(index, 1);
         }
-    },
-
-    setTourRoute(state, route) {
-        Vue.set(state, 'current', {...state.current, route});
     },
 
     setTourRoute(state, route) {
