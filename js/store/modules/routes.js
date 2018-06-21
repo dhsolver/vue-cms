@@ -29,6 +29,8 @@ export const mutations = {
 
     clearCurrent(state) {
         Vue.set(state, 'current', []);
+        Vue.set(state, 'id', null);
+        Vue.set(state, 'mode', 'hide');
     },
 
     startEditing(state, initialPoint = null) {

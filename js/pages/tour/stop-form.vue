@@ -463,8 +463,12 @@ export default {
                 this.form = new Form(newVal);
             }
 
-            console.log("stop form stop changed");
-            console.log(newVal);
+            if (newVal.id != oldVal.id) {
+                console.log("stop form stop changed");
+                console.log(newVal);
+                this.$store.commit('routes/clearCurrent');
+            }
+            
             this.form.fill(newVal);
         },
 
