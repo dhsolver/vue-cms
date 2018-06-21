@@ -5,24 +5,14 @@
             <input type="text" placeholder="Answer" @input="updateAnswer()" v-model="answer" />
             <span class="icon-right" @click="$emit('delete')"><fa :icon="['fas', 'times']"/></span>
         </div>
-        <div class="icon-input answer-input d-flex">
-            <span class="icon"><fa :icon="['fas', 'map-marker-alt']"/></span>
-            <b-form-select :disabled="busy" @input="updateNextStop()" v-model="next_stop_id">
-                <option value="">-- Select Stop --</option>
-                <option v-for="stop in otherStops" 
-                    :key="stop.id" 
-                    :value="stop.id"
-                    v-text="stop.title"
-                ></option>
-            </b-form-select>
-        </div>
-
+        
+        <next-stop-dropdown :busy="busy" v-model="next_stop_id" @input="updateNextStop()" />
+        
         <hr>
     </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
 export default {
     name: 'StopChoice',
     
@@ -32,22 +22,9 @@ export default {
     },
 
     computed: {
-        ...mapGetters({
-            tour: 'tours/current',
-            stop: 'tours/currentStop',
-        }),
-        
         letter() {
             let alpha = 'abcdefghijklmnopqrstuvwxyz';
             return alpha[this.value.order - 1] + '.';
-        },
-
-        /**
-         * Returns all stops but the current one for the 
-         * next stop dropdown.
-         */
-        otherStops() {
-            return this.tour.stops.filter(item => item.id != this.stop.id);
         },
     },
 
@@ -74,7 +51,6 @@ export default {
 
     watch: {
         value(newVal, oldVal) {
-            console.log(newVal);
             this.answer = newVal.answer;
             this.next_stop_id = newVal.next_stop_id;
         },

@@ -3,7 +3,7 @@ import Vue from 'vue';
 
 export const state = {
     list: [],
-    current: { stops: [], route: [], stopRoutes: [] },
+    current: { stops: [], route: [], stop_routes: [] },
     url: '',
 
     currentStop: {},
@@ -20,6 +20,16 @@ export const getters = {
     orderUrl: state => `${state.url}tours/${state.current.id}/stop-order`,
     saveStopUrl: state => `${state.url}tours/${state.current.id}/stops/${state.currentStop.id}`,
     currentStop: state => state.currentStop,
+    currentStopRoutes: (state) => {
+        return state.current.stop_routes.filter(item => {
+            return item.id == state.currentStop.id;
+        });
+    },
+    getStopRoute: (state) => (stop_id, next_id) => {
+        return state.current.stop_routes.find(item => {
+            return item.stop_id == stop_id && item.next_stop_id == next_id;
+        });
+    }
 }
 
 export const mutations = {
@@ -44,7 +54,7 @@ export const mutations = {
     },
 
     clearCurrentTour(state) {
-        Vue.set(state, 'current', { stops: [], route: [], stopRoutes: [], })
+        Vue.set(state, 'current', { stops: [], route: [], stop_routes: [], })
     },
 
     mediaUploadSuccess(state, {field, media}) {
@@ -75,6 +85,10 @@ export const mutations = {
         if (index > -1) {
             state.current.stops.splice(index, 1);
         }
+    },
+
+    setTourRoute(state, route) {
+        Vue.set(state, 'current', {...state.current, route});
     },
 
     setTourRoute(state, route) {

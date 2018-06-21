@@ -203,6 +203,9 @@
                             </b-form-textarea>
                             <input-help :form="form" field="question_success" text=""></input-help>
                         </b-form-group>
+
+                        <h3>Next Stop</h3>
+                        <next-stop-dropdown v-model="form.next_stop_id" :busy="form.busy" />
                     </b-tab>
 
                     <b-tab title="Multiple Choice" :active="form.is_multiple_choice">
@@ -285,6 +288,7 @@ export default {
             question: '',
             question_answer: '',
             question_success: '',
+            next_stop_id: '',
             choices: [],    
             video_url: '',
 

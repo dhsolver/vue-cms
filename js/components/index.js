@@ -14,6 +14,7 @@ import YoutubeInput from './YoutubeInput';
 import StopChoice from './StopChoice';
 import AddressForm from './AddressForm';
 import GoogleAddressSearch from './GoogleAddressSearch';
+import NextStopDropdown from './NextStopDropdown';
 
 // Components that are registered globaly.
 [
@@ -32,6 +33,7 @@ import GoogleAddressSearch from './GoogleAddressSearch';
     StopChoice,
     AddressForm,
     GoogleAddressSearch,
+    NextStopDropdown,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })
