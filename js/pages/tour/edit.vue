@@ -23,7 +23,6 @@
                     v-if="mode == 'stop'" 
                     @addStop="createStop()" 
                     @deleted="deleteStop(currentStop)"
-                    @changeMode="changeStopMode"
                 />
                 <tour-form v-else></tour-form>
             </transition>
@@ -58,7 +57,7 @@
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Stop
                     </b-btn>
                     
-                    <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="stopMode = 'map'">
+                    <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="changeStopMode('map')">
                         <fa :icon="['fas', 'list']" />&nbsp;Map Mode
                     </b-btn>
                 </div>
@@ -74,7 +73,7 @@
                         <fa :icon="['fas', 'times']" />&nbsp;Cancel
                     </b-btn>
                     
-                    <b-btn variant="secondary" class="d-inline" @click="cancelRoute(); stopMode = 'list'">
+                    <b-btn variant="secondary" class="d-inline" @click="cancelRoute(); changeStopMode('list')">
                         <fa :icon="['fas', 'list']" />&nbsp;List Mode
                     </b-btn>
                     
@@ -137,7 +136,6 @@ export default {
         stopOrders: [],
         loading: true,
         mode: 'tour', // tour / stop
-        stopMode: 'map', // map / list
         busy: false,
         useMapForLocation: false,
     }),
@@ -154,6 +152,7 @@ export default {
             orderUrl: "tours/orderUrl",
             tourFormHasChanges: 'tours/getTourChanges',
             stopFormHasChanges: 'tours/getStopChanges',
+            stopMode: 'tours/stopMode', // map / list
         }),
 
         formTransition() {
@@ -287,9 +286,7 @@ export default {
         },
 
         changeStopMode(mode) {
-            if (this.stopMode != mode) {
-                this.stopMode = mode
-            }
+            this.$store.commit('tours/setStopMode', mode);
         },
     },
 
@@ -303,7 +300,7 @@ export default {
         }
 
         if (this.tour.type == 'indoor') {
-            this.stopMode = 'list';
+            this.changeStopMode('list');
         }
 
         this.loading = false;

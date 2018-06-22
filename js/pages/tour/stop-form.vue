@@ -426,7 +426,7 @@ export default {
 
         useMap() {
             this.useMapForLocation = true;
-            this.$emit('changeMode', 'map');
+            this.$store.commit('tours/setStopMode', 'map');
         },
 
         markFormAsChanged(changed = false) {

@@ -10,6 +10,7 @@ export const state = {
 
     tourChanges: false,
     stopCanges: false,
+    stopMode: 'map',
 }
 
 export const getters = {
@@ -34,9 +35,19 @@ export const getters = {
     getStopChanges: (state) => {
         return state.stopChanges;
     },
+    stopMode: (state) => {
+        return state.stopMode;
+    }
 }
 
 export const mutations = {
+    setStopMode(state, mode) {
+        if (mode == state.stopMode) {
+            return;
+        }
+        
+        Vue.set(state, 'stopMode', mode);
+    },
     setTourChanges(state, yesno) {
         Vue.set(state, 'tourChanges', yesno);
     },
