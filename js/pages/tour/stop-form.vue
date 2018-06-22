@@ -277,7 +277,7 @@ export default {
             question: '',
             question_answer: '',
             question_success: '',
-            next_stop_id: '',
+            next_stop_id: null,
             choices: [],    
             video_url: '',
 
@@ -345,7 +345,7 @@ export default {
         save() {
             // remove other type of questions when switching type
             if (this.isMultipleChoice) {
-                this.form.next_stop_id = '';
+                this.form.next_stop_id = null;
                 this.form.question_answer = '';
                 this.form.question_success = '';
 
@@ -376,12 +376,13 @@ export default {
         },
 
         addChoice() {
+            console.log('adding choice...');
             this.form.choices.push({
                 id: '',
                 tour_stop_id: this.stop.id,
                 order: this.form.choices.length + 1,
                 answer: '',
-                next_stop_id: '',
+                next_stop_id: null,
             });
         },
 
@@ -443,11 +444,13 @@ export default {
             // this is a fix because when the stop form changes for some reason
             // the v-model syncs twice and updates this value signaling 'changes' 
             // in the stop form.
-            this.next_stop_id = '';
-            await Vue.nextTick();
+            // this.form.next_stop_id = '';
+            // await Vue.nextTick();
 
             if (! newVal.id) {
                 this.form = new Form(newVal);
+
+                await Vue.nextTick();
                 this.markFormAsChanged(false);
                 return;
             }
@@ -456,10 +459,12 @@ export default {
                 console.log("stop form stop changed");
                 console.log(newVal);
                 this.$store.commit('routes/clearCurrent');
-                this.markFormAsChanged(false);
             }
             
             this.form.fill(newVal);
+
+            await Vue.nextTick();
+            this.markFormAsChanged(false);
         },
 
         async clickedPoint(newVal, oldVal) {
@@ -501,8 +506,8 @@ export default {
 
         'form': {
             handler() {
-                console.log('stop form changes');
                 if (this.form.isDirty()) {
+                    console.log('stop form changes');
                     this.markFormAsChanged(true);
                 }
             },
@@ -512,6 +517,7 @@ export default {
         'form.choices': {
             handler(newVal, oldVal) {
                 console.log(newVal);
+                console.log(newVal == this.form.choices);
             },
             deep: true,
         },

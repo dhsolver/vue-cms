@@ -49,7 +49,7 @@ export default {
 
     props: {
         busy: { type: Boolean, default: false },
-        value: { default: '' },
+        value: { default: null },
     },
 
     computed: {
@@ -85,8 +85,7 @@ export default {
     },
 
     data: () => ({
-        next_stop_id: null,
-        current_stop_id: '',
+        next_stop_id: '',
     }),
 
     methods: {
@@ -133,18 +132,19 @@ export default {
 
     watch: {
         value(newVal, oldVal) {
-            if (!newVal) {
-                newVal = null;
-            }
+            // if (!newVal) {
+            //     newVal = null;
+            // }
 
-            if (newVal != this.next_stop_id) {
+            // if (newVal != this.next_stop_id) {
+            //     console.log(newVal + ' - ' + oldVal);
                 this.next_stop_id = newVal;
-            }
+            // }
         },
     },
 
     mounted() {
-        // this.next_stop_id = this.value;
+        this.next_stop_id = this.value;
     },
 }
 </script>
