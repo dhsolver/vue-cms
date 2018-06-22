@@ -102,6 +102,11 @@
             </div>
         </transition>
         </div>
+
+        <!-- Confirmation modal -->
+        <confirm-modal ref="confirm" yesButton="Discard Changes">
+            Are you sure you want to navigate away from this form?  You currently have unsaved changes.
+        </confirm-modal>
     </div>
 </template>
 
@@ -147,6 +152,8 @@ export default {
             route: 'routes/current',
             clickedPoint: 'map/clickedPoint',
             orderUrl: "tours/orderUrl",
+            tourFormHasChanges: 'tours/getTourChanges',
+            stopFormHasChanges: 'tours/getStopChanges',
         }),
 
         formTransition() {
@@ -164,17 +171,45 @@ export default {
             window.location = '/';
         },
 
-        openDashboard() {
+        openDashboard(confirmed = false) {
+            if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.openDashboard(true);
+                });
+                return;
+            }
+
             this.$router.push({ name: 'home' });
         },
 
-        showTourForm() {
+        showTourForm(confirmed = false) {
+            if (! confirmed && this.mode == 'stop' && this.stopFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.showTourForm(true);
+                });
+                return;
+            }
+
             this.$store.commit('tours/setEmptyStop');
             this.mode = 'tour';
             this.$refs.formContainer.scrollTop = 0;
         },
 
-        editStop(stop) {
+        editStop(stop, confirmed = false) {
+            if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.editStop(stop, true);
+                });
+                return;
+            }
+
+            if (! confirmed && this.mode == 'stop' && stop != this.currentStop && this.stopFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.editStop(stop, true);
+                });
+                return;
+            }
+
             this.$store.commit('tours/setCurrentStop', stop);
             this.mode = 'stop';
             this.$refs.formContainer.scrollTop = 0;
@@ -187,7 +222,21 @@ export default {
             this.$refs.formContainer.scrollTop = 0;
         },
 
-        createStop(location = {}) {
+        createStop(location = {}, confirmed = false) {
+            if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.createStop(location, true);
+                });
+                return;
+            }
+
+            if (! confirmed && this.mode == 'stop' && this.stopFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.createStop(location, true);
+                });
+                return;
+            }
+
             this.$store.commit('tours/setEmptyStop', location);
             this.mode = 'stop';
             this.$refs.formContainer.scrollTop = 0;

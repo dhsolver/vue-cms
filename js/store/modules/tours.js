@@ -7,6 +7,9 @@ export const state = {
     url: '',
 
     currentStop: { routes: [], },
+
+    tourChanges: false,
+    stopCanges: false,
 }
 
 export const getters = {
@@ -25,9 +28,22 @@ export const getters = {
             return obj.next_stop_id == next_id;
         });
     },
+    getTourChanges: (state) => {
+        return state.tourChanges;
+    },
+    getStopChanges: (state) => {
+        return state.stopChanges;
+    },
 }
 
 export const mutations = {
+    setTourChanges(state, yesno) {
+        Vue.set(state, 'tourChanges', yesno);
+    },
+    setStopChanges(state, yesno) {
+        Vue.set(state, 'stopChanges', yesno);
+    },
+
     clearStopRoute(state, next_id) {
         let routes = state.currentStop.routes.filter(obj => {
             return obj.next_stop_id != next_id;

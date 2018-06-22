@@ -213,7 +213,7 @@
                         <h3 class="mt-3">Options</h3>
 
                         <stop-choice v-for="(item, index) in form.choices"
-                            :key="index+item.id"
+                            :key="index + '' + item.id"
                             :busy="form.busy"
                             v-model="form.choices[index]"
                             @delete="deleteChoice(index)"
@@ -239,7 +239,7 @@
             <!-- SAVE -->
             <b-row class="mt-5">
                 <b-col lg="6">
-                    <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save">
+                    <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save" :disabled="!hasChanges">
                         <fa :icon="['fas', 'check']"/>&nbsp;&nbsp;Save
                     </busy-button>
                 </b-col>
@@ -312,6 +312,7 @@ export default {
             routes: 'routes/current',
             routeMode: 'routes/mode',
             draggedMarker: 'map/draggedMarker',
+            hasChanges: 'tours/getStopChanges',
         }),
         
         hasStop() {
@@ -338,7 +339,6 @@ export default {
                 method = 'patch'
             }
 
-            console.log(this.form.originalData);
             return this.form.submit(method, url);
         },
 
@@ -381,7 +381,7 @@ export default {
                 tour_stop_id: this.stop.id,
                 order: this.form.choices.length + 1,
                 answer: '',
-                next_stop_id: -1,
+                next_stop_id: '',
             });
         },
 
@@ -397,6 +397,7 @@ export default {
         updateCurrentStop() {
             console.log('stop location changed');
             this.$store.commit('tours/setCurrentStop', this.form.data());
+            this.markFormAsChanged(true);
         },
 
         /**
@@ -426,22 +427,36 @@ export default {
             this.useMapForLocation = true;
             this.$emit('changeMode', 'map');
         },
+
+        markFormAsChanged(changed = false) {
+            this.$store.commit('tours/setStopChanges', changed);
+        },
     },
 
     mounted() {
         this.form.fill(this.stop);
+        this.markFormAsChanged(false);
     },
 
     watch: {
-        stop(newVal, oldVal) {
+        async stop(newVal, oldVal) {
+            // this is a fix because when the stop form changes for some reason
+            // the v-model syncs twice and updates this value signaling 'changes' 
+            // in the stop form.
+            this.next_stop_id = '';
+            await Vue.nextTick();
+
             if (! newVal.id) {
                 this.form = new Form(newVal);
+                this.markFormAsChanged(false);
+                return;
             }
 
             if (newVal.id != oldVal.id) {
                 console.log("stop form stop changed");
                 console.log(newVal);
                 this.$store.commit('routes/clearCurrent');
+                this.markFormAsChanged(false);
             }
             
             this.form.fill(newVal);
@@ -462,6 +477,7 @@ export default {
                     longitude: newVal.longitude,
                 }
 
+                // this.markFormAsChanged(true);
                 this.updateCurrentStop();
             }
         },
@@ -479,7 +495,25 @@ export default {
                 longitude: newVal.latLng.lng,
             }
 
+            // this.markFormAsChanged(true);
             this.updateCurrentStop();
+        },
+
+        'form': {
+            handler() {
+                console.log('stop form changes');
+                if (this.form.isDirty()) {
+                    this.markFormAsChanged(true);
+                }
+            },
+            deep: true,
+        },
+        
+        'form.choices': {
+            handler(newVal, oldVal) {
+                console.log(newVal);
+            },
+            deep: true,
         },
     },
 }

@@ -85,7 +85,8 @@ export default {
     },
 
     data: () => ({
-        next_stop_id: '',
+        next_stop_id: null,
+        current_stop_id: '',
     }),
 
     methods: {
@@ -132,12 +133,18 @@ export default {
 
     watch: {
         value(newVal, oldVal) {
-            this.next_stop_id = newVal;
+            if (!newVal) {
+                newVal = null;
+            }
+
+            if (newVal != this.next_stop_id) {
+                this.next_stop_id = newVal;
+            }
         },
     },
 
     mounted() {
-        this.next_stop_id = this.value;
+        // this.next_stop_id = this.value;
     },
 }
 </script>

@@ -337,7 +337,7 @@
                 <!-- SAVE BUTTONS -->
                 <b-row>
                     <b-col lg="6">
-                        <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save">
+                        <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save" :disabled="! hasChanges">
                             <fa :icon="['fas', 'check']"/>&nbsp;&nbsp;Save
                         </busy-button>
                     </b-col>
@@ -428,6 +428,7 @@ export default {
             tour: "tours/current",
             createUrl: "tours/createUrl",
             saveUrl: "tours/saveUrl",
+            hasChanges: 'tours/getTourChanges',
         }),
 
         hasTour() {
@@ -484,6 +485,7 @@ export default {
     mounted() {
         if (this.tour.id) {
             this.form.fill(this.tour);
+            this.$store.commit('tours/setTourChanges', false);
         }
     },
 
@@ -491,8 +493,17 @@ export default {
         tour(newVal) {
             if (newVal.id) {
                 this.form.fill(newVal);
+                this.$store.commit('tours/setTourChanges', false);
             }
-        }
+        },
+        'form': {
+            handler() {
+                if (this.form.isDirty()) {
+                    this.$store.commit('tours/setTourChanges', true);
+                }
+            },
+            deep: true,
+        },
     }
 };
 </script>
