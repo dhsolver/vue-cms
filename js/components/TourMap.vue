@@ -224,7 +224,7 @@ export default {
             }
 
             if (stop.id != this.stop.id) {
-                this.$emit('clickStop', stop);
+                this.$emit('clickStop', stop.id);
             }
         },
 

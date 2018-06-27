@@ -1,11 +1,11 @@
 <template>
     <div class="wrapper shadow-lg">
-        <spinner v-model="loading"></spinner>
+        <spinner v-model="loading" />
 
         <!-- FORM --> 
         <div v-show="! loading" class="bg-white right-side" style="overflow: auto" ref="formContainer">
             <div v-if="mode == 'tour'" class="d-flex">
-                <b-btn variant="info" class="square f-1" @click="openDashboard()">
+                <b-btn variant="info" class="square f-1" @click="showDashboard()">
                     Dashboard
                 </b-btn>
                 <b-btn variant="info" class="square f-1" style="margin-left: 1px" @click="createStop()">
@@ -24,82 +24,81 @@
                     @addStop="createStop()" 
                     @deleted="deleteStop(currentStop)"
                 />
-                <tour-form v-else></tour-form>
+                <tour-form v-else />
             </transition>
         </div>
 
         <!-- STOP LIST -->
-        <div v-if="! loading" class="left-side bg-gray compass-bg ">
+        <div v-if="! loading" class="left-side bg-gray compass-bg">
             <transition name="fade" mode="out-in">
-            <!-- LIST MODE -->
-            <div v-if="stopMode == 'list'" class="p-2 h-100 flex flex-col" key="list">
-                <div class="f-1">
-                    <draggable :list="tour.stops" @change="stopOrderChanged" class="stop-list">
-                        <stop-card v-for="item in tour.stops"
-                            :key="item.id" 
-                            :stop="item" 
-                            @click="editStop(item)" 
-                            @deleted="deleteStop(item)"
-                            class="stop-list-child"
-                        />
+                <!-- LIST MODE -->
+                <div v-if="stopMode == 'list'" class="p-2 h-100 flex flex-col" key="list">
+                    <div class="f-1">
+                        <draggable :list="tour.stops" @change="saveStopOrder" class="stop-list">
+                            <stop-card v-for="item in tour.stops"
+                                :key="item.id" 
+                                :stop="item" 
+                                @click="showStopForm(item.id)" 
+                                @deleted="deleteStop(item)"
+                                class="stop-list-child"
+                            />
 
-                        <div class="stop-list-child">
-                            <div class="add-box bg-fit" @click="createStop()">
-                                <fa :icon="['fas', 'plus']" size="3x" />
-                                <div class="title mt-3">ADD STOP</div>
+                            <div class="stop-list-child">
+                                <div class="add-box bg-fit" @click="createStop()">
+                                    <fa :icon="['fas', 'plus']" size="3x" />
+                                    <div class="title mt-3">ADD STOP</div>
+                                </div>
                             </div>
-                        </div>
-                    </draggable>
-                </div>
-                <div class="map-toolbar">
-                <!-- <div class="mt-4 mb-2" style=""> -->
-                    <b-btn variant="secondary" class="d-inline" @click="createStop()">
-                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Stop
-                    </b-btn>
-                    
-                    <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="changeStopMode('map')">
-                        <fa :icon="['fas', 'list']" />&nbsp;Map Mode
-                    </b-btn>
-                </div>
-            </div>
-
-            <!-- MAP MODE -->
-            <div v-else class="bg-gray h-100 p-relative" key="map">
-                <div class="map-toolbar">
-                    <b-btn v-if="!useMapForLocation" variant="secondary" class="d-inline" @click="createStopFromPoint()">
-                        <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
-                    </b-btn>
-                    <b-btn v-else variant="danger" class="d-inline" @click="useMapForLocation = false">
-                        <fa :icon="['fas', 'times']" />&nbsp;Cancel
-                    </b-btn>
-                    
-                    <b-btn variant="secondary" class="d-inline" @click="cancelRoute(); changeStopMode('list')">
-                        <fa :icon="['fas', 'list']" />&nbsp;List Mode
-                    </b-btn>
-                    
-                    <div v-if="tour.type == 'outdoor'" class="d-inline">
-                        <b-btn v-if="routeMode != 'edit'" variant="secondary" class="d-inline" @click="editRoute()">
-                            <fa :icon="['fas', 'pencil-alt']" />&nbsp;Draw Route
+                        </draggable>
+                    </div>
+                    <div class="map-toolbar">
+                        <b-btn variant="secondary" class="d-inline" @click="createStop()">
+                            <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Stop
                         </b-btn>
-
-                        <b-btn v-if="routeMode != 'edit'" variant="secondary" class="d-inline" @click="toggleRoute()">
-                            <span v-if="routeMode == 'hide'"><fa :icon="['fas', 'eye']" />&nbsp; Show Route</span>
-                            <span v-else><fa :icon="['fas', 'eye-slash']" />&nbsp;Hide Route</span>
-                        </b-btn>
-
-                        <b-btn v-if="routeMode == 'edit'" variant="success" class="d-inline" @click="saveRoute()">
-                            <fa :icon="['fas', 'save']" />&nbsp;Save Route
-                        </b-btn>
-
-                        <b-btn v-if="routeMode == 'edit'" variant="danger" class="d-inline" @click="cancelRoute()">
-                            <fa :icon="['fas', 'times']" />&nbsp;Cancel
+                        
+                        <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="changeStopMode('map')">
+                            <fa :icon="['fas', 'list']" />&nbsp;Map Mode
                         </b-btn>
                     </div>
                 </div>
-                
-                <tour-map @clickStop="editStop" @clickTour="showTourForm"></tour-map>
-            </div>
-        </transition>
+
+                <!-- MAP MODE -->
+                <div v-else class="bg-gray h-100 p-relative" key="map">
+                    <div class="map-toolbar">
+                        <b-btn v-if="!useMapForLocation" variant="secondary" class="d-inline" @click="createStopFromPoint()">
+                            <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
+                        </b-btn>
+                        <b-btn v-else variant="danger" class="d-inline" @click="useMapForLocation = false">
+                            <fa :icon="['fas', 'times']" />&nbsp;Cancel
+                        </b-btn>
+                        
+                        <b-btn variant="secondary" class="d-inline" @click="cancelRoute(); changeStopMode('list')">
+                            <fa :icon="['fas', 'list']" />&nbsp;List Mode
+                        </b-btn>
+                        
+                        <div v-if="tour.type == 'outdoor'" class="d-inline">
+                            <b-btn v-if="routeMode != 'edit'" variant="secondary" class="d-inline" @click="editRoute()">
+                                <fa :icon="['fas', 'pencil-alt']" />&nbsp;Draw Route
+                            </b-btn>
+
+                            <b-btn v-if="routeMode != 'edit'" variant="secondary" class="d-inline" @click="toggleRoute()">
+                                <span v-if="routeMode == 'hide'"><fa :icon="['fas', 'eye']" />&nbsp; Show Route</span>
+                                <span v-else><fa :icon="['fas', 'eye-slash']" />&nbsp;Hide Route</span>
+                            </b-btn>
+
+                            <b-btn v-if="routeMode == 'edit'" variant="success" class="d-inline" @click="saveRoute()">
+                                <fa :icon="['fas', 'save']" />&nbsp;Save Route
+                            </b-btn>
+
+                            <b-btn v-if="routeMode == 'edit'" variant="danger" class="d-inline" @click="cancelRoute()">
+                                <fa :icon="['fas', 'times']" />&nbsp;Cancel
+                            </b-btn>
+                        </div>
+                    </div>
+                    
+                    <tour-map @clickStop="showStopForm" @clickTour="showTourForm()" />
+                </div>
+            </transition>
         </div>
 
         <!-- Confirmation modal -->
@@ -133,23 +132,18 @@ export default {
     },
     
     data: () => ({
-        stopOrders: [],
         loading: true,
         mode: 'tour', // tour / stop
-        busy: false,
         useMapForLocation: false,
     }),
 
     computed: {
         ...mapGetters({
-            user: 'auth/user',
-            isAdmin: 'auth/isAdmin',
             tour: 'tours/current',
             currentStop: 'tours/currentStop',
             routeMode: 'routes/mode',
             route: 'routes/current',
             clickedPoint: 'map/clickedPoint',
-            orderUrl: "tours/orderUrl",
             tourFormHasChanges: 'tours/getTourChanges',
             stopFormHasChanges: 'tours/getStopChanges',
             stopMode: 'tours/stopMode', // map / list
@@ -158,22 +152,13 @@ export default {
         formTransition() {
             return this.mode == 'stop' ? 'slide' : 'slide-right';
         },
-
-        tourRows() {
-            return Math.ceil( (this.tour.stops.length + 1) / 4);
-        }
     },
 
     methods: {
-        async logout () {
-            this.$store.commit('auth/logout');
-            window.location = '/';
-        },
-
-        openDashboard(confirmed = false) {
+        showDashboard(confirmed = false) {
             if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
                 this.$refs.confirm.confirm(() => {
-                    this.openDashboard(true);
+                    this.showDashboard(true);
                 });
                 return;
             }
@@ -194,18 +179,25 @@ export default {
             this.$refs.formContainer.scrollTop = 0;
         },
 
-        editStop(stop, confirmed = false) {
+        showStopForm(stop_id, confirmed = false) {
             if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
                 this.$refs.confirm.confirm(() => {
-                    this.editStop(stop, true);
+                    this.showStopForm(stop_id, true);
                 });
                 return;
             }
 
-            if (! confirmed && this.mode == 'stop' && stop != this.currentStop && this.stopFormHasChanges) {
+            if (! confirmed && this.mode == 'stop' && stop_id != this.currentStop && this.stopFormHasChanges) {
                 this.$refs.confirm.confirm(() => {
-                    this.editStop(stop, true);
+                    this.showStopForm(stop_id, true);
                 });
+                return;
+            }
+
+            let stop = this.$store.getters['tours/getStopFromid'](stop_id)
+            if (! stop) {
+                // stop not found on current tour
+                this.showDashboard();
                 return;
             }
 
@@ -266,23 +258,8 @@ export default {
             }
         },
 
-        stopOrderChanged(e) {
-            console.log('stop order changed');
-
-            let stopOrder = this.tour.stops.map(s => {
-                return s.id;
-            })
-            
-            axios.put(this.orderUrl, { order: stopOrder })
-                .then(({ data }) => {
-                    this.$store.commit("tours/updateStopOrder", data.data.order);
-                })
-                .catch(e => {
-                    console.log("save order error:");
-                    console.log(e);
-                });
-
-            console.log(stopOrder);
+        async saveStopOrder(e) {
+            await this.$store.dispatch('tours/saveStopOrder');
         },
 
         changeStopMode(mode) {

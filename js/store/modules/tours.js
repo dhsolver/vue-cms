@@ -37,6 +37,11 @@ export const getters = {
     },
     stopMode: (state) => {
         return state.stopMode;
+    },
+    getStopFromid: (state) => (stop_id) => {
+        return state.current.stops.find(obj => {
+            return obj.id == stop_id;
+        });
     }
 }
 
@@ -233,5 +238,20 @@ export const actions = {
         } catch (e) {
             return e;
         }
+    },
+
+    async saveStopOrder({ commit, dispatch }) {
+        let stopOrder = state.current.stops.map(obj => {
+            return obj.id;
+        })
+        
+        axios.put(getters.orderUrl(state), { order: stopOrder })
+            .then(({ data }) => {
+                commit('updateStopOrder', data.data.order);
+            })
+            .catch(e => {
+                console.log("save order error:");
+                console.log(e);
+            });
     },
 }
