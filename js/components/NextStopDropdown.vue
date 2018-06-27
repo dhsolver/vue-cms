@@ -103,6 +103,7 @@ export default {
         clearRoute() {
             this.$store.commit('tours/clearStopRoute', this.next_stop_id);
             this.$store.commit('routes/clearCurrent');
+            this.$store.commit('tours/setStopChanges', true);
         },
         toggleRoute() {
             if (this.routeMode == 'show' && this.routeId != this.next_stop_id) {
@@ -126,6 +127,7 @@ export default {
                 route: this.drawingRoute,
             });
             this.$store.commit('routes/stopEditing', {revert: false, hide: false} );
+            this.$store.commit('tours/setStopChanges', true);
         },
         cancelRoute() {
             this.$store.commit('routes/stopEditing', {revert: true, hide: false} );

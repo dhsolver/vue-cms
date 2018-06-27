@@ -9,7 +9,7 @@ export const state = {
     currentStop: { routes: [], },
 
     tourChanges: false,
-    stopCanges: false,
+    stopChanges: false,
     stopMode: 'map',
 }
 
@@ -120,7 +120,7 @@ export const mutations = {
     },
 
     setCurrentStop(state, stop) {
-        state.currentStop = stop;
+        Vue.set(state, 'currentStop', stop);
     },
 
     updateStop(state, stop) {
