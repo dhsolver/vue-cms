@@ -32,7 +32,7 @@
         <div v-if="! loading" class="left-side bg-gray compass-bg">
             <transition name="fade" mode="out-in">
                 <!-- LIST MODE -->
-                <div v-if="stopMode == 'list'" class="p-2 h-100 flex flex-col" key="list">
+                <div v-if="stopViewMode == 'list'" class="p-2 h-100 flex flex-col" key="list">
                     <div class="f-1">
                         <draggable :list="tour.stops" @change="saveStopOrder" class="stop-list">
                             <stop-card v-for="item in tour.stops"
@@ -56,7 +56,7 @@
                             <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Stop
                         </b-btn>
                         
-                        <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="changeStopMode('map')">
+                        <b-btn v-if="tour.type != 'indoor'" variant="secondary" class="d-inline" @click="setStopViewMode('map')">
                             <fa :icon="['fas', 'list']" />&nbsp;Map Mode
                         </b-btn>
                     </div>
@@ -72,7 +72,7 @@
                             <fa :icon="['fas', 'times']" />&nbsp;Cancel
                         </b-btn>
                         
-                        <b-btn variant="secondary" class="d-inline" @click="cancelRoute(); changeStopMode('list')">
+                        <b-btn variant="secondary" class="d-inline" @click="cancelRoute(); setStopViewMode('list')">
                             <fa :icon="['fas', 'list']" />&nbsp;List Mode
                         </b-btn>
                         
@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import { urls } from '../config';
 import Geocoding from '../mixins/Geocoding';
 import TourForm from '../components/TourForm';
@@ -138,6 +138,9 @@ export default {
     }),
 
     computed: {
+        ...mapState({
+            stopViewMode: state => state.stops.viewMode,
+        }),
         ...mapGetters({
             tour: 'tours/current',
             currentStop: 'tours/currentStop',
@@ -146,7 +149,6 @@ export default {
             clickedPoint: 'map/clickedPoint',
             tourFormHasChanges: 'tours/getTourChanges',
             stopFormHasChanges: 'tours/getStopChanges',
-            stopMode: 'tours/stopMode', // map / list
         }),
 
         formTransition() {
@@ -262,8 +264,8 @@ export default {
             await this.$store.dispatch('tours/saveStopOrder');
         },
 
-        changeStopMode(mode) {
-            this.$store.commit('tours/setStopMode', mode);
+        setStopViewMode(mode) {
+            this.$store.commit('stops/setViewMode', mode);
         },
     },
 
@@ -277,7 +279,7 @@ export default {
         }
 
         if (this.tour.type == 'indoor') {
-            this.changeStopMode('list');
+            this.setStopViewMode('list');
         }
 
         this.loading = false;
