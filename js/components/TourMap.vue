@@ -18,7 +18,6 @@ export default {
         stopMarkers: [],
         radiusCircles: [],
         routeLine: {},
-        tempMarker: {},
     }),
 
     computed: {

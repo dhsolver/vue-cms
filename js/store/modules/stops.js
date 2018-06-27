@@ -2,7 +2,7 @@ import axios from 'axios';
 import Vue from 'vue';
 
 export const state = {
-    viewMode: 'list', // options: map, list
+    viewMode: 'map', // options: map, list
 }
 
 export const getters = {
@@ -29,7 +29,8 @@ export const mutations = {
 }
 
 export const actions = {
-    // zzzzzzzzzzzzzzzzzz ({ commit, dispatch }, payload) {
-    //     commit('saveToken', payload)
-    // },
+    destroy({ commit, dispatch }, stop_id) {
+        // commit('saveToken', payload)
+        
+    },
 }

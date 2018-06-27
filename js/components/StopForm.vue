@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- FEATURE IMAGE -->
-        <input id="main_image" name="main_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+        <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadImage" hidden>
         <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
             <div class="addlink">
                 <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
@@ -87,7 +87,7 @@
             
             <div v-if="tour.type == 'indoor'">
                 <h3>Intro Audio</h3>
-                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="uploadAudio" hidden>
                 <audio-player 
                     id="intro_audio"
                     :source="audioSource(form.intro_audio)"
@@ -98,7 +98,7 @@
             </div>
             
             <h3 v-if="tour.type == 'indoor'">Background Audio</h3>
-            <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+            <input id="background_audio" name="background_audio" type="file" class="input-file" @change="uploadAudio" hidden>
             <audio-player 
                 id="background_audio"
                 :source="audioSource(form.background_audio)" 
@@ -118,7 +118,7 @@
             <!-- IMAGES  -->
             <b-row class="image-row mb-3">
                 <b-col lg="4">
-                    <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                    <input id="image1" name="image1" type="file" class="input-file" @change="uploadImage" hidden>
                     <image-box 
                         id="image1"
                         :url="imagePath(form.image1, 'sm')" 
@@ -128,7 +128,7 @@
                     ></image-box>
                 </b-col>
                 <b-col lg="4">
-                    <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                    <input id="image2" name="image2" type="file" class="input-file" @change="uploadImage" hidden>
                     <image-box 
                         id="image2"
                         :url="imagePath(form.image2, 'sm')" 
@@ -138,7 +138,7 @@
                     ></image-box>
                 </b-col>
                 <b-col lg="4">
-                    <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                    <input id="image3" name="image3" type="file" class="input-file" @change="uploadImage" hidden>
                     <image-box 
                         id="image3"
                         :url="imagePath(form.image3, 'sm')" 
@@ -401,15 +401,7 @@ export default {
             this.markFormAsChanged(true);
         },
 
-        /**
-         * Enables mode to allow user to select a location by clicking 
-         * anywhere on the map.
-         */
-        selectMapPoint() {
-            this.useMapForLocation = true;
-        },
-
-        deleteStop(confirm = true) {
+        async deleteStop(confirm = true) {
             this.$refs.confirm.confirm(() => {
                 this.form.busy = true;
                 axios.delete(this.saveTourUrl + `/stops/${this.stop.id}`)
@@ -420,7 +412,7 @@ export default {
                     .catch( e => {
                         alerts.addMessage('error', e.response.data.message);
                         this.form.busy = false;
-                    })
+                    })  
             });
         },
 

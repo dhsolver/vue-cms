@@ -279,7 +279,6 @@ $darkRed: #ad1a28 !default;
 }
 .slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
     width: 13px;
     height: 13px;
     border-radius: 50%;
@@ -295,5 +294,4 @@ $darkRed: #ad1a28 !default;
     cursor: pointer;
     border: 1px solid $blue;
 }
-
 </style>

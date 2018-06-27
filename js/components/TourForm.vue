@@ -2,7 +2,7 @@
     <div>
         <div v-show="hasTour">
             <!-- FEATURE IMAGE -->
-            <input id="main_image" name="main_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadImage" hidden>
             <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
                     <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
@@ -23,7 +23,7 @@
             <div class="circbox"
                 v-if="tour.type != 'indoor'"
                 @click.stop="openFileDialog('pin_image')">
-                <input id="pin_image" name="pin_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'icon')" hidden>
+                <input id="pin_image" name="pin_image" type="file" class="input-file" @change="uploadIcon" hidden>
                 <div class="addrescir">
                     <fa v-if="! form.pin_image" :icon="['fas', 'plus']" size="3x" style="color: #79acd1" />
                     <img v-if="form.pin_image" :src="imagePath(form.pin_image, 'ico')" width="48" height="48"/>
@@ -132,7 +132,7 @@
                 </h4>
 
                 <h3>Intro Audio</h3>
-                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="uploadAudio" hidden>
                 <audio-player 
                     id="intro_audio"
                     :source="audioSource(form.intro_audio)"
@@ -142,7 +142,7 @@
                 />
                 
                 <h3>Background Audio</h3>
-                <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <input id="background_audio" name="background_audio" type="file" class="input-file" @change="uploadAudio" hidden>
                 <audio-player 
                     id="background_audio"
                     :source="audioSource(form.background_audio)" 
@@ -162,7 +162,7 @@
                 <!-- IMAGES  -->
                 <b-row class="image-row mb-3">
                     <b-col lg="4">
-                        <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                        <input id="image1" name="image1" type="file" class="input-file" @change="uploadImage" hidden>
                         <image-box 
                             id="image1"
                             :url="imagePath(form.image1, 'sm')" 
@@ -172,7 +172,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                        <input id="image2" name="image2" type="file" class="input-file" @change="uploadImage" hidden>
                         <image-box 
                             id="image2"
                             :url="imagePath(form.image2, 'sm')" 
@@ -182,7 +182,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                        <input id="image3" name="image3" type="file" class="input-file" @change="uploadImage" hidden>
                         <image-box 
                             id="image3"
                             :url="imagePath(form.image3, 'sm')" 
@@ -277,7 +277,7 @@
                     <h3>Start Point Media</h3>
                     <b-row class="image-row mb-3">
                         <b-col lg="4">
-                            <input id="start_image" name="start_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                            <input id="start_image" name="start_image" type="file" class="input-file" @change="uploadImage" hidden>
                             <image-box 
                                 id="start_image"
                                 :url="imagePath(form.start_image, 'sm')" 
@@ -319,7 +319,7 @@
                     <h3>End Point Media</h3>
                     <b-row class="image-row mb-3">
                         <b-col lg="4">
-                            <input id="end_image" name="end_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                            <input id="end_image" name="end_image" type="file" class="input-file" @change="uploadImage" hidden>
                             <image-box 
                                 id="end_image"
                                 :url="imagePath(form.end_image, 'sm')" 
@@ -496,6 +496,7 @@ export default {
                 this.$store.commit('tours/setTourChanges', false);
             }
         },
+        
         'form': {
             handler() {
                 if (this.form.isDirty()) {

@@ -8,7 +8,7 @@
     </head>
     <body>
         <div id="alerts">
-            <message v-for="message in messages" :msg="message" :key="message.id"></message>
+            <alert v-for="message in messages" :msg="message" :key="message.id" />
         </div>
         <div id="app"></div>
         <script src="http://localhost:8080/public/js/app.js"></script>
