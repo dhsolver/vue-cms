@@ -337,7 +337,13 @@
                 <!-- SAVE BUTTONS -->
                 <b-row>
                     <b-col lg="6">
-                        <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save" :disabled="! hasChanges">
+                        <busy-button 
+                            :busy="form.busy" 
+                            variant="primary" 
+                            class="w-100" 
+                            @click="save" 
+                            :disabled="! tourWasModified"
+                        >
                             <fa :icon="['fas', 'check']"/>&nbsp;&nbsp;Save
                         </busy-button>
                     </b-col>
@@ -358,12 +364,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapState } from "vuex";
 import UploadsMedia from "../mixins/UploadsMedia";
 import Geocoding from "../mixins/Geocoding";
 
 export default {
-    mixins: [UploadsMedia, Geocoding],
+    mixins: [ UploadsMedia, Geocoding ],
 
     data: () => ({
         form: new Form({
@@ -424,11 +430,13 @@ export default {
     }),
 
     computed: {
+        ...mapState({
+            tourWasModified: state => state.tours.wasModified,
+        }),
         ...mapGetters({
             tour: "tours/current",
             createUrl: "tours/createUrl",
             saveUrl: "tours/saveUrl",
-            hasChanges: 'tours/getTourChanges',
         }),
 
         hasTour() {
@@ -485,7 +493,7 @@ export default {
     mounted() {
         if (this.tour.id) {
             this.form.fill(this.tour);
-            this.$store.commit('tours/setTourChanges', false);
+            this.$store.commit('tours/setWasModified', false);
         }
     },
 
@@ -493,14 +501,14 @@ export default {
         tour(newVal) {
             if (newVal.id) {
                 this.form.fill(newVal);
-                this.$store.commit('tours/setTourChanges', false);
+                this.$store.commit('tours/setWasModified', false);
             }
         },
-        
+
         'form': {
             handler() {
                 if (this.form.isDirty()) {
-                    this.$store.commit('tours/setTourChanges', true);
+                    this.$store.commit('tours/setWasModified', true);
                 }
             },
             deep: true,

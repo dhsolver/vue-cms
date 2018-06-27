@@ -4,11 +4,12 @@ import Vue from 'vue';
 export const state = {
     list: [],
     current: { stops: [], route: [], },
+    wasModified: false,
+
     url: '',
 
     currentStop: { routes: [], },
 
-    tourChanges: false,
     stopChanges: false,
     stopMode: 'map',
 }
@@ -28,9 +29,6 @@ export const getters = {
         return state.currentStop.routes.find(obj => {
             return obj.next_stop_id == next_id;
         });
-    },
-    getTourChanges: (state) => {
-        return state.tourChanges;
     },
     getStopChanges: (state) => {
         return state.stopChanges;
@@ -53,8 +51,8 @@ export const mutations = {
         
         Vue.set(state, 'stopMode', mode);
     },
-    setTourChanges(state, yesno) {
-        Vue.set(state, 'tourChanges', yesno);
+    setWasModified(state, yesno) {
+        Vue.set(state, 'wasModified', yesno);
     },
     setStopChanges(state, yesno) {
         Vue.set(state, 'stopChanges', yesno);

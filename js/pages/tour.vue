@@ -117,6 +117,10 @@ import TourMap from '../components/TourMap';
 import StopForm from '../components/StopForm';
 
 export default {
+    metaInfo() {
+        return { title: 'Edit Tour' }
+    },
+    
     middleware: 'auth',
 
     components: {
@@ -127,10 +131,6 @@ export default {
 
     mixins: [ Geocoding ],
 
-    metaInfo() {
-        return { title: 'Edit Tour' }
-    },
-    
     data: () => ({
         loading: true,
         mode: 'tour', // tour / stop
@@ -140,6 +140,7 @@ export default {
     computed: {
         ...mapState({
             stopViewMode: state => state.stops.viewMode,
+            tourWasModified: state => state.tours.wasModified,
         }),
         ...mapGetters({
             tour: 'tours/current',
@@ -147,7 +148,6 @@ export default {
             routeMode: 'routes/mode',
             route: 'routes/current',
             clickedPoint: 'map/clickedPoint',
-            tourFormHasChanges: 'tours/getTourChanges',
             stopFormHasChanges: 'tours/getStopChanges',
         }),
 
@@ -158,7 +158,7 @@ export default {
 
     methods: {
         showDashboard(confirmed = false) {
-            if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
+            if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
                 this.$refs.confirm.confirm(() => {
                     this.showDashboard(true);
                 });
@@ -182,7 +182,7 @@ export default {
         },
 
         showStopForm(stop_id, confirmed = false) {
-            if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
+            if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
                 this.$refs.confirm.confirm(() => {
                     this.showStopForm(stop_id, true);
                 });
@@ -216,7 +216,7 @@ export default {
         },
 
         createStop(location = {}, confirmed = false) {
-            if (! confirmed && this.mode == 'tour' && this.tourFormHasChanges) {
+            if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
                 this.$refs.confirm.confirm(() => {
                     this.createStop(location, true);
                 });
