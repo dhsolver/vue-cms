@@ -6,7 +6,7 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Geocoding from '../../mixins/Geocoding';
+import Geocoding from '../mixins/Geocoding';
 var MarkerWithLabel = require('markerwithlabel')(google.maps);
 
 export default {

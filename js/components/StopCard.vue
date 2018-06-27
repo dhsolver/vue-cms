@@ -24,7 +24,7 @@
 <script>
 import { mapGetters } from 'vuex';
 export default {
-    name: "StopBox",
+    name: "StopCard",
 
     props: ['stop'],
 
@@ -66,6 +66,3 @@ export default {
     },
 }
 </script>
-
-<style>
-</style>

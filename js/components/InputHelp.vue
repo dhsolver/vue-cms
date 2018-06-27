@@ -6,18 +6,18 @@
 </template>
 
 <script>
-    export default {
-        name: 'InputHelp',
-        
-        props: {
-            'form': {},
-            'field': '',
-            'text': '',
-        },
-        watch: {
-            'form.errorMods': function() {
-                this.$forceUpdate();
-            }
+export default {
+    name: 'InputHelp',
+    
+    props: {
+        'form': {},
+        'field': '',
+        'text': '',
+    },
+    watch: {
+        'form.errorMods': function() {
+            this.$forceUpdate();
         }
     }
+}
 </script>

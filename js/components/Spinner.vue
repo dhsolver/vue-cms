@@ -9,29 +9,29 @@
     </div>
 </template>
 
-<script type='es6'>
-    import Spinner from 'vue-spinner-component/src/Spinner.vue';
+<script>
+import Spinner from 'vue-spinner-component/src/Spinner.vue';
 
-    export default {
-        name: 'spinner',
+export default {
+    name: 'spinner',
 
-        components: {
-            'vue-spinner-component': Spinner
-        },
+    components: {
+        'vue-spinner-component': Spinner
+    },
 
-        props: ['value'],
+    props: ['value'],
 
-        computed: {
-            hidden() {
-                return !this.value;
-            }
-        },
+    computed: {
+        hidden() {
+            return !this.value;
+        }
+    },
 
-        data() {
-            return {
-            }
+    data() {
+        return {
         }
     }
+}
 </script>
 
 <style>

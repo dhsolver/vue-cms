@@ -18,34 +18,28 @@
 </template>
 
 <script>
-    export default {
-        props: {
-            url: {
-                type: String,
-                default: '',
-            },
-            busy: {
-                type: Boolean,
-                default: false,
-            },
-            id: {
-                type: String,
-                required: true,
-            }
+export default {
+    name: 'ImageBox',
+
+    props: {
+        url: {
+            type: String,
+            default: '',
         },
-
-        name: 'ImageBox',
-
-        computed: {
-            bgImage() {
-                return `url('${this.url}')`;
-            }
+        busy: {
+            type: Boolean,
+            default: false,
         },
-
-        data: () => ({
-        }),
-
-        methods: {
+        id: {
+            type: String,
+            required: true,
         }
-    }
+    },
+
+    computed: {
+        bgImage() {
+            return `url('${this.url}')`;
+        }
+    },
+}
 </script>

@@ -8,22 +8,22 @@
 </template>
 
 <script>
-    export default {
-        name: 'BusyButton',
+export default {
+    name: 'BusyButton',
 
-        props: {
-            variant: String,
-            size: {
-                type: String,
-                default: 'md',
-            },
-            busy: Boolean,
+    props: {
+        variant: String,
+        size: {
+            type: String,
+            default: 'md',
         },
+        busy: Boolean,
+    },
 
-        methods: {
-            onClick(e) {
-                this.$emit('click', e);
-            },
-        }
+    methods: {
+        onClick(e) {
+            this.$emit('click', e);
+        },
     }
+}
 </script>

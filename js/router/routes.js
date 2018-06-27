@@ -1,7 +1,7 @@
 import Login from '../pages/login';
 import Register from '../pages/register'
 import Home from '../pages/home';
-import EditTour from '../pages/tour/edit';
+import EditTour from '../pages/tour';
 
 import NotFound from '../pages/errors/404';
 

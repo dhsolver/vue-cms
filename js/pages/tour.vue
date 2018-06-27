@@ -35,7 +35,7 @@
             <div v-if="stopMode == 'list'" class="p-2 h-100 flex flex-col" key="list">
                 <div class="f-1">
                     <draggable :list="tour.stops" @change="stopOrderChanged" class="stop-list">
-                        <stop-box v-for="item in tour.stops"
+                        <stop-card v-for="item in tour.stops"
                             :key="item.id" 
                             :stop="item" 
                             @click="editStop(item)" 
@@ -111,11 +111,11 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import { urls } from '../../config';
-import TourForm from './form';
-import TourMap from './map';
-import StopForm from './stop-form';
-import Geocoding from '../../mixins/Geocoding';
+import { urls } from '../config';
+import Geocoding from '../mixins/Geocoding';
+import TourForm from '../components/TourForm';
+import TourMap from '../components/TourMap';
+import StopForm from '../components/StopForm';
 
 export default {
     middleware: 'auth',

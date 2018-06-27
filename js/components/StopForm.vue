@@ -260,8 +260,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import UploadsMedia from '../../mixins/UploadsMedia';
-import Geocoding from '../../mixins/Geocoding';
+import UploadsMedia from '../mixins/UploadsMedia';
+import Geocoding from '../mixins/Geocoding';
 
 export default {
     mixins: [ UploadsMedia, Geocoding ],

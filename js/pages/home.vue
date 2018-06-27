@@ -49,7 +49,7 @@
 
                 <b-row v-if="! loading" v-for="i in Math.ceil(tours.length / 3)" :key="i">
                     <b-col class="box-col" xl="4" v-for="item in filteredTours.slice((i - 1) * 3, i * 3)" :key="item.id">
-                        <tour-box :tour="item"></tour-box>
+                        <tour-card :tour="item" />
                     </b-col>
                 </b-row>
             </div>

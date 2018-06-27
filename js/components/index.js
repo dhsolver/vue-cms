@@ -3,11 +3,11 @@ import Child from './Child';
 import Button from './Button';
 import Spinner from './Spinner';
 import InputHelp from './InputHelp';
-import Message from './Message';
+import Alert from './Alert';
 import BusyButton from './BusyButton';
 import ConfirmModal from './ConfirmModal';
-import TourBox from './TourBox';
-import StopBox from './StopBox';
+import TourCard from './TourCard';
+import StopCard from './StopCard';
 import ImageBox from './ImageBox';
 import AudioPlayer from './AudioPlayer';
 import YoutubeInput from './YoutubeInput';
@@ -22,11 +22,11 @@ import NextStopDropdown from './NextStopDropdown';
     Button,
     Spinner,
     InputHelp,
-    Message,
+    Alert,
     BusyButton,
     ConfirmModal,
-    TourBox,
-    StopBox,
+    TourCard,
+    StopCard,
     ImageBox,
     AudioPlayer,
     YoutubeInput,
