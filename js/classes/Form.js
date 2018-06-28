@@ -6,9 +6,9 @@ class Form {
      *
      * @param {object} data
      */
-    constructor(data) {
-        let cloneData = JSON.parse(JSON.stringify(data));
-        this.originalData = JSON.parse(JSON.stringify(data));
+    constructor(data, raw = false) {
+        let cloneData = raw ? data : JSON.parse(JSON.stringify(data));
+        this.originalData = raw ? data : JSON.parse(JSON.stringify(data));
 
         for (let field in cloneData) {
             this[field] = cloneData[field];
@@ -21,10 +21,17 @@ class Form {
         this.busy = false;
     }
 
-    fill(data) {
-        let cloneData = JSON.parse(JSON.stringify(data));
+    fill(data, raw = false) {
+        let cloneData = raw ? data : JSON.parse(JSON.stringify(data));
         this.reset();
-        this.originalData = JSON.parse(JSON.stringify(data));
+        this.originalData = raw ? data : JSON.parse(JSON.stringify(data));
+        for (let field in cloneData) {
+            this[field] = cloneData[field];
+        }
+    }
+
+    update(data, raw = false) {
+        let cloneData = raw ? data : JSON.parse(JSON.stringify(data));
         for (let field in cloneData) {
             this[field] = cloneData[field];
         }

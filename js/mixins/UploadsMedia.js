@@ -26,6 +26,7 @@ export default {
         },
         
         uploadImage(e) {
+            console.log(e);
             return this.uploadMedia(e, 'image');
         },
 
@@ -65,7 +66,7 @@ export default {
 
             let f = new Form({
                 [type]: file,
-            })
+            }, true)
 
             f.submit('post', this.mediaUrl, true)
                 .then( ({data}) => {
