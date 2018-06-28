@@ -1,7 +1,7 @@
 <template>
     <div>
         <!-- FEATURE IMAGE -->
-        <input id="main_image" name="main_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+        <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadImage" hidden>
         <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
             <div class="addlink">
                 <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
@@ -55,7 +55,11 @@
                         Cancel
                     </a>
                 </div>
-                <address-form :form="form" v-model="form.location" @input="updateCurrentStop" :overlay="useMapForLocation"></address-form>
+                <address-form 
+                    :form="form" 
+                    v-model="form.location" 
+                    @input="updateCurrentStop" 
+                    :overlay="useMapForLocation" />
 
                 <h4 class="mt-4 info-heading">
                     Location Trigger
@@ -87,7 +91,7 @@
             
             <div v-if="tour.type == 'indoor'">
                 <h3>Intro Audio</h3>
-                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="uploadAudio" hidden>
                 <audio-player 
                     id="intro_audio"
                     :source="audioSource(form.intro_audio)"
@@ -98,7 +102,7 @@
             </div>
             
             <h3 v-if="tour.type == 'indoor'">Background Audio</h3>
-            <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+            <input id="background_audio" name="background_audio" type="file" class="input-file" @change="uploadAudio" hidden>
             <audio-player 
                 id="background_audio"
                 :source="audioSource(form.background_audio)" 
@@ -118,7 +122,7 @@
             <!-- IMAGES  -->
             <b-row class="image-row mb-3">
                 <b-col lg="4">
-                    <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                    <input id="image1" name="image1" type="file" class="input-file" @change="uploadImage" hidden>
                     <image-box 
                         id="image1"
                         :url="imagePath(form.image1, 'sm')" 
@@ -128,7 +132,7 @@
                     ></image-box>
                 </b-col>
                 <b-col lg="4">
-                    <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                    <input id="image2" name="image2" type="file" class="input-file" @change="uploadImage" hidden>
                     <image-box 
                         id="image2"
                         :url="imagePath(form.image2, 'sm')" 
@@ -138,7 +142,7 @@
                     ></image-box>
                 </b-col>
                 <b-col lg="4">
-                    <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                    <input id="image3" name="image3" type="file" class="input-file" @change="uploadImage" hidden>
                     <image-box 
                         id="image3"
                         :url="imagePath(form.image3, 'sm')" 
@@ -158,7 +162,7 @@
             <div v-if="tour.type == 'adventure'">
                 <h4 class="info-heading mt-3">
                     Decisions
-                    <span class="info-icon" v-b-tooltip.hover title="need info for this">
+                    <span class="info-icon" v-b-tooltip.hover title="Decisions are the choices that the user will make after they receive all the information you provided on this stop. The choice that they make will help determine their points and reveal the next location that the user will go to. Decisions are either multiple choice or fill in the blank. Each choice must lead to another stop.">
                         <fa :icon="['fas', 'info']"/>
                     </span>
                 </h4>
@@ -205,7 +209,7 @@
                         </b-form-group>
 
                         <h3>Next Stop</h3>
-                        <next-stop-dropdown v-model="form.next_stop_id" :busy="form.busy" />
+                        <next-stop-dropdown v-model="form.next_stop_id" :busy="form.busy" @changeRoute="updateRoutes" />
                     </b-tab>
 
                     <b-tab title="Multiple Choice" :active="form.is_multiple_choice">
@@ -213,10 +217,11 @@
                         <h3 class="mt-3">Options</h3>
 
                         <stop-choice v-for="(item, index) in form.choices"
-                            :key="index+item.id"
+                            :key="index + '' + item.id"
                             :busy="form.busy"
                             v-model="form.choices[index]"
                             @delete="deleteChoice(index)"
+                            @changeRoute="updateRoutes"
                         ></stop-choice>
                         
                         <b-btn size="sm" variant="primary" class="w-100 mt-3" @click="addChoice">
@@ -233,13 +238,14 @@
                     <span class="info-icon" v-b-tooltip.hover title="Set the route to the next stop here">
                         <fa :icon="['fas', 'info']"/>
                     </span>
+                    <next-stop-dropdown class="mt-2" v-model="form.next_stop_id" :busy="form.busy" :no-routes="true" />
                 </h4>
             </div>
 
             <!-- SAVE -->
             <b-row class="mt-5">
                 <b-col lg="6">
-                    <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save">
+                    <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save" :disabled="!hasChanges">
                         <fa :icon="['fas', 'check']"/>&nbsp;&nbsp;Save
                     </busy-button>
                 </b-col>
@@ -260,8 +266,8 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import UploadsMedia from '../../mixins/UploadsMedia';
-import Geocoding from '../../mixins/Geocoding';
+import UploadsMedia from '../mixins/UploadsMedia';
+import Geocoding from '../mixins/Geocoding';
 
 export default {
     mixins: [ UploadsMedia, Geocoding ],
@@ -277,8 +283,8 @@ export default {
             question: '',
             question_answer: '',
             question_success: '',
-            next_stop_id: '',
-            choices: [],    
+            next_stop_id: null,
+            choices: [],
             video_url: '',
 
             intro_audio: "",
@@ -312,6 +318,7 @@ export default {
             routes: 'routes/current',
             routeMode: 'routes/mode',
             draggedMarker: 'map/draggedMarker',
+            hasChanges: 'tours/getStopChanges',
         }),
         
         hasStop() {
@@ -329,6 +336,10 @@ export default {
     },
 
     methods: {
+        updateRoutes(routes) {
+            this.form.routes = routes;
+        },
+
         submit() {
             let url = this.createStopUrl;
             let method = 'post';
@@ -338,14 +349,13 @@ export default {
                 method = 'patch'
             }
 
-            console.log(this.form.originalData);
             return this.form.submit(method, url);
         },
 
-        save() {
+        async save() {
             // remove other type of questions when switching type
             if (this.isMultipleChoice) {
-                this.form.next_stop_id = '';
+                this.form.next_stop_id = null;
                 this.form.question_answer = '';
                 this.form.question_success = '';
 
@@ -364,10 +374,13 @@ export default {
                     } else {
                         this.$store.commit('tours/pushStop', data.data);
                         this.$store.commit('tours/setCurrentStop', data.data);
-                        // this.stop = data.data;
                     }
                     
                     this.form.fill(this.stop);
+
+                    Vue.nextTick(() => {
+                        this.markFormAsChanged(false);
+                    });
                 })
                 .catch(e => {
                     console.log('save stop error:');
@@ -376,12 +389,13 @@ export default {
         },
 
         addChoice() {
+            console.log('adding choice...');
             this.form.choices.push({
                 id: '',
                 tour_stop_id: this.stop.id,
                 order: this.form.choices.length + 1,
                 answer: '',
-                next_stop_id: -1,
+                next_stop_id: null,
             });
         },
 
@@ -395,19 +409,15 @@ export default {
         },
         
         updateCurrentStop() {
-            console.log('stop location changed');
-            this.$store.commit('tours/setCurrentStop', this.form.data());
+            console.log('update current changed');
+            if (this.form.isDirty()) {
+                // console.log('stop location changed');
+                this.$store.commit('tours/setCurrentStop', {...this.form.data()});
+                this.markFormAsChanged(true);
+            }
         },
 
-        /**
-         * Enables mode to allow user to select a location by clicking 
-         * anywhere on the map.
-         */
-        selectMapPoint() {
-            this.useMapForLocation = true;
-        },
-
-        deleteStop(confirm = true) {
+        async deleteStop(confirm = true) {
             this.$refs.confirm.confirm(() => {
                 this.form.busy = true;
                 axios.delete(this.saveTourUrl + `/stops/${this.stop.id}`)
@@ -418,41 +428,80 @@ export default {
                     .catch( e => {
                         alerts.addMessage('error', e.response.data.message);
                         this.form.busy = false;
-                    })
+                    })  
             });
         },
 
         useMap() {
             this.useMapForLocation = true;
-            this.$emit('changeMode', 'map');
+            this.$store.commit('tours/setStopMode', 'map');
+        },
+
+        markFormAsChanged(changed = false) {
+            this.$store.commit('tours/setStopChanges', changed);
         },
     },
 
-    mounted() {
+    async mounted() {
         this.form.fill(this.stop);
+        await Vue.nextTick();
+        this.markFormAsChanged(false);
     },
 
     watch: {
-        stop(newVal, oldVal) {
+        async stop(newVal, oldVal) {
+            // this is a fix because when the stop form changes for some reason
+            // the v-model syncs twice and updates this value signaling 'changes' 
+            // in the stop form.
+            // this.form.next_stop_id = '';
+            // await Vue.nextTick();
+            console.log('stop watch changed');
             if (! newVal.id) {
+                // new stop
+                console.log('new stop');
                 this.form = new Form(newVal);
+
+                await Vue.nextTick();
+                this.markFormAsChanged(true);
+                return;
             }
 
             if (newVal.id != oldVal.id) {
+                // stop has actually changed
                 console.log("stop form stop changed");
                 console.log(newVal);
-                this.$store.commit('routes/clearCurrent');
+                if (this.tour.type == 'adventure') {
+                    this.$store.commit('routes/clearCurrent');
+                }
+                this.form.fill(newVal);
+                await Vue.nextTick();
+                this.markFormAsChanged(false);
+                return;
             }
-            
-            this.form.fill(newVal);
+
+            if (! oldVal.id) {
+                // stop is set initially
+                this.form.fill(newVal);
+                this.markFormAsChanged(false);
+                return;
+            }
+
+            // this.form.fill(newVal);
         },
 
+        'form': {
+            handler() {
+                if (this.form.isDirty()) {
+                    console.log('stop form changes');
+                    this.markFormAsChanged(true);
+                }
+            },
+            deep: true,
+        },
+        
         async clickedPoint(newVal, oldVal) {
             if (this.useMapForLocation) {
                 this.useMapForLocation = false;
-
-                console.log('clicked point:');
-                console.log(newVal);
 
                 let address = await this.reverseLookup(newVal.latitude, newVal.longitude)
 
@@ -462,6 +511,7 @@ export default {
                     longitude: newVal.longitude,
                 }
 
+                // this.markFormAsChanged(true);
                 this.updateCurrentStop();
             }
         },
@@ -479,7 +529,16 @@ export default {
                 longitude: newVal.latLng.lng,
             }
 
+            // this.markFormAsChanged(true);
             this.updateCurrentStop();
+        },
+
+        'form.choices': {
+            handler(newVal, oldVal) {
+                // console.log(newVal);
+                // console.log(newVal == this.form.choices);
+            },
+            deep: true,
         },
     },
 }

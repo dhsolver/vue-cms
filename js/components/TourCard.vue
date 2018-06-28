@@ -23,43 +23,37 @@
 </template>
 
 <script>
-    export default {
-        name: "TourBox",
+export default {
+    name: "TourCard",
 
-        props: ['tour'],
+    props: ['tour'],
 
-        data: () => ({
-        }),
-
-        computed: {
-            typeClass() {
-                return this.tour.type == 'adventure' ? 'bg-success' : 'bg-info';
-            },
-
-            location() {
-                if (this.tour.city && this.tour.state) {
-                    return this.tour.city + ', ' + this.tour.state;
-                }
-                return '';
-            },
-
-            backgroundImage() {
-                let url = this.imagePath(this.tour.main_image, 'sm');
-                if (url) {
-                    return `background: url(${url})`;
-                } else {
-                    return '';
-                }
-            },
+    computed: {
+        typeClass() {
+            return this.tour.type == 'adventure' ? 'bg-success' : 'bg-info';
         },
 
-        methods: {
-            editTour() {
-                this.$router.push({ name: 'tour', params: { id: this.tour.id } });
+        location() {
+            if (this.tour.city && this.tour.state) {
+                return this.tour.city + ', ' + this.tour.state;
+            }
+            return '';
+        },
+
+        backgroundImage() {
+            let url = this.imagePath(this.tour.main_image, 'sm');
+            if (url) {
+                return `background: url(${url})`;
+            } else {
+                return '';
             }
         },
-    }
-</script>
+    },
 
-<style>
-</style>
+    methods: {
+        editTour() {
+            this.$router.push({ name: 'tour', params: { id: this.tour.id } });
+        }
+    },
+}
+</script>

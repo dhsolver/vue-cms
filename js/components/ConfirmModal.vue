@@ -9,45 +9,50 @@
 </template>
 
 <script>
-    export default {
-        name: 'ConfirmModal',
+export default {
+    name: 'ConfirmModal',
 
-        props: {
-            cancelButton: {
-                type: String,
-                default: 'Cancel',
-            },
-            yesButton: {
-                type: String,
-                default: 'Yes',
-            },
-            title: {
-                type: String,
-                default: 'Are you sure?',
-            },
+    props: {
+        cancelButton: {
+            type: String,
+            default: 'Cancel',
+        },
+        yesButton: {
+            type: String,
+            default: 'Yes',
+        },
+        title: {
+            type: String,
+            default: 'Are you sure?',
+        },
+    },
+
+    data: () => ({
+        show: false,
+        callback: null,
+        cancelCallback: null,
+    }),
+
+    methods: {
+        confirm(callback, cancelCallback = null) {
+            this.show = true;
+            this.callback = callback;
+            this.cancelCallback = cancelCallback;
         },
 
-        data: () => ({
-            show: false,
-            callback: null,
-        }),
+        onYes() {
+            this.show = false;
+            if (this.callback) {
+                this.callback();
+            }
+        },
 
-        methods: {
-            confirm(callback) {
-                this.show = true;
-                this.callback = callback;
-            },
-
-            onYes() {
-                this.show = false;
-                if (this.callback) {
-                    this.callback();
-                }
-            },
-
-            onCancel() {
-                this.show = false;
+        onCancel() {
+            this.show = false;
+            if (this.cancelCallback) {
+                this.cancelCallback();
             }
         }
     }
+}
 </script>

@@ -6,11 +6,12 @@ class Form {
      *
      * @param {object} data
      */
-    constructor(data) {
-        this.originalData = data;
+    constructor(data, raw = false) {
+        let cloneData = raw ? data : JSON.parse(JSON.stringify(data));
+        this.originalData = raw ? data : JSON.parse(JSON.stringify(data));
 
-        for (let field in data) {
-            this[field] = data[field];
+        for (let field in cloneData) {
+            this[field] = cloneData[field];
         }
 
         this.handler = new AxiosResponseHandler();
@@ -20,11 +21,19 @@ class Form {
         this.busy = false;
     }
 
-    fill(data) {
+    fill(data, raw = false) {
+        let cloneData = raw ? data : JSON.parse(JSON.stringify(data));
         this.reset();
-        this.originalData = data;
-        for (let field in data) {
-            this[field] = data[field];
+        this.originalData = raw ? data : JSON.parse(JSON.stringify(data));
+        for (let field in cloneData) {
+            this[field] = cloneData[field];
+        }
+    }
+
+    update(data, raw = false) {
+        let cloneData = raw ? data : JSON.parse(JSON.stringify(data));
+        for (let field in cloneData) {
+            this[field] = cloneData[field];
         }
     }
 
@@ -57,9 +66,12 @@ class Form {
      * @returns {boolean}
      */
     wasModified(field=null) {
-        if (field) return (this[field] !== this.originalData[field]);
+        if (field) return (this[field] != this.originalData[field]);
         for (let property in this.originalData) {
-            if (this[property] !== this.originalData[property]) return true;
+            if (this[property] != this.originalData[property]) { 
+                console.log('dirty prop: ' + property);
+                return true
+            };
         }
         return false;
     }

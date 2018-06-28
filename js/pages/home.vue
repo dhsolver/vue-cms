@@ -49,7 +49,7 @@
 
                 <b-row v-if="! loading" v-for="i in Math.ceil(tours.length / 3)" :key="i">
                     <b-col class="box-col" xl="4" v-for="item in filteredTours.slice((i - 1) * 3, i * 3)" :key="item.id">
-                        <tour-box :tour="item"></tour-box>
+                        <tour-card :tour="item" />
                     </b-col>
                 </b-row>
             </div>
@@ -57,7 +57,7 @@
 
         <!-- ADD TOUR MODAL -->
         <b-modal title="Create a Junket" v-model="showAddModal">
-            <tour-form ref="addForm"></tour-form>
+            <tour-form ref="addForm" v-if="showAddModal" />
 
             <div slot="modal-footer" class="w-100">
                 <busy-button class="float-right" variant="primary" :busy="busy" @click="add">Create Junket</busy-button>
@@ -72,7 +72,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { urls } from '../config';
-import TourForm from './tour/form';
+import TourForm from '../components/TourForm';
 
 export default {
     middleware: 'auth',
@@ -136,7 +136,7 @@ export default {
         },
 
         addModal() {
-            this.$refs.addForm.form.reset();
+            this.$store.commit('tours/setEmptyTour');
             this.showAddModal = true;
         },
     },

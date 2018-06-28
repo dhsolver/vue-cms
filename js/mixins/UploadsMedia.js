@@ -24,6 +24,19 @@ export default {
         openFileDialog(id) {
             document.getElementById(id).click();
         },
+        
+        uploadImage(e) {
+            console.log(e);
+            return this.uploadMedia(e, 'image');
+        },
+
+        uploadAudio(e) {
+            return this.uploadMedia(e, 'audio');
+        },
+
+        uploadIcon(e) {
+            return this.uploadMedia(e, 'icon');
+        },
 
         uploadMedia(e, type = 'image') {
             // validate file
@@ -53,7 +66,7 @@ export default {
 
             let f = new Form({
                 [type]: file,
-            })
+            }, true)
 
             f.submit('post', this.mediaUrl, true)
                 .then( ({data}) => {
@@ -74,8 +87,6 @@ export default {
 
         clearFile(target) {
             target.value = null;
-            // this.form[target.name] = '';
         },
-
     }
 }

@@ -13,28 +13,30 @@
             </b-form-select>
         </div>
 
-        <b-row v-if="routeMode == 'edit' && routeId == next_stop_id">
-            <b-col xs="6">
-                <b-button variant="success" size="sm" @click="saveRoute()">SAVE ROUTE</b-button>
-            </b-col>
-            <b-col xs="6">
-                <b-button variant="danger" size="sm" class="ml-auto" @click="cancelRoute()">CANCEL</b-button>
-            </b-col>
-        </b-row>
-        <b-row v-if="hasRoute && routeMode != 'edit'">
-            <b-col xs="6">
-                <b-button v-if="(routeId == next_stop_id && routeMode == 'hide') || routeId != next_stop_id" variant="info" size="sm" @click="toggleRoute()">SHOW ROUTE</b-button>
-                <b-button v-if="routeId == next_stop_id && routeMode == 'show'" variant="info" size="sm" @click="toggleRoute()">HIDE ROUTE</b-button>
-            </b-col>
-            <b-col xs="6">
-                <b-button variant="warning" size="sm" class="ml-auto" @click="clearRoute()">CLEAR ROUTE</b-button>
-            </b-col>
-        </b-row>
-        <b-row v-if="! hasRoute && routeMode != 'edit'">
-            <b-col xs="6">
-                <b-button variant="info" size="sm" @click="createRoute()">SET ROUTE</b-button>
-            </b-col>
-        </b-row>
+        <div v-if="! noRoutes">
+            <b-row v-if="routeMode == 'edit' && routeId == next_stop_id">
+                <b-col xs="6">
+                    <b-button variant="success" size="sm" @click="saveRoute()">SAVE ROUTE</b-button>
+                </b-col>
+                <b-col xs="6">
+                    <b-button variant="danger" size="sm" class="ml-auto" @click="cancelRoute()">CANCEL</b-button>
+                </b-col>
+            </b-row>
+            <b-row v-if="hasRoute && routeMode != 'edit'">
+                <b-col xs="6">
+                    <b-button v-if="(routeId == next_stop_id && routeMode == 'hide') || routeId != next_stop_id" variant="info" size="sm" @click="toggleRoute()">SHOW ROUTE</b-button>
+                    <b-button v-if="routeId == next_stop_id && routeMode == 'show'" variant="info" size="sm" @click="toggleRoute()">HIDE ROUTE</b-button>
+                </b-col>
+                <b-col xs="6">
+                    <b-button variant="warning" size="sm" class="ml-auto" @click="clearRoute()">CLEAR ROUTE</b-button>
+                </b-col>
+            </b-row>
+            <b-row v-if="! hasRoute && routeMode != 'edit'">
+                <b-col xs="6">
+                    <b-button variant="info" size="sm" @click="createRoute()">SET ROUTE</b-button>
+                </b-col>
+            </b-row>
+        </div>
     </div>
 </template>
 
@@ -49,7 +51,8 @@ export default {
 
     props: {
         busy: { type: Boolean, default: false },
-        value: { default: '' },
+        value: { default: null },
+        noRoutes: { type: Boolean, default: false },
     },
 
     computed: {
@@ -98,10 +101,13 @@ export default {
                 lat: this.stop.location.latitude,
                 lng: this.stop.location.longitude,
             });
+            this.$store.commit('tours/setStopMode', 'map');
         },
         clearRoute() {
             this.$store.commit('tours/clearStopRoute', this.next_stop_id);
             this.$store.commit('routes/clearCurrent');
+            this.$store.commit('tours/setStopChanges', true);
+            this.$emit('changeRoute', this.stop.routes);
         },
         toggleRoute() {
             if (this.routeMode == 'show' && this.routeId != this.next_stop_id) {
@@ -116,6 +122,7 @@ export default {
             } else {
                 this.$store.commit('routes/setId', this.next_stop_id);
                 this.$store.commit('routes/show', this.route);
+                this.$store.commit('tours/setStopMode', 'map');
             }
         },
         saveRoute() {
@@ -124,6 +131,8 @@ export default {
                 route: this.drawingRoute,
             });
             this.$store.commit('routes/stopEditing', {revert: false, hide: false} );
+            this.$store.commit('tours/setStopChanges', true);
+            this.$emit('changeRoute', this.stop.routes);
         },
         cancelRoute() {
             this.$store.commit('routes/stopEditing', {revert: true, hide: false} );
@@ -132,7 +141,14 @@ export default {
 
     watch: {
         value(newVal, oldVal) {
-            this.next_stop_id = newVal;
+            // if (!newVal) {
+            //     newVal = null;
+            // }
+
+            // if (newVal != this.next_stop_id) {
+            //     console.log(newVal + ' - ' + oldVal);
+                this.next_stop_id = newVal;
+            // }
         },
     },
 

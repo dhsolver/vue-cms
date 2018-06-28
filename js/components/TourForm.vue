@@ -2,7 +2,7 @@
     <div>
         <div v-show="hasTour">
             <!-- FEATURE IMAGE -->
-            <input id="main_image" name="main_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+            <input id="main_image" name="main_image" type="file" class="input-file" @change="uploadImage" hidden>
             <div v-if="! form.main_image_id" class="feature-box empty" @click.stop="openFileDialog('main_image')">
                 <div class="addlink">
                     <fa v-if="busyUploading == 'main_image'" class="fa-spin" size="lg" :icon="['fas', 'spinner']" />
@@ -23,7 +23,7 @@
             <div class="circbox"
                 v-if="tour.type != 'indoor'"
                 @click.stop="openFileDialog('pin_image')">
-                <input id="pin_image" name="pin_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'icon')" hidden>
+                <input id="pin_image" name="pin_image" type="file" class="input-file" @change="uploadIcon" hidden>
                 <div class="addrescir">
                     <fa v-if="! form.pin_image" :icon="['fas', 'plus']" size="3x" style="color: #79acd1" />
                     <img v-if="form.pin_image" :src="imagePath(form.pin_image, 'ico')" width="48" height="48"/>
@@ -49,18 +49,20 @@
                 <input-help :form="form" field="title" text=""></input-help>
             </b-form-group>
             
-            <h4>Description</h4>
-            <b-form-group>
-                <b-form-textarea id="description"
-                    :disabled="form.busy"
-                    type="text"
-                    v-model="form.description"
-                    required
-                    rows="5"
-                    placeholder="Description">
-                </b-form-textarea>
-                <input-help :form="form" field="description" text=""></input-help>
-            </b-form-group>
+            <div v-if="hasTour">
+                <h4>Description</h4>
+                <b-form-group>
+                    <b-form-textarea id="description"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.description"
+                        required
+                        rows="5"
+                        placeholder="Description">
+                    </b-form-textarea>
+                    <input-help :form="form" field="description" text=""></input-help>
+                </b-form-group>
+            </div>
             
             <h4>Pricing</h4>
             <b-form-group>    
@@ -132,7 +134,7 @@
                 </h4>
 
                 <h3>Intro Audio</h3>
-                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="uploadAudio" hidden>
                 <audio-player 
                     id="intro_audio"
                     :source="audioSource(form.intro_audio)"
@@ -142,7 +144,7 @@
                 />
                 
                 <h3>Background Audio</h3>
-                <input id="background_audio" name="background_audio" type="file" class="input-file" @change="(e) => uploadMedia(e, 'audio')" hidden>
+                <input id="background_audio" name="background_audio" type="file" class="input-file" @change="uploadAudio" hidden>
                 <audio-player 
                     id="background_audio"
                     :source="audioSource(form.background_audio)" 
@@ -162,7 +164,7 @@
                 <!-- IMAGES  -->
                 <b-row class="image-row mb-3">
                     <b-col lg="4">
-                        <input id="image1" name="image1" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                        <input id="image1" name="image1" type="file" class="input-file" @change="uploadImage" hidden>
                         <image-box 
                             id="image1"
                             :url="imagePath(form.image1, 'sm')" 
@@ -172,7 +174,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image2" name="image2" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                        <input id="image2" name="image2" type="file" class="input-file" @change="uploadImage" hidden>
                         <image-box 
                             id="image2"
                             :url="imagePath(form.image2, 'sm')" 
@@ -182,7 +184,7 @@
                         ></image-box>
                     </b-col>
                     <b-col lg="4">
-                        <input id="image3" name="image3" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                        <input id="image3" name="image3" type="file" class="input-file" @change="uploadImage" hidden>
                         <image-box 
                             id="image3"
                             :url="imagePath(form.image3, 'sm')" 
@@ -277,7 +279,7 @@
                     <h3>Start Point Media</h3>
                     <b-row class="image-row mb-3">
                         <b-col lg="4">
-                            <input id="start_image" name="start_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                            <input id="start_image" name="start_image" type="file" class="input-file" @change="uploadImage" hidden>
                             <image-box 
                                 id="start_image"
                                 :url="imagePath(form.start_image, 'sm')" 
@@ -319,7 +321,7 @@
                     <h3>End Point Media</h3>
                     <b-row class="image-row mb-3">
                         <b-col lg="4">
-                            <input id="end_image" name="end_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'image')" hidden>
+                            <input id="end_image" name="end_image" type="file" class="input-file" @change="uploadImage" hidden>
                             <image-box 
                                 id="end_image"
                                 :url="imagePath(form.end_image, 'sm')" 
@@ -337,7 +339,13 @@
                 <!-- SAVE BUTTONS -->
                 <b-row>
                     <b-col lg="6">
-                        <busy-button :busy="form.busy" variant="primary" class="w-100" @click="save">
+                        <busy-button 
+                            :busy="form.busy" 
+                            variant="primary" 
+                            class="w-100" 
+                            @click="save" 
+                            :disabled="! tourWasModified"
+                        >
                             <fa :icon="['fas', 'check']"/>&nbsp;&nbsp;Save
                         </busy-button>
                     </b-col>
@@ -358,12 +366,12 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import UploadsMedia from "../../mixins/UploadsMedia";
-import Geocoding from "../../mixins/Geocoding";
+import { mapGetters, mapState } from "vuex";
+import UploadsMedia from "../mixins/UploadsMedia";
+import Geocoding from "../mixins/Geocoding";
 
 export default {
-    mixins: [UploadsMedia, Geocoding],
+    mixins: [ UploadsMedia, Geocoding ],
 
     data: () => ({
         form: new Form({
@@ -385,7 +393,6 @@ export default {
             background_audio: "",
             background_audio_id: "",
             deleted_at: "",
-            description: "",
             end_image: "",
             end_message: "",
             end_point_id: "",
@@ -420,10 +427,14 @@ export default {
             twitter_url: "",
             type: "",
             video_url: ""
-        })
+        }),
     }),
 
     computed: {
+        ...mapState({
+            tourWasModified: state => state.tours.wasModified,
+            formViewMode: state => state.tours.formViewMode,
+        }),
         ...mapGetters({
             tour: "tours/current",
             createUrl: "tours/createUrl",
@@ -453,6 +464,11 @@ export default {
                 .then(({ data }) => {
                     console.log(data);
                     this.$store.commit("tours/setCurrent", data.data);
+
+                    this.form.fill(this.tour);
+                    Vue.nextTick(() => {
+                        this.markFormAsChanged(false);
+                    });
                 })
                 .catch(e => {
                     console.log("save tour error:");
@@ -462,7 +478,7 @@ export default {
 
         updateLocation() {
             console.log('tour location changed');
-            this.$store.commit('tours/setCurrent', this.form.data());
+            this.$store.commit('tours/setCurrent', {...this.form.data()});
         },
 
         destroy() {
@@ -479,20 +495,68 @@ export default {
                     });
             });
         },
+        
+        markFormAsChanged(onoff) {
+            this.$store.commit('tours/setWasModified', onoff);
+        }
     },
 
-    mounted() {
-        if (this.tour.id) {
+    async mounted() {
+        // if (this.tour.id) {
+            console.log('(mount) initial tour set');
             this.form.fill(this.tour);
-        }
+            this.$store.commit('tours/setOriginalRoutes', this.tour.route);
+            await Vue.nextTick();
+            this.markFormAsChanged(false);
+        // }
     },
 
     watch: {
-        tour(newVal) {
-            if (newVal.id) {
-                this.form.fill(newVal);
+        async tour(newVal, oldVal) {
+            console.log('tour watch changed');
+            if (! newVal.id) {
+                // new tour
+                console.log('new tour');
+                this.form = new Form(newVal);
+                this.$store.commit('tours/setOriginalRoutes', newVal.route);
+
+                await Vue.nextTick();
+                this.markFormAsChanged(true);
+                return;
             }
-        }
+
+            if (newVal.id != oldVal.id) {
+                console.log("tour form data changed");
+                console.log(newVal);
+                this.form.fill(newVal);
+                this.$store.commit('tours/setOriginalRoutes', newVal.route);
+                await Vue.nextTick();
+                this.markFormAsChanged(false);
+                return
+            }
+
+            if (! oldVal.id) {
+                // tour set initially
+                console.log('initial tour set');
+                this.form.fill(newVal);
+                this.$store.commit('tours/setOriginalRoutes', newVal.route);
+                this.markFormAsChanged(false);
+                return;
+            }
+
+            // state object was modified (location/routes/radius), update the form to reflect changes
+            this.form.update(newVal);
+        },
+
+        'form': {
+            handler() {
+                if (this.form.isDirty()) {
+                    console.log('tour form changed');
+                    this.markFormAsChanged(true);
+                }
+            },
+            deep: true,
+        },
     }
 };
 </script>
