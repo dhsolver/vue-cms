@@ -470,7 +470,9 @@ export default {
                 // stop has actually changed
                 console.log("stop form stop changed");
                 console.log(newVal);
-                this.$store.commit('routes/clearCurrent');
+                if (this.tour.type == 'adventure') {
+                    this.$store.commit('routes/clearCurrent');
+                }
                 this.form.fill(newVal);
                 await Vue.nextTick();
                 this.markFormAsChanged(false);

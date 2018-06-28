@@ -275,6 +275,10 @@ export default {
         },
 
         updateRoutes() {
+            if (this.formViewMode != 'tour' && this.tour.type == 'outdoor') {
+                this.$emit('clickTour');
+            }
+
             if (this.routeMode != 'edit') {
                 this.$store.commit('routes/startEditing');
             }
@@ -299,9 +303,9 @@ export default {
 
     watch: {
         routes(newVal, oldVal) {
-            console.log('route obj changed');
+            console.log('tourmap: routes object changed (watch)');
             this.routeLine.setPath(newVal);
-    
+     
             google.maps.event.clearListeners(this.routeLine.getPath(), 'insert_at');
             google.maps.event.clearListeners(this.routeLine.getPath(), 'remove_at');
             google.maps.event.clearListeners(this.routeLine.getPath(), 'set_at');

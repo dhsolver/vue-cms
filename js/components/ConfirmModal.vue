@@ -30,12 +30,14 @@ export default {
     data: () => ({
         show: false,
         callback: null,
+        cancelCallback: null,
     }),
 
     methods: {
-        confirm(callback) {
+        confirm(callback, cancelCallback = null) {
             this.show = true;
             this.callback = callback;
+            this.cancelCallback = cancelCallback;
         },
 
         onYes() {
@@ -47,6 +49,9 @@ export default {
 
         onCancel() {
             this.show = false;
+            if (this.cancelCallback) {
+                this.cancelCallback();
+            }
         }
     }
 }

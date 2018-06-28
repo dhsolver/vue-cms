@@ -5,6 +5,7 @@ export const state = {
     list: [],
     current: { stops: [], route: [], },
     wasModified: false,
+    originalRoutes: [],
 
     url: '',
 
@@ -12,6 +13,7 @@ export const state = {
 
     stopChanges: false,
     stopMode: 'map',
+    formViewMode: 'tour', // options: tour, stop
 }
 
 export const getters = {
@@ -44,6 +46,14 @@ export const getters = {
 }
 
 export const mutations = {
+    setFormViewMode(state, mode) {
+        Vue.set(state, 'formViewMode', mode);
+    },
+
+    setOriginalRoutes(state, routes) {
+        Vue.set(state, 'originalRoutes', routes);
+    },
+
     setStopMode(state, mode) {
         if (mode == state.stopMode) {
             return;
@@ -177,6 +187,63 @@ export const mutations = {
             image3_id: '',
 
             routes: [],
+        });
+    },
+
+    setEmptyTour(state) {
+        Vue.set(state, 'current', {
+            id: null,
+            title: "",
+            description: "",
+            type: "",
+            pricing_type: "",
+
+            location: {
+                latitude: "",
+                longitude: "",
+                address1: "",
+                address2: "",
+                city: "",
+                state: "",
+                zipcode: ""
+            },
+            background_audio: "",
+            background_audio_id: "",
+            deleted_at: "",
+            end_image: "",
+            end_message: "",
+            end_point_id: "",
+            end_video_url: "",
+            facebook_url: "",
+            image1: "",
+            image1_id: "",
+            image2: "",
+            image2_id: "",
+            image3: "",
+            image3_id: "",
+            instagram_url: "",
+            intro_audio: "",
+            intro_audio_id: "",
+            main_image: "",
+            main_image_id: "",
+            pin_image: "",
+            pin_image_id: "",
+            pricing_type: "",
+            prize_details: "",
+            prize_instructions: "",
+            published_at: "",
+            start_image: "",
+            start_message: "",
+            start_point_id: "",
+            start_video_url: "",
+            stops: [],
+            route: [],
+            title: "",
+            trophy_image: "",
+            trophy_image_id: "",
+            twitter_url: "",
+            type: "",
+            video_url: ""
         });
     },
 

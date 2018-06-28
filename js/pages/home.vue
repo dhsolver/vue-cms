@@ -57,7 +57,7 @@
 
         <!-- ADD TOUR MODAL -->
         <b-modal title="Create a Junket" v-model="showAddModal">
-            <tour-form ref="addForm"></tour-form>
+            <tour-form ref="addForm" v-if="showAddModal" />
 
             <div slot="modal-footer" class="w-100">
                 <busy-button class="float-right" variant="primary" :busy="busy" @click="add">Create Junket</busy-button>
@@ -136,7 +136,7 @@ export default {
         },
 
         addModal() {
-            this.$refs.addForm.form.reset();
+            this.$store.commit('tours/setEmptyTour');
             this.showAddModal = true;
         },
     },

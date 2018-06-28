@@ -24,7 +24,7 @@
                     @addStop="createStop()" 
                     @deleted="deleteStop(currentStop)"
                 />
-                <tour-form v-else />
+                <tour-form v-else ref="tourForm" />
             </transition>
         </div>
 
@@ -133,7 +133,6 @@ export default {
 
     data: () => ({
         loading: true,
-        mode: 'tour', // tour / stop
         useMapForLocation: false,
     }),
 
@@ -141,6 +140,8 @@ export default {
         ...mapState({
             stopViewMode: state => state.stops.viewMode,
             tourWasModified: state => state.tours.wasModified,
+            originalRoutes: state => state.tours.originalRoutes,
+            mode: state => state.tours.formViewMode,
         }),
         ...mapGetters({
             tour: 'tours/current',
@@ -172,12 +173,15 @@ export default {
             if (! confirmed && this.mode == 'stop' && this.stopFormHasChanges) {
                 this.$refs.confirm.confirm(() => {
                     this.showTourForm(true);
+                }, () => {
+                    // stop editing route in case that was opened
+                    this.cancelRoute();
                 });
                 return;
             }
 
             this.$store.commit('tours/setEmptyStop');
-            this.mode = 'tour';
+            this.$store.commit('tours/setFormViewMode', 'tour');
             this.$refs.formContainer.scrollTop = 0;
         },
 
@@ -203,15 +207,18 @@ export default {
                 return;
             }
 
+         
+            // return routes object back to original
+            this.$store.commit('tours/setTourRoute', this.originalRoutes);
             this.$store.commit('tours/setCurrentStop', stop);
-            this.mode = 'stop';
+            this.$store.commit('tours/setFormViewMode', 'stop');
             this.$refs.formContainer.scrollTop = 0;
         },
 
         deleteStop(stop) {
             this.$store.commit('tours/removeStop', stop.id);
             this.$store.commit('tours/setEmptyStop');
-            this.mode = 'tour';
+            this.$store.commit('tours/setFormViewMode', 'tour');
             this.$refs.formContainer.scrollTop = 0;
         },
 
@@ -231,7 +238,7 @@ export default {
             }
 
             this.$store.commit('tours/setEmptyStop', location);
-            this.mode = 'stop';
+            this.$store.commit('tours/setFormViewMode', 'stop');
             this.$refs.formContainer.scrollTop = 0;
         },
 
@@ -240,6 +247,16 @@ export default {
         },
 
         editRoute() {
+            if (this.mode == 'stop' && this.stopFormHasChanges) {
+                console.log('yessssssss');
+                this.$refs.confirm.confirm(() => {
+                    this.showTourForm(true);
+                    this.$store.commit('routes/startDrawing');
+                });
+                return;
+            }
+
+            this.showTourForm(true);
             this.$store.commit('routes/startDrawing');
         },
 

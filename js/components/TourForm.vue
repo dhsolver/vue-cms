@@ -49,18 +49,20 @@
                 <input-help :form="form" field="title" text=""></input-help>
             </b-form-group>
             
-            <h4>Description</h4>
-            <b-form-group>
-                <b-form-textarea id="description"
-                    :disabled="form.busy"
-                    type="text"
-                    v-model="form.description"
-                    required
-                    rows="5"
-                    placeholder="Description">
-                </b-form-textarea>
-                <input-help :form="form" field="description" text=""></input-help>
-            </b-form-group>
+            <div v-if="hasTour">
+                <h4>Description</h4>
+                <b-form-group>
+                    <b-form-textarea id="description"
+                        :disabled="form.busy"
+                        type="text"
+                        v-model="form.description"
+                        required
+                        rows="5"
+                        placeholder="Description">
+                    </b-form-textarea>
+                    <input-help :form="form" field="description" text=""></input-help>
+                </b-form-group>
+            </div>
             
             <h4>Pricing</h4>
             <b-form-group>    
@@ -391,7 +393,6 @@ export default {
             background_audio: "",
             background_audio_id: "",
             deleted_at: "",
-            description: "",
             end_image: "",
             end_message: "",
             end_point_id: "",
@@ -426,12 +427,13 @@ export default {
             twitter_url: "",
             type: "",
             video_url: ""
-        })
+        }),
     }),
 
     computed: {
         ...mapState({
             tourWasModified: state => state.tours.wasModified,
+            formViewMode: state => state.tours.formViewMode,
         }),
         ...mapGetters({
             tour: "tours/current",
@@ -503,6 +505,7 @@ export default {
         // if (this.tour.id) {
             console.log('(mount) initial tour set');
             this.form.fill(this.tour);
+            this.$store.commit('tours/setOriginalRoutes', this.tour.route);
             await Vue.nextTick();
             this.markFormAsChanged(false);
         // }
@@ -515,6 +518,7 @@ export default {
                 // new tour
                 console.log('new tour');
                 this.form = new Form(newVal);
+                this.$store.commit('tours/setOriginalRoutes', newVal.route);
 
                 await Vue.nextTick();
                 this.markFormAsChanged(true);
@@ -525,6 +529,7 @@ export default {
                 console.log("tour form data changed");
                 console.log(newVal);
                 this.form.fill(newVal);
+                this.$store.commit('tours/setOriginalRoutes', newVal.route);
                 await Vue.nextTick();
                 this.markFormAsChanged(false);
                 return
@@ -534,10 +539,12 @@ export default {
                 // tour set initially
                 console.log('initial tour set');
                 this.form.fill(newVal);
+                this.$store.commit('tours/setOriginalRoutes', newVal.route);
                 this.markFormAsChanged(false);
                 return;
             }
 
+            // state object was modified (location/routes/radius), update the form to reflect changes
             this.form.update(newVal);
         },
 
