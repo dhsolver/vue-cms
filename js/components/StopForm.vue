@@ -55,7 +55,11 @@
                         Cancel
                     </a>
                 </div>
-                <address-form :form="form" v-model="form.location" @input="updateCurrentStop" :overlay="useMapForLocation"></address-form>
+                <address-form 
+                    :form="form" 
+                    v-model="form.location" 
+                    @input="updateCurrentStop" 
+                    :overlay="useMapForLocation" />
 
                 <h4 class="mt-4 info-heading">
                     Location Trigger
@@ -205,7 +209,7 @@
                         </b-form-group>
 
                         <h3>Next Stop</h3>
-                        <next-stop-dropdown v-model="form.next_stop_id" :busy="form.busy" />
+                        <next-stop-dropdown v-model="form.next_stop_id" :busy="form.busy" @changeRoute="updateRoutes" />
                     </b-tab>
 
                     <b-tab title="Multiple Choice" :active="form.is_multiple_choice">
@@ -217,6 +221,7 @@
                             :busy="form.busy"
                             v-model="form.choices[index]"
                             @delete="deleteChoice(index)"
+                            @changeRoute="updateRoutes"
                         ></stop-choice>
                         
                         <b-btn size="sm" variant="primary" class="w-100 mt-3" @click="addChoice">
@@ -330,6 +335,10 @@ export default {
     },
 
     methods: {
+        updateRoutes(routes) {
+            this.form.routes = routes;
+        },
+
         submit() {
             let url = this.createStopUrl;
             let method = 'post';
@@ -342,7 +351,7 @@ export default {
             return this.form.submit(method, url);
         },
 
-        save() {
+        async save() {
             // remove other type of questions when switching type
             if (this.isMultipleChoice) {
                 this.form.next_stop_id = null;
@@ -367,7 +376,10 @@ export default {
                     }
                     
                     this.form.fill(this.stop);
-                    this.markFormAsChanged(false);
+
+                    Vue.nextTick(() => {
+                        this.markFormAsChanged(false);
+                    });
                 })
                 .catch(e => {
                     console.log('save stop error:');
@@ -396,8 +408,9 @@ export default {
         },
         
         updateCurrentStop() {
+            console.log('update current changed');
             if (this.form.isDirty()) {
-                console.log('stop location changed');
+                // console.log('stop location changed');
                 this.$store.commit('tours/setCurrentStop', {...this.form.data()});
                 this.markFormAsChanged(true);
             }
@@ -428,8 +441,9 @@ export default {
         },
     },
 
-    mounted() {
+    async mounted() {
         this.form.fill(this.stop);
+        await Vue.nextTick();
         this.markFormAsChanged(false);
     },
 
@@ -469,7 +483,7 @@ export default {
                 return;
             }
 
-            this.form.fill(newVal);
+            // this.form.fill(newVal);
         },
 
         async clickedPoint(newVal, oldVal) {

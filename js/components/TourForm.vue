@@ -471,7 +471,7 @@ export default {
 
         updateLocation() {
             console.log('tour location changed');
-            this.$store.commit('tours/setCurrent', this.form.data());
+            this.$store.commit('tours/setCurrent', {...this.form.data()});
         },
 
         destroy() {

@@ -6,7 +6,7 @@
             <span class="icon-right" @click="$emit('delete')"><fa :icon="['fas', 'times']"/></span>
         </div>
         
-        <next-stop-dropdown :busy="busy" v-model="next_stop_id" @input="updateNextStop()" />
+        <next-stop-dropdown :busy="busy" v-model="next_stop_id" @input="updateNextStop()" @changeRoute="updateRoutes" />
         
         <hr>
     </div>
@@ -34,6 +34,10 @@ export default {
     }),
 
     methods: {
+        updateRoutes(routes) {
+            this.$emit('changeRoute', routes);
+        },
+
         updateAnswer() {
             this.$emit('input', {
                 ...this.value,
