@@ -232,14 +232,15 @@
 
                 <!-- /end QUESTIONS -->
             </div>
-            <div v-if="tour.type == 'outdoor'">
+            <!-- <div v-if="tour.type == 'outdoor'">
                 <h4 class="info-heading mt-3">
                     Next Stop
                     <span class="info-icon" v-b-tooltip.hover title="Set the route to the next stop here">
                         <fa :icon="['fas', 'info']"/>
                     </span>
+                    <next-stop-dropdown v-model="form.next_stop_id" :busy="form.busy" @changeRoute="updateRoutes" />
                 </h4>
-            </div>
+            </div> -->
 
             <!-- SAVE -->
             <b-row class="mt-5">
@@ -486,6 +487,16 @@ export default {
             // this.form.fill(newVal);
         },
 
+        'form': {
+            handler() {
+                if (this.form.isDirty()) {
+                    console.log('stop form changes');
+                    this.markFormAsChanged(true);
+                }
+            },
+            deep: true,
+        },
+        
         async clickedPoint(newVal, oldVal) {
             if (this.useMapForLocation) {
                 this.useMapForLocation = false;
@@ -520,16 +531,6 @@ export default {
             this.updateCurrentStop();
         },
 
-        'form': {
-            handler() {
-                if (this.form.isDirty()) {
-                    console.log('stop form changes');
-                    this.markFormAsChanged(true);
-                }
-            },
-            deep: true,
-        },
-        
         'form.choices': {
             handler(newVal, oldVal) {
                 // console.log(newVal);

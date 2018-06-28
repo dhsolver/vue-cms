@@ -462,6 +462,11 @@ export default {
                 .then(({ data }) => {
                     console.log(data);
                     this.$store.commit("tours/setCurrent", data.data);
+
+                    this.form.fill(this.tour);
+                    Vue.nextTick(() => {
+                        this.markFormAsChanged(false);
+                    });
                 })
                 .catch(e => {
                     console.log("save tour error:");
@@ -488,27 +493,56 @@ export default {
                     });
             });
         },
-    },
-
-    mounted() {
-        if (this.tour.id) {
-            this.form.fill(this.tour);
-            this.$store.commit('tours/setWasModified', false);
+        
+        markFormAsChanged(onoff) {
+            this.$store.commit('tours/setWasModified', onoff);
         }
     },
 
+    async mounted() {
+        // if (this.tour.id) {
+            console.log('(mount) initial tour set');
+            this.form.fill(this.tour);
+            await Vue.nextTick();
+            this.markFormAsChanged(false);
+        // }
+    },
+
     watch: {
-        tour(newVal) {
-            if (newVal.id) {
+        async tour(newVal, oldVal) {
+            console.log('tour watch changed');
+            if (! newVal.id) {
+                // new tour
+                console.log('new tour');
+                this.form = new Form(newVal);
+
+                await Vue.nextTick();
+                this.markFormAsChanged(true);
+                return;
+            }
+
+            if (newVal.id != oldVal.id) {
+                console.log("tour form data changed");
+                console.log(newVal);
                 this.form.fill(newVal);
-                this.$store.commit('tours/setWasModified', false);
+                this.markFormAsChanged(false);
+                return
+            }
+
+            if (! oldVal.id) {
+                // tour set initially
+                console.log('initial tour set');
+                this.form.fill(newVal);
+                this.markFormAsChanged(false);
+                return;
             }
         },
 
         'form': {
             handler() {
                 if (this.form.isDirty()) {
-                    this.$store.commit('tours/setWasModified', true);
+                    console.log('tour form changed');
+                    this.markFormAsChanged(true);
                 }
             },
             deep: true,

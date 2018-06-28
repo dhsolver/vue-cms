@@ -66,9 +66,12 @@ class Form {
      * @returns {boolean}
      */
     wasModified(field=null) {
-        if (field) return (this[field] !== this.originalData[field]);
+        if (field) return (this[field] != this.originalData[field]);
         for (let property in this.originalData) {
-            if (this[property] !== this.originalData[property]) return true;
+            if (this[property] != this.originalData[property]) { 
+                console.log('dirty prop: ' + property);
+                return true
+            };
         }
         return false;
     }
