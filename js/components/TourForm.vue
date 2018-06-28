@@ -467,7 +467,7 @@ export default {
 
                     this.form.fill(this.tour);
                     this.$store.commit('tours/setOriginalRoutes', this.tour.route);
-                    
+
                     Vue.nextTick(() => {
                         this.markFormAsChanged(false);
                     });
@@ -506,7 +506,8 @@ export default {
     async mounted() {
         // if (this.tour.id) {
             console.log('(mount) initial tour set');
-            this.form.fill(this.tour);
+            this.form = new Form(this.tour);
+            // this.form.fill(this.tour);
             this.$store.commit('tours/setOriginalRoutes', this.tour.route);
             await Vue.nextTick();
             this.markFormAsChanged(false);
@@ -552,8 +553,9 @@ export default {
 
         'form': {
             handler() {
+                console.log('form was modified');
                 if (this.form.isDirty()) {
-                    console.log('tour form changed');
+                    console.log('tour form has changed');
                     this.markFormAsChanged(true);
                 }
             },

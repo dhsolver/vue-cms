@@ -1,4 +1,4 @@
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
     data: () => ({
@@ -10,6 +10,9 @@ export default {
     }),
 
     computed: {
+        ...mapState({
+            mode: state => state.tours.formViewMode,
+        }),
         ...mapGetters({
             mediaUrl: 'tours/mediaUrl',
         }),
@@ -17,6 +20,8 @@ export default {
 
     methods: {
         deleteMedia(field) {
+            console.log('delet field: ' + field);
+            console.log(this.form);
             this.form[field] = null;
             this.form[`${field}_id`] = null;
         },
@@ -26,7 +31,6 @@ export default {
         },
         
         uploadImage(e) {
-            console.log(e);
             return this.uploadMedia(e, 'image');
         },
 

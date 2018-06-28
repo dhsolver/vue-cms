@@ -24,7 +24,7 @@
                     @addStop="createStop()" 
                     @deleted="deleteStop(currentStop)"
                 />
-                <tour-form v-else ref="tourForm" />
+                <tour-form v-if="mode == 'tour' && tour.id" ref="tourForm" />
             </transition>
         </div>
 
