@@ -158,7 +158,7 @@
             <div v-if="tour.type == 'adventure'">
                 <h4 class="info-heading mt-3">
                     Decisions
-                    <span class="info-icon" v-b-tooltip.hover title="need info for this">
+                    <span class="info-icon" v-b-tooltip.hover title="Decisions are the choices that the user will make after they receive all the information you provided on this stop. The choice that they make will help determine their points and reveal the next location that the user will go to. Decisions are either multiple choice or fill in the blank. Each choice must lead to another stop.">
                         <fa :icon="['fas', 'info']"/>
                     </span>
                 </h4>
