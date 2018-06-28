@@ -525,6 +525,7 @@ export default {
                 console.log("tour form data changed");
                 console.log(newVal);
                 this.form.fill(newVal);
+                await Vue.nextTick();
                 this.markFormAsChanged(false);
                 return
             }
@@ -536,6 +537,8 @@ export default {
                 this.markFormAsChanged(false);
                 return;
             }
+
+            this.form.update(newVal);
         },
 
         'form': {

@@ -125,7 +125,7 @@ export const mutations = {
     },
 
     setCurrentStop(state, stop) {
-        Vue.set(state, 'currentStop', stop);
+        Vue.set(state, 'currentStop', JSON.parse(JSON.stringify(stop)));
     },
 
     updateStop(state, stop) {
