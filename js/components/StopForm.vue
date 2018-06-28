@@ -398,7 +398,7 @@ export default {
         updateCurrentStop() {
             if (this.form.isDirty()) {
                 console.log('stop location changed');
-                this.$store.commit('tours/setCurrentStop', this.form.data());
+                this.$store.commit('tours/setCurrentStop', {...this.form.data()});
                 this.markFormAsChanged(true);
             }
         },
@@ -476,9 +476,6 @@ export default {
             if (this.useMapForLocation) {
                 this.useMapForLocation = false;
 
-                console.log('clicked point:');
-                console.log(newVal);
-
                 let address = await this.reverseLookup(newVal.latitude, newVal.longitude)
 
                 this.form.location = {
@@ -521,8 +518,8 @@ export default {
         
         'form.choices': {
             handler(newVal, oldVal) {
-                console.log(newVal);
-                console.log(newVal == this.form.choices);
+                // console.log(newVal);
+                // console.log(newVal == this.form.choices);
             },
             deep: true,
         },

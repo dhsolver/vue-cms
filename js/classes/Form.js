@@ -7,10 +7,11 @@ class Form {
      * @param {object} data
      */
     constructor(data) {
-        this.originalData = data;
+        let cloneData = JSON.parse(JSON.stringify(data));
+        this.originalData = JSON.parse(JSON.stringify(data));
 
-        for (let field in data) {
-            this[field] = data[field];
+        for (let field in cloneData) {
+            this[field] = cloneData[field];
         }
 
         this.handler = new AxiosResponseHandler();
@@ -21,10 +22,11 @@ class Form {
     }
 
     fill(data) {
+        let cloneData = JSON.parse(JSON.stringify(data));
         this.reset();
-        this.originalData = data;
-        for (let field in data) {
-            this[field] = data[field];
+        this.originalData = JSON.parse(JSON.stringify(data));
+        for (let field in cloneData) {
+            this[field] = cloneData[field];
         }
     }
 
