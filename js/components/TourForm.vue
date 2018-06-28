@@ -466,6 +466,8 @@ export default {
                     this.$store.commit("tours/setCurrent", data.data);
 
                     this.form.fill(this.tour);
+                    this.$store.commit('tours/setOriginalRoutes', this.tour.route);
+                    
                     Vue.nextTick(() => {
                         this.markFormAsChanged(false);
                     });
