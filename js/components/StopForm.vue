@@ -278,7 +278,7 @@ export default {
             question_answer: '',
             question_success: '',
             next_stop_id: null,
-            choices: [],    
+            choices: [],
             video_url: '',
 
             intro_audio: "",
@@ -364,10 +364,10 @@ export default {
                     } else {
                         this.$store.commit('tours/pushStop', data.data);
                         this.$store.commit('tours/setCurrentStop', data.data);
-                        // this.stop = data.data;
                     }
                     
                     this.form.fill(this.stop);
+                    this.markFormAsChanged(false);
                 })
                 .catch(e => {
                     console.log('save stop error:');
@@ -396,9 +396,11 @@ export default {
         },
         
         updateCurrentStop() {
-            console.log('stop location changed');
-            this.$store.commit('tours/setCurrentStop', this.form.data());
-            this.markFormAsChanged(true);
+            if (this.form.isDirty()) {
+                console.log('stop location changed');
+                this.$store.commit('tours/setCurrentStop', this.form.data());
+                this.markFormAsChanged(true);
+            }
         },
 
         async deleteStop(confirm = true) {
@@ -438,25 +440,36 @@ export default {
             // in the stop form.
             // this.form.next_stop_id = '';
             // await Vue.nextTick();
-
+            console.log('stop watch changed');
             if (! newVal.id) {
+                // new stop
+                console.log('new stop');
                 this.form = new Form(newVal);
 
+                await Vue.nextTick();
+                this.markFormAsChanged(true);
+                return;
+            }
+
+            if (newVal.id != oldVal.id) {
+                // stop has actually changed
+                console.log("stop form stop changed");
+                console.log(newVal);
+                this.$store.commit('routes/clearCurrent');
+                this.form.fill(newVal);
                 await Vue.nextTick();
                 this.markFormAsChanged(false);
                 return;
             }
 
-            if (newVal.id != oldVal.id) {
-                console.log("stop form stop changed");
-                console.log(newVal);
-                this.$store.commit('routes/clearCurrent');
+            if (! oldVal.id) {
+                // stop is set initially
+                this.form.fill(newVal);
+                this.markFormAsChanged(false);
+                return;
             }
-            
-            this.form.fill(newVal);
 
-            await Vue.nextTick();
-            this.markFormAsChanged(false);
+            this.form.fill(newVal);
         },
 
         async clickedPoint(newVal, oldVal) {

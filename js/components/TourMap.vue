@@ -301,7 +301,7 @@ export default {
         routes(newVal, oldVal) {
             console.log('route obj changed');
             this.routeLine.setPath(newVal);
-
+    
             google.maps.event.clearListeners(this.routeLine.getPath(), 'insert_at');
             google.maps.event.clearListeners(this.routeLine.getPath(), 'remove_at');
             google.maps.event.clearListeners(this.routeLine.getPath(), 'set_at');

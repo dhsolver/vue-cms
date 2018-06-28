@@ -72,7 +72,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import { urls } from '../config';
-import TourForm from './tour/form';
+import TourForm from '../components/TourForm';
 
 export default {
     middleware: 'auth',

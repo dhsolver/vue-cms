@@ -65,6 +65,8 @@ export const mutations = {
 
         console.log('modified routes:');
         console.log(routes);
+
+        // state.currentStop.routes = routes;
         Vue.set(state, 'currentStop', {
             ...state.currentStop,
             routes,
@@ -156,7 +158,7 @@ export const mutations = {
             question: '',
             question_answer: '',
             question_success: '',
-            next_stop_id: '',
+            next_stop_id: null,
             choices: [],    
             video_url: '',
 
