@@ -238,7 +238,7 @@
                             v-model="form.prize_details"
                             required
                             rows="3"
-                            placeholder="Price Details">
+                            placeholder="Prize Details">
                         </b-form-textarea>
                         <input-help :form="form" field="prize_details" text=""></input-help>
                     </b-form-group>
