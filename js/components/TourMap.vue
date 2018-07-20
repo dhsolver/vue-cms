@@ -26,6 +26,7 @@ export default {
             stop: 'tours/currentStop',
             routes: 'routes/current',
             routeMode: 'routes/mode',
+            nextStopOrder: 'tours/getNextStopOrder',
         }),
         ...mapState({
             cursor: state => state.map.cursor,
@@ -140,7 +141,7 @@ export default {
                 icon: this.pinIcon,
                 labelAnchor: new google.maps.Point(13, 68),
                 labelClass: isCurrent ? "pin_label_active" : "pin_label", // the CSS class for the label
-                labelContent: String(stop.order ? stop.order : 'N'),
+                labelContent: String(stop.order ? stop.order : this.nextStopOrder),
                 draggable: isCurrent,
             });
 

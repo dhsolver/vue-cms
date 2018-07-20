@@ -42,7 +42,17 @@ export const getters = {
         return state.current.stops.find(obj => {
             return obj.id == stop_id;
         });
-    }
+    },
+    getNextStopOrder: (state) => {
+        let max = 0;
+        state.current.stops.forEach(item => {
+            if (item.order > max) {
+                max = item.order;
+            }
+        });
+
+        return max + 1;
+    },
 }
 
 export const mutations = {
