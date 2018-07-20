@@ -3,6 +3,7 @@
         <slot></slot>
         <div slot="modal-footer">
             <b-btn variant="default" @click.prevent="onCancel()">{{ cancelButton }}</b-btn>
+            <b-btn variant="success" @click.prevent="onNo()" v-if="noButton">{{ noButton }}</b-btn>
             <b-btn variant="danger" @click.prevent="onYes()">{{ yesButton }}</b-btn>
         </div>
     </b-modal>
@@ -21,6 +22,10 @@ export default {
             type: String,
             default: 'Yes',
         },
+        noButton: {
+            type: String,
+            default: '',
+        },
         title: {
             type: String,
             default: 'Are you sure?',
@@ -31,13 +36,22 @@ export default {
         show: false,
         callback: null,
         cancelCallback: null,
+        noCallback: null,
     }),
 
     methods: {
-        confirm(callback, cancelCallback = null) {
+        confirm(callback, cancelCallback = null, noCallback = null) {
             this.show = true;
             this.callback = callback;
             this.cancelCallback = cancelCallback;
+            this.noCallback = noCallback;
+        },
+
+        onNo() {
+            this.show = false;
+            if (this.noCallback) {
+                this.noCallback();
+            }
         },
 
         onYes() {
