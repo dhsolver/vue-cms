@@ -223,28 +223,37 @@
                     </b-btn>
                 </div>
 
-                <b-form-group class="mt-3">
-                    <b-form-textarea id="prize_details"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.prize_details"
-                        required
-                        rows="3"
-                        placeholder="Price Details">
-                    </b-form-textarea>
-                    <input-help :form="form" field="prize_details" text=""></input-help>
-                </b-form-group>
-                <b-form-group>
-                    <b-form-textarea id="prize_instructions"
-                        :disabled="form.busy"
-                        type="text"
-                        v-model="form.prize_instructions"
-                        required
-                        rows="3"
-                        placeholder="Redemption Instructions">
-                    </b-form-textarea>
-                    <input-help :form="form" field="prize_instructions" text=""></input-help>
-                </b-form-group>
+                <div class="form-check mt-3">
+                    <div class="custom-control custom-checkbox mr-sm-2">
+                        <input type="checkbox" class="custom-control-input" id="has_prize" v-model="form.has_prize">
+                        <label class="custom-control-label" for="has_prize">Offer Prize</label>
+                    </div>
+                </div>
+
+                <div v-if="form.has_prize">
+                    <b-form-group class="mt-3">
+                        <b-form-textarea id="prize_details"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.prize_details"
+                            required
+                            rows="3"
+                            placeholder="Price Details">
+                        </b-form-textarea>
+                        <input-help :form="form" field="prize_details" text=""></input-help>
+                    </b-form-group>
+                    <b-form-group>
+                        <b-form-textarea id="prize_instructions"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.prize_instructions"
+                            required
+                            rows="3"
+                            placeholder="Redemption Instructions">
+                        </b-form-textarea>
+                        <input-help :form="form" field="prize_instructions" text=""></input-help>
+                    </b-form-group>
+                </div>
                 <!-- /end PRIZE -->
 
                 <!-- START/END POINTS -->

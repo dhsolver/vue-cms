@@ -229,6 +229,7 @@ export const mutations = {
             pin_image: "",
             pin_image_id: "",
             pricing_type: "",
+            has_prize: false,
             prize_details: "",
             prize_instructions: "",
             published_at: "",
