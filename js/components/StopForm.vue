@@ -232,7 +232,7 @@
 
                 <!-- /end QUESTIONS -->
             </div>
-            <div v-if="tour.type == 'outdoor'">
+            <!-- <div v-if="tour.type == 'outdoor'">
                 <h4 class="info-heading mt-3">
                     Next Stop
                     <span class="info-icon" v-b-tooltip.hover title="Set the route to the next stop here">
@@ -240,7 +240,7 @@
                     </span>
                     <next-stop-dropdown class="mt-2" v-model="form.next_stop_id" :busy="form.busy" :no-routes="true" />
                 </h4>
-            </div>
+            </div> -->
 
             <!-- SAVE -->
             <b-row class="mt-5">
