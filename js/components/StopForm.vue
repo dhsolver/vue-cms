@@ -62,7 +62,7 @@
                     :overlay="useMapForLocation" />
 
                 <h4 class="mt-4 info-heading">
-                    Location Trigger
+                    Trigger Radius
                     <span class="info-icon" v-b-tooltip.hover title="Radius in meters">
                         <fa :icon="['fas', 'info']"/>
                     </span>
