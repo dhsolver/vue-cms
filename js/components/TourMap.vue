@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import Geocoding from '../mixins/Geocoding';
 var MarkerWithLabel = require('markerwithlabel')(google.maps);
 
@@ -27,7 +27,9 @@ export default {
             routes: 'routes/current',
             routeMode: 'routes/mode',
         }),
-
+        ...mapState({
+            cursor: state => state.map.cursor,
+        }),
         allMarkers() {
             if (this.tourMarker != null) {
                 return [...this.stopMarkers, this.tourMarker];
@@ -336,6 +338,11 @@ export default {
         stop(newVal, oldVal) {
             this.loadStopMarkers();
             this.zoomToFitMarkers();
+        },
+
+        cursor(newVal, oldVal) {
+            console.log('cusor changed: ' + newVal);
+            this.map.setOptions({draggableCursor: newVal});
         },
     },
 }

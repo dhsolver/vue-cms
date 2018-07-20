@@ -4,6 +4,7 @@ export const state = {
     setPointMode: false,
     clickedPoint: {},
     draggedMarker: {latLng: {}, stop: {}},
+    cursor: undefined,
 }
 
 export const getters = {
@@ -22,5 +23,9 @@ export const mutations = {
             latLng,
             stop,
         })
+    },
+
+    setCursor(state, cursor) {
+        Vue.set(state, 'cursor', cursor);
     }
 }

@@ -51,7 +51,7 @@
                     <a v-if="!useMapForLocation" href="#" class="reverse mr-2" @click.prevent="useMap()">
                         <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Use Map
                     </a>
-                    <a v-else href="#" class="reverse mr-2" @click.prevent="useMapForLocation = false">
+                    <a v-else href="#" class="reverse mr-2" @click.prevent="cancelUseMap()">
                         Cancel
                     </a>
                 </div>
@@ -433,8 +433,14 @@ export default {
         },
 
         useMap() {
+            this.$store.commit('map/setCursor', 'n-resize');
             this.useMapForLocation = true;
             this.$store.commit('tours/setStopMode', 'map');
+        },
+
+        cancelUseMap() {
+            this.useMapForLocation = false
+            this.$store.commit('map/setCursor', undefined);
         },
 
         markFormAsChanged(changed = false) {
@@ -502,6 +508,7 @@ export default {
         async clickedPoint(newVal, oldVal) {
             if (this.useMapForLocation) {
                 this.useMapForLocation = false;
+                this.$store.commit('map/setCursor', undefined);
 
                 let address = await this.reverseLookup(newVal.latitude, newVal.longitude)
 

@@ -68,7 +68,7 @@
                         <b-btn v-if="!useMapForLocation" variant="secondary" class="d-inline" @click="createStopFromPoint()">
                             <fa :icon="['fas', 'map-marker-alt']" />&nbsp;Add Point
                         </b-btn>
-                        <b-btn v-else variant="danger" class="d-inline" @click="useMapForLocation = false">
+                        <b-btn v-else variant="danger" class="d-inline" @click="cancelUseMap()">
                             <fa :icon="['fas', 'times']" />&nbsp;Cancel
                         </b-btn>
                         
@@ -244,6 +244,12 @@ export default {
 
         createStopFromPoint() {
             this.useMapForLocation = true;
+            this.$store.commit('map/setCursor', 'n-resize');
+        },
+
+        cancelUseMap() {
+            this.useMapForLocation = false;
+            this.$store.commit('map/setCursor', undefined);
         },
 
         editRoute() {
@@ -306,6 +312,7 @@ export default {
         async clickedPoint(newVal, oldVal) {
             if (this.useMapForLocation) {
                 this.useMapForLocation = false;
+                this.$store.commit('map/setCursor', undefined);
 
                 let address = await this.reverseLookup(newVal.latitude, newVal.longitude)
 
