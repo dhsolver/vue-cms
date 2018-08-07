@@ -43,6 +43,19 @@
                     <input-help :form="form" field="password" text=""></input-help>
                 </b-form-group>
                             
+                <b-form-group>
+                    <b-form-input id="password_confirmation"
+                        :disabled="form.busy"
+                        type="password"
+                        name="password_confirmation"
+                        v-model="form.password_confirmation"
+                        required
+                        autocomplete="new-password"
+                        placeholder="Confirm Password">
+                    </b-form-input>
+                    <input-help :form="form" field="password_confirmation" text=""></input-help>
+                </b-form-group>
+                            
                 <b-row class="mt-3">
                     <b-col lg="12">
                         <busy-button variant="primary" type="submit" :busy="busy" class="w-100">REGISTER</busy-button>
@@ -80,8 +93,11 @@ export default {
 
     data: () => ({
         form: new Form({
+            name: '',
             email: '',
-            password: ''
+            password: '',
+            password_confirmation: '',
+            role: 'client',
         }),
         remember: false,
         busy: false,
@@ -89,8 +105,32 @@ export default {
 
     methods: {
         async register() {
+            await this.form.post(this.urls.auth + 'signup')
+                .then( ({ data }) => {
+                    this.$store.commit('auth/saveToken', {
+                        token: data.token,
+                        remember: this.remember
+                    })
 
-        }
+                    this.loadDashboard();
+                })
+                .catch( e => {
+                    this.busy = false;
+                });
+        },
+
+        async loadDashboard() {
+            // Fetch the user.
+            await this.$store.dispatch('auth/fetchUser')
+
+            if (this.user.role === 'admin') {
+                this.$router.push({ name: 'admin.dashboard' })
+                return;
+            }
+            
+            // Redirect home.
+            this.$router.push({ name: 'home' })
+        },
     }
 }
 </script>
