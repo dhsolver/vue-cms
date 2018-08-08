@@ -45,6 +45,11 @@ npm run prod
 
 ### Config
 
+To utilize the Facebook Login API you must supply an App ID in the .env file
+```
+MIX_DEV_FACEBOOK_APP_ID={yourkey}
+```
+
 For configuring media requirements, e.g. file size / image size limits:
 
 The following data files correspond to the junket-api config values

@@ -15,6 +15,7 @@ import StopChoice from './StopChoice';
 import AddressForm from './AddressForm';
 import GoogleAddressSearch from './GoogleAddressSearch';
 import NextStopDropdown from './NextStopDropdown';
+import FacebookLogin from './FacebookLogin';
 
 // Components that are registered globaly.
 [
@@ -34,6 +35,7 @@ import NextStopDropdown from './NextStopDropdown';
     AddressForm,
     GoogleAddressSearch,
     NextStopDropdown,
+    FacebookLogin,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

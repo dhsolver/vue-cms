@@ -30,13 +30,18 @@
                     </b-form-input>
                     <input-help :form="form" field="password" text=""></input-help>
                 </b-form-group>
-                            
+
                 <b-row class="mt-3">
                     <b-col lg="12">
                         <busy-button variant="primary" type="submit" :busy="busy" class="w-100">LOGIN</busy-button>
                     </b-col>
                 </b-row>
 
+                <b-row class="mt-3">
+                    <b-col lg="12">
+                        <facebook-login @success="fbSuccess" />
+                    </b-col>
+                </b-row>
                 <div class="mt-5 text-center">
                     <h3>Don't have an account?</h3>
                 </div>
@@ -60,6 +65,10 @@ export default {
         ...mapGetters({
             user: 'auth/user'
         }),
+
+        facebookUrl() {
+            return this.urls.auth + 'facebook';
+        },
     },
 
     metaInfo () {
@@ -76,7 +85,29 @@ export default {
     }),
 
     methods: {
-        async login () {
+        fbSuccess(token) {
+            // submit the facebook access token to the login.
+            let form = new Form({ 
+                token,
+                role: 'client',
+            });
+
+            form.post(this.urls.auth + 'login/facebook')
+                .then( ({ data }) => {
+                    // save the sites jwt auth token.
+                    this.$store.commit('auth/saveToken', {
+                        token: data.token,
+                        remember: this.remember
+                    })
+
+                    this.loadDashboard();
+                })
+                .catch( e => {
+                    this.busy = false;
+                });
+        },
+
+        async login() {
             this.busy = true;
             
             // Submit the form.
