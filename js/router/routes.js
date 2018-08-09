@@ -2,6 +2,8 @@ import Login from '../pages/login';
 import Register from '../pages/register'
 import Home from '../pages/home';
 import EditTour from '../pages/tour';
+import ResetPassword from '../pages/reset-password';
+import ForgotPassword from '../pages/forgot-password';
 
 import NotFound from '../pages/errors/404';
 
@@ -22,6 +24,8 @@ export default [
 
     { path: '/', name: 'home', component: Home },
     { path: '/login', name: 'login', component: Login },
+    { path: '/forgot-password', name: 'forgot-password', component: ForgotPassword },
+    { path: '/reset-password', name: 'reset-password', component: ResetPassword },
     { path: '/register', name: 'register', component: Register },
     { path: '/tour/:id', name: 'tour', component: EditTour },
 

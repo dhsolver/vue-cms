@@ -49,6 +49,10 @@
                 <div class="mt-2">
                     <b-btn :to="{ name: 'register' }" type="button" variant="secondary" class="w-100">REGISTER</b-btn>
                 </div>
+
+                <div class="mt-5 text-center">
+                    <h3><router-link :to="{ name: 'forgot-password' }">I forgot my password</router-link></h3>
+                </div>
             </b-form>
         </div>
     </div>
