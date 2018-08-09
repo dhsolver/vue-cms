@@ -17,10 +17,7 @@ import AdminEdit from '../pages/admin/admins/edit';
 import AdminTours from '../pages/admin/tours/list';
 import AdminTourEdit from '../pages/admin/tours/edit';
 
-import Test from '../pages/test';
-
 export default [
-    { path: '/test', name: 'test', component: Test },
 
     { path: '/', name: 'home', component: Home },
     { path: '/login', name: 'login', component: Login },
