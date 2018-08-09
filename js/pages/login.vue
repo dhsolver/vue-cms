@@ -8,7 +8,7 @@
             <b-form @submit.prevent="login">
                 <b-form-group>
                     <b-form-input id="email"
-                        :disabled="form.busy"
+                        :disabled="form.busy || busy"
                         name="email"
                         type="email"
                         v-model="form.email"
@@ -20,7 +20,7 @@
 
                 <b-form-group>
                     <b-form-input id="password"
-                        :disabled="form.busy"
+                        :disabled="form.busy || busy"
                         name="password"
                         type="password"
                         v-model="form.password"
@@ -90,6 +90,8 @@ export default {
 
     methods: {
         fbSuccess(token) {
+            this.busy = true;
+
             // submit the facebook access token to the login.
             let form = new Form({ 
                 token,
