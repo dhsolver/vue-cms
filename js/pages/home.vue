@@ -22,7 +22,7 @@
                     </b-btn>
                 </div>
                 <div class="p-2">
-                    <b-btn variant="secondary" class="w-100">
+                    <b-btn variant="secondary" class="w-100" :to="{'name' : 'profile'}" >
                         <fa :icon="['fas', 'cog']" />&nbsp;My Account
                     </b-btn>
                 </div>

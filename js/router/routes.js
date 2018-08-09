@@ -4,6 +4,7 @@ import Home from '../pages/home';
 import EditTour from '../pages/tour';
 import ResetPassword from '../pages/reset-password';
 import ForgotPassword from '../pages/forgot-password';
+import Profile from '../pages/profile';
 
 import NotFound from '../pages/errors/404';
 
@@ -25,6 +26,7 @@ export default [
     { path: '/reset-password', name: 'reset-password', component: ResetPassword },
     { path: '/register', name: 'register', component: Register },
     { path: '/tour/:id', name: 'tour', component: EditTour },
+    { path: '/profile', name: 'profile', component: Profile },
 
     { path: '/admin/', name: 'admin.dashboard', component: Dashboard },
     { path: '/admin/clients', name: 'admin.clients', component: Clients },
