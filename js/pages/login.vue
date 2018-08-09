@@ -116,10 +116,8 @@ export default {
         async login() {
             this.busy = true;
             
-            // Submit the form.
-            await this.form.post(this.urls.auth + 'login')
+            axios.post(this.urls.auth + 'login', this.form.data())
                 .then( ({ data }) => {
-                    // Save the token.
                     this.$store.commit('auth/saveToken', {
                         token: data.token,
                         remember: this.remember
@@ -128,6 +126,12 @@ export default {
                     this.loadDashboard();
                 })
                 .catch( e => {
+                    if (e.response.status == 401) {
+                        alerts.addMessage('error', 'Invalid username and/or password.');
+                    } else {
+                        alerts.addMessage('error', 'An unexpected error occurred.  Please try again.');
+                    }
+
                     this.busy = false;
                 });
         },
