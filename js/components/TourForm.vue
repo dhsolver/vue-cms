@@ -223,7 +223,7 @@
                     </b-btn>
                 </div>
 
-                <div class="form-check mt-3">
+                <div class="form-check mt-3 mb-3">
                     <div class="custom-control custom-checkbox mr-sm-2">
                         <input type="checkbox" class="custom-control-input" id="has_prize" v-model="form.has_prize">
                         <label class="custom-control-label" for="has_prize">Offer Prize</label>
@@ -231,7 +231,7 @@
                 </div>
 
                 <div v-if="form.has_prize">
-                    <b-form-group class="mt-3">
+                    <b-form-group>
                         <b-form-textarea id="prize_details"
                             :disabled="form.busy"
                             type="text"
