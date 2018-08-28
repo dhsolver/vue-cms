@@ -89,27 +89,27 @@
                 </span>
             </h4>
             
+            <h3 v-if="tour.type == 'indoor'">Intro Audio</h3>
+            <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="uploadAudio" hidden>
+            <audio-player 
+                id="intro_audio"
+                :source="audioSource(form.intro_audio)"
+                :busy="busyUploading == 'intro_audio'"
+                @upload="openFileDialog('intro_audio')"
+                @delete="deleteMedia('intro_audio')"
+            />
+            
             <div v-if="tour.type == 'indoor'">
-                <h3>Intro Audio</h3>
-                <input id="intro_audio" name="intro_audio" type="file" class="input-file" @change="uploadAudio" hidden>
+                <h3>Background Audio</h3>
+                <input id="background_audio" name="background_audio" type="file" class="input-file" @change="uploadAudio" hidden>
                 <audio-player 
-                    id="intro_audio"
-                    :source="audioSource(form.intro_audio)"
-                    :busy="busyUploading == 'intro_audio'"
-                    @upload="openFileDialog('intro_audio')"
-                    @delete="deleteMedia('intro_audio')"
+                    id="background_audio"
+                    :source="audioSource(form.background_audio)" 
+                    :busy="busyUploading == 'background_audio'"
+                    @upload="openFileDialog('background_audio')" 
+                    @delete="deleteMedia('background_audio')"
                 />
             </div>
-            
-            <h3 v-if="tour.type == 'indoor'">Background Audio</h3>
-            <input id="background_audio" name="background_audio" type="file" class="input-file" @change="uploadAudio" hidden>
-            <audio-player 
-                id="background_audio"
-                :source="audioSource(form.background_audio)" 
-                :busy="busyUploading == 'background_audio'"
-                @upload="openFileDialog('background_audio')" 
-                @delete="deleteMedia('background_audio')"
-            />
             
             <!-- MEDIA -->
             <h4 class="info-heading mt-3">
