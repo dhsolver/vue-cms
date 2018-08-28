@@ -396,6 +396,7 @@ export default {
                 address1: "",
                 address2: "",
                 city: "",
+                country: "",
                 state: "",
                 zipcode: ""
             },

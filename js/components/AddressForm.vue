@@ -20,6 +20,7 @@
                 <b-col class="mt-3 mb-3">
                     <p>{{ address.address1 }}</p>
                     <p>{{ address.city }}, {{ address.state }} {{ address.zipcode }}</p>
+                    <p v-if="address.country != 'US'">{{ address.country }}</p>
                     <!-- <p class="gray">{{ address.latitude }} / {{ address.longitude }}</p> -->
                 </b-col>
             </b-row>
@@ -50,6 +51,7 @@ export default {
             address1: '',
             address2: '',
             city: '',
+            country: '',
             state: '',
             zipcode: '',
         },

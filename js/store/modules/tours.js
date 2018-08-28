@@ -215,6 +215,7 @@ export const mutations = {
                 address2: "",
                 city: "",
                 state: "",
+                country: "",
                 zipcode: ""
             },
             background_audio: "",

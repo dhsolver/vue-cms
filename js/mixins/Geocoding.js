@@ -9,11 +9,11 @@ export default {
         },
 
         isCompleteAddress(obj) {
-            return (obj && obj.address1 && obj.city && obj.state && obj.zipcode);
+            return (obj && obj.address1 && obj.city && obj.state && obj.zipcode && obj.country);
         },
         
         getAddressString(obj) {
-            return `${obj.address1} ${obj.city} ${obj.state} ${obj.zipcode}`;
+            return `${obj.address1} ${obj.city} ${obj.state} ${obj.zipcode} ${obj.country}`;
         },
 
         geocodeLookup(obj) {
@@ -42,6 +42,7 @@ export default {
                             address2: '',
                             city: '',
                             state: '',
+                            country: '',
                             zipcode: '',
                         });
                     }
@@ -61,6 +62,7 @@ export default {
                 address1: addr.street_number ? `${addr.street_number} ${addr.route}` : addr.route,
                 city: addr.locality,
                 state: addr.administrative_area_level_1,
+                country: addr.country,
                 zipcode: addr.postal_code,
             };
         },
@@ -78,6 +80,7 @@ export default {
                 address1: streetNo ? `${streetNo} ${route}` : route,
                 city: this.getComponentType(components, 'locality'),
                 state: this.getComponentType(components, 'administrative_area_level_1'),
+                country: this.getComponentType(components, 'country'),
                 zipcode: this.getComponentType(components, 'postal_code'),
             };
         },
