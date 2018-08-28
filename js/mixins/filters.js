@@ -15,5 +15,6 @@ Vue.filter('minsec', s => {
     if (s == NaN) {
         return '0:00';
     }
-    return (s - (s %= 60)) / 60 + (9 < s ? ':' : ':0') + Math.floor(s);
+
+    return (s - (s %= 60)) / 60 + (s >= 10 ? ':' : ':0') + Math.floor(s);
 })
