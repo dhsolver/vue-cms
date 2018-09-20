@@ -24,7 +24,7 @@
                     @addStop="createStop()" 
                     @deleted="deleteStop(currentStop)"
                 />
-                <tour-form v-if="mode == 'tour' && tour.id" ref="tourForm" />
+                <tour-form v-if="mode == 'tour' && tour.id" ref="tourForm" @publish="publish" />
             </transition>
         </div>
 
@@ -144,6 +144,7 @@ export default {
             mode: state => state.tours.formViewMode,
         }),
         ...mapGetters({
+            saveUrl: "tours/saveUrl",
             tour: 'tours/current',
             currentStop: 'tours/currentStop',
             routeMode: 'routes/mode',
@@ -254,7 +255,6 @@ export default {
 
         editRoute() {
             if (this.mode == 'stop' && this.stopFormHasChanges) {
-                console.log('yessssssss');
                 this.$refs.confirm.confirm(() => {
                     this.showTourForm(true);
                     this.$store.commit('routes/startDrawing');
@@ -290,6 +290,42 @@ export default {
         setStopViewMode(mode) {
             this.$store.commit('stops/setViewMode', mode);
         },
+
+        publish(confirmed = false) {
+            if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
+                this.$refs.confirm.confirm(() => {
+                    this.publish(true);
+                });
+                return;
+            }
+
+            if (! confirmed && this.mode == 'stop' && this.stopFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.publish(true);
+                });
+                return;
+            }
+
+            this.$refs.tourForm.busyPublishing = true;
+            this.$refs.tourForm.form.busy = true;
+
+            axios.put(this.saveUrl + '/publish', {})
+                .then(response => {
+                    this.$store.commit('tours/setCurrent', response.data.data);
+                    alerts.addMessage('success', response.data.message);
+                    this.$refs.tourForm.busyPublishing = false;
+                    this.$refs.tourForm.form.busy = false;
+                })
+                .catch(e => {
+                    console.log(e);
+                    if (e.response.data.message) {
+                        alerts.addMessage('error', e.response.data.message);
+                        this.$refs.tourForm.busyPublishing = false;
+                        this.$refs.tourForm.form.busy = false;
+                    }
+                })
+        },
+
     },
 
     async mounted() {
