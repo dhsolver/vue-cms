@@ -15,10 +15,10 @@
             :clearOnChange="true"
         />
 
-        <b-container v-if="this.address.address1">
+        <b-container v-if="validAddress">
             <b-row>
                 <b-col class="mt-3 mb-3">
-                    <p>{{ address.address1 }}</p>
+                    <p v-if="this.address.address1">{{ address.address1 }}</p>
                     <p>{{ address.city }}, {{ address.state }} {{ address.zipcode }}</p>
                     <p v-if="address.country != 'US'">{{ address.country }}</p>
                     <!-- <p class="gray">{{ address.latitude }} / {{ address.longitude }}</p> -->
@@ -58,6 +58,20 @@ export default {
         search: '',
     }),
     
+    computed: {
+        validAddress() {
+            if (!this.address) {
+                return false;
+            }
+
+            if (!this.address.latitude || ! this.address.longitude || ! this.address.city || ! this.address.state || ! this.address.zipcode || ! this.address.country) {
+                return false;
+            }
+
+            return true;
+        },
+    },
+
     methods: {
         getAddressData(addressData, placeResultData, id) {
             console.log('address changed');
