@@ -24,7 +24,7 @@
                     @addStop="createStop()" 
                     @deleted="deleteStop(currentStop)"
                 />
-                <tour-form v-if="mode == 'tour' && tour.id" ref="tourForm" />
+                <tour-form v-if="mode == 'tour' && tour.id" ref="tourForm" @publish="publish" />
             </transition>
         </div>
 
@@ -105,6 +105,16 @@
         <confirm-modal ref="confirm" yesButton="Discard Changes">
             Are you sure you want to navigate away from this form?  You currently have unsaved changes.
         </confirm-modal>
+
+        <b-modal v-if="publishErrorModal" title="Cannot Publish Tour" v-model="publishErrorModal">
+            <p>This tour does not meet the requirements to be published.  Please correct the following issues:</p>
+            <ul>
+               <li v-for="e in publishErrors" :key="e">{{ e }}</li> 
+            </ul>
+            <div slot="modal-footer">
+               <b-btn variant="default" @click="publishErrorModal = false">Close</b-btn>
+            </div>
+        </b-modal>
     </div>
 </template>
 
@@ -134,6 +144,8 @@ export default {
     data: () => ({
         loading: true,
         useMapForLocation: false,
+        publishErrors: [],
+        publishErrorModal: false,
     }),
 
     computed: {
@@ -144,6 +156,7 @@ export default {
             mode: state => state.tours.formViewMode,
         }),
         ...mapGetters({
+            saveUrl: "tours/saveUrl",
             tour: 'tours/current',
             currentStop: 'tours/currentStop',
             routeMode: 'routes/mode',
@@ -254,7 +267,6 @@ export default {
 
         editRoute() {
             if (this.mode == 'stop' && this.stopFormHasChanges) {
-                console.log('yessssssss');
                 this.$refs.confirm.confirm(() => {
                     this.showTourForm(true);
                     this.$store.commit('routes/startDrawing');
@@ -290,6 +302,55 @@ export default {
         setStopViewMode(mode) {
             this.$store.commit('stops/setViewMode', mode);
         },
+
+        publish(confirmed = false) {
+            if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
+                this.$refs.confirm.confirm(() => {
+                    this.publish(true);
+                });
+                return;
+            }
+
+            if (! confirmed && this.mode == 'stop' && this.stopFormHasChanges) {
+                this.$refs.confirm.confirm(() => {
+                    this.publish(true);
+                });
+                return;
+            }
+
+            this.publishErrors = [];
+            this.$refs.tourForm.busyPublishing = true;
+            this.$refs.tourForm.form.busy = true;
+
+            axios.put(this.saveUrl + '/publish', {})
+                .then(response => {
+                    this.$store.commit('tours/setCurrent', response.data.data);
+                    alerts.addMessage('success', response.data.message);
+                    this.$refs.tourForm.busyPublishing = false;
+                    this.$refs.tourForm.form.busy = false;
+
+                    Vue.nextTick(() => {
+                        this.$refs.tourForm.markFormAsChanged(false);
+                    });
+                })
+                .catch(e => {
+                    if (e.response.data.message) {
+                        alerts.addMessage('error', e.response.data.message);
+                        if (e.response.data.data && e.response.data.data.errors && e.response.data.data.tour) {
+                            // publish tour error
+                            this.$store.commit('tours/setCurrent', e.response.data.data.tour);
+                            this.publishErrors = e.response.data.data.errors;
+                            this.publishErrorModal = true;
+                            Vue.nextTick(() => {
+                                this.$refs.tourForm.markFormAsChanged(false);
+                            });
+                        }
+                        this.$refs.tourForm.busyPublishing = false;
+                        this.$refs.tourForm.form.busy = false;
+                    }
+                })
+        },
+
     },
 
     async mounted() {

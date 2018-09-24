@@ -49,6 +49,24 @@
                 <input-help :form="form" field="title" text=""></input-help>
             </b-form-group>
             
+            <!-- STATUS / PUBLISH -->
+            <div class="d-flex mb-3" style="align-items: baseline">
+                <h4 class="info-heading mt-3 f-1">
+                    Status: 
+                    <span v-if="tour.status == 'draft'" class="text-danger">DRAFT</span>
+                    <span v-if="tour.status == 'live'" class="text-success">LIVE</span>
+                    <span v-if="tour.status == 'pending'" class="text-warning">PENDING</span>
+                    <span class="info-icon" v-b-tooltip.hover :title="statusDescription">
+                        <fa :icon="['fas', 'info']"/>
+                    </span>
+                </h4>
+                <div class="ml-auto">
+                    <busy-button v-if="tour.status == 'draft'" variant="success" size="sm" :disabled="form.busy" @click.prevent="publish()">Publish</busy-button>
+                    <busy-button v-if="tour.status == 'live'" variant="danger" size="sm" :disabled="form.busy" @click.prevent="unpublish()">Unpublish</busy-button>
+                    <busy-button v-if="tour.status == 'pending'" variant="danger" size="sm" :disabled="form.busy" @click.prevent="unpublish()">Cancel</busy-button>
+                </div>
+            </div>
+            
             <div v-if="hasTour">
                 <h4>Description</h4>
                 <b-form-group>
@@ -367,9 +385,15 @@
             </div>
         </div>
 
-        <!-- Confirmation modal -->
+        <!-- Confirmation modals -->
         <confirm-modal ref="confirmDelete">
             Are you sure you want to delete this Tour?
+        </confirm-modal>
+        <confirm-modal ref="confirmUnpublish">
+            Are you sure you want to unpublish this Tour?  This will remove it from the mobile app's tour list.
+        </confirm-modal>
+        <confirm-modal ref="confirmCancelApproval">
+            Are you sure you want to cancel your publish tour request?
         </confirm-modal>
     </div>
 </template>
@@ -453,7 +477,18 @@ export default {
 
         hasTour() {
             return this.tour.id ? true : false;
-        }
+        },
+
+        statusDescription() {
+            switch(this.tour.status) {
+                case 'live':
+                    return 'This tour is published and live in the mobile app.';
+                case 'pending':
+                    return 'This tour is awaiting admin approval to be published in the mobile app.';
+                default:
+                    return 'This tour is not published and will not appear in the mobile app.';
+            }
+        },
     },
 
     methods: {
@@ -510,7 +545,48 @@ export default {
         
         markFormAsChanged(onoff) {
             this.$store.commit('tours/setWasModified', onoff);
-        }
+        },
+
+        async publish() {
+            // handle publish from outside this component so you can prompt 
+            // for confirmation of changes
+            this.$emit('publish');
+        },
+
+        async unpublish(confirmed = false) {
+            if (! confirmed && this.tour.is_awaiting_approval) {
+                return this.$refs.confirmCancelApproval.confirm(() => {
+                    this.unpublish(true);
+                });
+            } else if (! confirmed) {
+                return this.$refs.confirmUnpublish.confirm(() => {
+                    this.unpublish(true);
+                });
+            }
+
+            this.busyPublishing = true;
+            this.form.busy = true;
+
+            axios.put(this.saveUrl + '/unpublish', {})
+                .then(response => {
+                    this.$store.commit('tours/setCurrent', response.data.data);
+                    alerts.addMessage('success', response.data.message);
+                    this.busyPublishing = false;
+                    this.form.busy = false;
+
+                    Vue.nextTick(() => {
+                        this.markFormAsChanged(false);
+                    });
+                })
+                .catch(e => {
+                    console.log(e);
+                    if (e.response.data.message) {
+                        alerts.addMessage('error', e.response.data.message);
+                        this.busyPublishing = false;
+                        this.form.busy = false;
+                    }
+                })
+        },
     },
 
     async mounted() {
