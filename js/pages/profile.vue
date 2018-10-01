@@ -2,7 +2,7 @@
     <div class="d-flex">
         <div class="mx-auto p-5 mt-5 shadow-lg bg-white rounded" style="min-width: 360px; width: 80%; max-width: 500px;">
             <div class="text-center mb-5">
-                <router-link :to="{name:'home'}"><img src="images/junket-logo.png" alt="Junket"></router-link>
+                <router-link :to="{name:'home'}"><img src="images/junket-logo.png" alt="Junket" class="w-100"></router-link>
             </div>
 
             <spinner v-model="loading" />

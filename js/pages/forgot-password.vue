@@ -2,7 +2,7 @@
     <div class="d-flex">
         <div class="mx-auto auth-box mt-5 shadow-lg bg-white rounded" >
             <div class="text-center mb-5">
-                <img src="images/junket-logo.png" alt="Junket">
+                <img src="images/junket-logo.png" alt="Junket" class="w-100">
             </div>
 
             <div v-if="success" class="text-center">

@@ -2,7 +2,7 @@
     <div class="d-flex">
         <div class="mx-auto p-5 mt-5 shadow-lg bg-white rounded" style="min-width: 60%">
             <div class="text-center mb-5">
-                <img src="images/junket-logo.png" alt="Junket">
+                <img src="images/junket-logo.png" alt="Junket" class="w-100">
             </div>
 
             <div class="text-center">

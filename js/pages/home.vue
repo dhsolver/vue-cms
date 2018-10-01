@@ -6,7 +6,7 @@
             <div class="f-1">
                 <!-- LOGO -->            
                 <div class="text-center mb-5">
-                    <img src="images/junket-logo.png" alt="Junket" style="max-width: 100%" />
+                    <img src="images/junket-logo.png" alt="Junket" class="w-100" />
                 </div>
 
                 <!-- Search bar -->
