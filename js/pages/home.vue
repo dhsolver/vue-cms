@@ -110,8 +110,8 @@ export default {
             if (this.filter == '') return this.tours;
 
             return this.tours.filter(x => 
-                x.title.includes(this.filter) ||
-                (x.zipcode && x.zipcode.includes(this.filter))
+                x.title.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0
+                || (x.zipcode && x.zipcode.toLowerCase().indexOf(this.filter.toLowerCase()) >= 0)
             );
         },
     },
