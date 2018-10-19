@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="mt-5 text-center">
-                    <h3><a :href="`${this.supportHost}/#/forgot-password`">I forgot my password</a></h3>
+                    <h3><a :href="`${this.config.urls.support}/#/forgot-password`">I forgot my password</a></h3>
                 </div>
             </b-form>
         </div>
@@ -71,7 +71,7 @@ export default {
         }),
 
         facebookUrl() {
-            return this.urls.auth + 'facebook';
+            return this.config.urls.auth + 'facebook';
         },
     },
 
@@ -98,7 +98,7 @@ export default {
                 role: 'client',
             });
 
-            form.post(this.urls.auth + 'login/facebook')
+            form.post(this.config.urls.auth + 'login/facebook')
                 .then( ({ data }) => {
                     // save the sites jwt auth token.
                     this.$store.commit('auth/saveToken', {
@@ -116,7 +116,7 @@ export default {
         async login() {
             this.busy = true;
             
-            axios.post(this.urls.auth + 'login', this.form.data())
+            axios.post(this.config.urls.auth + 'login', this.form.data())
                 .then( ({ data }) => {
                     this.$store.commit('auth/saveToken', {
                         token: data.token,

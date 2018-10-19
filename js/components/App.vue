@@ -37,7 +37,7 @@ export default {
 
     metaInfo () {
         let title = 'Junket CMS';
-        if (window.location.href.indexOf(this.supportHost) === 0) {
+        if (window.location.href.indexOf(this.config.urls.support) === 0) {
             title = 'Junket'
         } else if (window.location.href.indexOf('/#/admin') > 0) {
             title = 'Junket Admin';

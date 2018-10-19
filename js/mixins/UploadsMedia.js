@@ -2,10 +2,6 @@ import { mapGetters, mapState } from 'vuex';
 
 export default {
     data: () => ({
-        maxAudioSize: 30, // MB
-        maxImageSize: 15, // MB
-        minImageSize: 400,
-        minIconSize: 48,
         busyUploading: '',
     }),
 
@@ -16,6 +12,12 @@ export default {
         ...mapGetters({
             mediaUrl: 'tours/mediaUrl',
         }),
+        minImageSize() {
+            return this.config.media.min_image_size;
+        },
+        minIconSize() {
+            return this.config.media.min_icon_size;
+        },
     },
 
     methods: {
@@ -51,15 +53,15 @@ export default {
             }
 
             if (type == 'audio') {
-                if (file.size > (this.maxAudioSize * 1000000)) {
+                if (file.size > (this.config.media.max_audio_size * 1000000)) {
                     this.clearFile(e.target);
-                    alerts.addMessage('error', `Audio files must be less than ${this.maxAudioSize} MB.`);
+                    alerts.addMessage('error', `Audio files must be less than ${this.config.media.max_audio_size} MB.`);
                     return;
                 }
             } else {
-                if (file.size > (this.maxImageSize * 1000000)) {
+                if (file.size > (this.config.media.max_image_size * 1000000)) {
                     this.clearFile(e.target);
-                    alerts.addMessage('error', `Images must be less than ${this.maxImageSize} MB.`);
+                    alerts.addMessage('error', `Images must be less than ${this.config.media.max_image_size} MB.`);
                     return;
                 }
             }

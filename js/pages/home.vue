@@ -2,7 +2,6 @@
     <div class="wrapper shadow-lg">
         <!-- DASHBOARD --> 
         <div class="p-50 bg-white d-flex flex-column right-side">
-
             <div class="f-1">
                 <!-- LOGO -->            
                 <div class="text-center mb-5">
@@ -70,8 +69,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
-import { urls } from '../config';
+import { mapGetters } from "vuex";
 import TourForm from '../components/TourForm';
 
 export default {
@@ -86,7 +84,7 @@ export default {
     },
 
     async mounted() {
-        this.$store.commit('tours/setUrl', urls.cms);
+        this.$store.commit('tours/setUrl', this.config.urls.cms);
         this.$store.commit('tours/clearCurrentTour');
         await this.$store.dispatch('tours/fetchTours');
         this.loading = false;

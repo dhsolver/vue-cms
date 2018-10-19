@@ -107,7 +107,7 @@ export default {
         async register() {
             this.busy = true;
             
-            await this.form.post(this.urls.auth + 'signup')
+            await this.form.post(this.config.urls.auth + 'signup')
                 .then( ({ data }) => {
                     this.$store.commit('auth/saveToken', {
                         token: data.token,

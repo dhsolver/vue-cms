@@ -69,7 +69,7 @@
             },
 
             url() {
-                let url = this.urls.admin + 'admins';
+                let url = this.config.urls.admin + 'admins';
                 if (this.hasAdmin) {
                     url = url + `/${this.admin.id}`;
                 }

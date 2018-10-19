@@ -37,18 +37,14 @@ window.Form = Form;
 import MediaPaths from './mixins/MediaPaths';
 Vue.mixin(MediaPaths);
 
-import { urls, supportHost } from './config';
+import { mapState } from "vuex";
+
 Vue.mixin({
-    data: () => {
-        return {
-            get urls() {
-                return urls;
-            },
-            get supportHost() {
-                return supportHost;
-            },
-        }
-    },
+    computed: {
+        ...mapState({
+            config: state => state.config,
+        }),
+    }
 })
 
 new Vue({

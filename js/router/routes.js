@@ -20,10 +20,10 @@ import ResetPassword from '../pages/support/reset-password';
 import ForgotPassword from '../pages/support/forgot-password';
 import ConfirmEmail from '../pages/support/confirm-email';
 
-import { supportHost } from '../config';
+import store from '../store'
 let routes = [];
 
-if (window.location.href.indexOf(supportHost) === 0) {
+if (window.location.href.indexOf(store.state.config.urls.support) === 0) {
     routes = [
         { path: '/forgot-password', name: 'forgot-password', component: ForgotPassword },
         { path: '/reset-password', name: 'reset-password', component: ResetPassword },

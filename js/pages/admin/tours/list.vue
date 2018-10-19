@@ -81,7 +81,6 @@
 import { mapGetters } from 'vuex';
 import FormatsDates from "../../../mixins/FormatsDates";
 import TourForm from './form';
-import { urls } from '../../../config';
 
 export default {
     middleware: ['auth', 'admin'],
@@ -181,8 +180,8 @@ export default {
     },
 
     async created() {
-        this.$store.commit('tours/setUrl', urls.admin);
-        console.log(urls.admin);
+        this.$store.commit('tours/setUrl', this.config.urls.admin);
+        console.log(this.config.urls.admin);
         this.$store.commit('tours/clearCurrentTour');
         await this.$store.dispatch('tours/fetchTours');
         this.totalRows = this.itemCount;

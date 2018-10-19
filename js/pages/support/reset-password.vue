@@ -90,7 +90,7 @@ export default {
             this.busy = true;
             
             // Submit the form.
-            await this.form.post(this.urls.auth + 'reset-password')
+            await this.form.post(this.config.urls.auth + 'reset-password')
                 .then( ({ data }) => {
                     this.success = true;
                 })

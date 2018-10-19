@@ -109,7 +109,7 @@
             },
 
             url() {
-                let url = this.urls.admin + 'tours';
+                let url = this.config.urls.admin + 'tours';
                 if (this.hasTour) {
                     url = url + `/${this.tour.id}`;
                 }

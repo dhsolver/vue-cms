@@ -75,7 +75,7 @@
             },
 
             url() {
-                let url = this.urls.admin + 'clients';
+                let url = this.config.urls.admin + 'clients';
                 if (this.hasClient) {
                     url = url + `/${this.client.id}`;
                 }

@@ -120,7 +120,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { urls } from '../config';
 import Geocoding from '../mixins/Geocoding';
 import TourForm from '../components/TourForm';
 import TourMap from '../components/TourMap';
@@ -354,7 +353,7 @@ export default {
     },
 
     async mounted() {
-        this.$store.commit('tours/setUrl', urls.cms);
+        this.$store.commit('tours/setUrl', this.config.urls.cms);
         await this.$store.dispatch('tours/fetchTour', this.$route.params.id);
 
         if (!this.tour.id) {

@@ -129,7 +129,6 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex';
-import { urls } from '../config';
 
 export default {
     metaInfo() {
@@ -165,7 +164,7 @@ export default {
         submit() {
             this.busy = true;
 
-            this.form.patch(urls.cms + 'profile')
+            this.form.patch(this.config.urls.cms + 'profile')
                 .then( ({ data }) => {
                     this.form.update(data.data);
                     this.busy = false;
@@ -178,7 +177,7 @@ export default {
         changePassword() {
             this.busy = true;
          
-            this.passwordForm.patch(urls.cms + 'profile/password')
+            this.passwordForm.patch(this.config.urls.cms + 'profile/password')
                 .then(response => {
                     this.passwordForm.reset();
                     this.busy = false;
@@ -197,7 +196,7 @@ export default {
                 role: 'client',
             });
 
-            form.post(this.urls.auth + 'login/facebook')
+            form.post(this.config.urls.auth + 'login/facebook')
                 .then( ({ data }) => {
                     // save the sites jwt auth token.
                     this.$store.commit('auth/saveToken', {
@@ -229,7 +228,7 @@ export default {
     },
 
     created() {
-        this.$store.commit('profile/setUrl', urls.cms);
+        this.$store.commit('profile/setUrl', this.config.urls.cms);
         this.syncProfile();
     },
 }

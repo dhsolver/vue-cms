@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Vue from 'vue';
-import { urls } from '../../config';
 
 export const state = {
     list: [],
@@ -40,9 +39,9 @@ export const actions = {
         commit('saveToken', payload)
     },
 
-    async fetchClients ({ commit }) {
+    async fetchClients ({ commit, rootState }) {
         try {
-            const { data } = await axios.get(urls.admin + 'clients')
+            const { data } = await axios.get(rootState.config.urls.admin + 'clients')
 
             commit('fetchClientsSuccess', { list: data })
         } catch (e) {
@@ -50,10 +49,10 @@ export const actions = {
         }
     },
 
-    async fetchClient ({ commit }, id) {
+    async fetchClient ({ commit, rootState }, id) {
         try {
             commit('fetchClientSuccess', {})
-            const { data } = await axios.get(urls.admin + `clients/${id}`)
+            const { data } = await axios.get(rootState.config.urls.admin + `clients/${id}`)
             commit('fetchClientSuccess', data)
 
         } catch (e) {

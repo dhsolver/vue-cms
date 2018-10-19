@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Vue from 'vue';
-import { urls } from '../../config';
 
 export const state = {
     list: [],
@@ -41,9 +40,9 @@ export const actions = {
         commit('saveToken', payload)
     },
 
-    async fetchAdmins ({ commit }) {
+    async fetchAdmins ({ commit, rootState }) {
         try {
-            const { data } = await axios.get(urls.admin + 'admins')
+            const { data } = await axios.get(rootState.config.urls.admin + 'admins')
             console.log('wtf');
             let list = data instanceof Array ? data : [];
             commit('fetchAdminsSuccess', { list: data })
@@ -54,10 +53,10 @@ export const actions = {
         }
     },
 
-    async fetchAdmin ({ commit }, id) {
+    async fetchAdmin ({ commit, rootState }, id) {
         try {
             commit('fetchAdminSuccess', {})
-            const { data } = await axios.get(urls.admin + `admins/${id}`)
+            const { data } = await axios.get(rootState.config.urls.admin + `admins/${id}`)
             commit('fetchAdminSuccess', data)
 
         } catch (e) {

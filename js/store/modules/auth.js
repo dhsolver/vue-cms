@@ -1,6 +1,5 @@
 import axios from 'axios'
 import Cookies from 'js-cookie'
-import { urls } from '../../config';
 
 export const state = {
     user: {},
@@ -39,9 +38,9 @@ export const mutations = {
 }
 
 export const actions = {
-    async fetchUser ({ commit }) {
+    async fetchUser ({ commit, rootState }) {
         try {
-            const { data } = await axios.get(urls.auth + 'session')
+            const { data } = await axios.get(rootState.config.urls.auth + 'session')
             commit('fetchUserSuccess', { user: data })
         } catch (e) {
             commit('fetchUserFailure')

@@ -1,6 +1,5 @@
 import axios from 'axios';
 import Vue from 'vue';
-import { urls } from '../../config';
 
 export const state = {
     list: [],
@@ -40,9 +39,9 @@ export const actions = {
         commit('saveToken', payload)
     },
 
-    async fetchUsers ({ commit }) {
+    async fetchUsers ({ commit, rootState }) {
         try {
-            const { data } = await axios.get(urls.admin + 'users')
+            const { data } = await axios.get(rootState.config.urls.admin + 'users')
 
             commit('fetchUsersSuccess', { list: data })
         } catch (e) {
@@ -53,7 +52,7 @@ export const actions = {
     async fetchUser ({ commit }, id) {
         try {
             commit('fetchUserSuccess', {})
-            const { data } = await axios.get(urls.admin + `users/${id}`)
+            const { data } = await axios.get(rootState.config.urls.admin + `users/${id}`)
             commit('fetchUserSuccess', data)
 
         } catch (e) {

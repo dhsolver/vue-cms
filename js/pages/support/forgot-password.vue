@@ -75,7 +75,7 @@ export default {
         async submit() {
             this.busy = true;
             
-            await this.form.post(this.urls.auth + 'forgot-password')
+            await this.form.post(this.config.urls.auth + 'forgot-password')
                 .then( ({ data }) => {
                     this.success = true;
                 })

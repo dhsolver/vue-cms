@@ -49,7 +49,7 @@ export default {
         checkToken() {
             this.form.alertOnResponse = false;
             this.form.alertOnError = false;
-            this.form.post(this.urls.api + 'confirm-email')
+            this.form.post(this.config.urls.api + 'confirm-email')
                 .then( ({ data }) => {
                     this.status = 1;
                 })
