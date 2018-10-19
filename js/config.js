@@ -1,6 +1,6 @@
 
 let host = process.env.NODE_ENV == 'development' ? process.env.MIX_DEV_API_URL : process.env.MIX_PROD_API_URL;
-let supportHost = process.env.NODE_ENV == 'development' ? process.env.MIX_DEV_SUPPORT_URL : process.env.MIX_DEV_SUPPORT_URL;
+let supportHost = process.env.NODE_ENV == 'development' ? process.env.MIX_DEV_SUPPORT_URL : process.env.MIX_PROD_SUPPORT_URL;
 
 let urls = {
     auth: `${host}/auth/`,
