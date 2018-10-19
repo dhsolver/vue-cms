@@ -12,7 +12,10 @@
         "hot-ssl": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --https --config=node_modules/laravel-mix/setup/webpack.config.js",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --progress --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "deploy": "npm run production && npm run push-to-s3 && npm run invalidate-cdn",
+        "push-to-s3": "aws s3 sync --acl public-read --profile junket --delete dist/ s3://cms.wejunket.com",
+        "invalidate-cdn": "aws cloudfront --profile junket create-invalidation --distribution-id E3GZXH5FAQNE05 --paths '/*'"
     },
     "devDependencies": {
         "@fortawesome/fontawesome": "^1.1.8",

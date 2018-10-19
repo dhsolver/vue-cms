@@ -10,54 +10,53 @@ Junket CMS Frontend SPA using Vue
 - [Bootswatch Bootstrap Themes](https://bootswatch.com/)
 - [Howler for audio](https://github.com/goldfire/howler.js)
 
+### Config
+
+Rename the .env.example file to .env and set the proper URLs for development and production.  You will also need to enter the Facebook API key.
+
+The contents of the /public directory is the local development version and the /dist directory is production.
+
+The Google Maps API key is hard coded into the index.html files, you can set different ones for /public and /dist.
+
+You can also configure the client side media requirements
+
+```
+MIX_MAX_AUDIO_SIZE=30
+MIX_MAX_IMAGE_SIZE=15
+MIX_MIN_IMAGE_SIZE=400
+MIX_MIN_ICON_SIZE=48
+```
+
 ### Development Setup
 
-1. Make sure to set MIX_DEV_API_URL environment var to your local install of the Junket API
+1. Make sure URLs are set properly in the .env file
+
+2. Run hot loader
 
 ```
-MIX_DEV_API_URL=http://junket-api.test
+npm run hot-ssl
 ```
 
-2. Run hot loading watcher
-
-```
-npm run hot
-```
-
-3. Visit the root of the /public directory in browser
+3. Point a webserver at the contents of the /public directory.
 
 
 ### How to Deploy
 
-1. Make sure MIX_PROD_API_URL environment var is set properly
+The front end SPA is published to an S3 bucket, which is distributed via CloudFront.  
+Reference on S3/CloudFront setup: [S3 Static Sites](https://gist.github.com/bradwestfall/b5b0e450015dbc9b4e56e5f398df48ff)
+
+Updating the files on the S3 bucket alone will not make the changes live.  The files need to be invalidated on the CDN so that they can then be updated.
+
+1. Make sure URLs are set properly in the .env file
+
+2. Run deploy script.  This requires the [aws-cli](https://aws.amazon.com/cli/) and utilizes a local profile named 'junket'.
 
 ```
-MIX_PROD_API_URL=https://api.wejunket.com
+npm run deploy
 ```
 
-2. Compile js/css for produciton with Mix
+3. Wait for the CDN to reset and refresh the browser
 
 ```
-npm run prod
-```
-
-3. Upload contents of dist directory to server or CDN
-
-### Config
-
-To utilize the Facebook Login API you must supply an App ID in the .env file
-```
-MIX_DEV_FACEBOOK_APP_ID={yourkey}
-```
-
-For configuring media requirements, e.g. file size / image size limits:
-
-The following data files correspond to the junket-api config values
-
-File: /js/mixins/UploadsMedia.js
-```
-maxAudioSize: 30, // MB
-maxImageSize: 15, // MB
-minImageSize: 400,
-minIconSize: 48,
+https://cms.wejunket.com
 ```
