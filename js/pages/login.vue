@@ -51,7 +51,7 @@
                 </div>
 
                 <div class="mt-5 text-center">
-                    <h3><router-link :to="{ name: 'forgot-password' }">I forgot my password</router-link></h3>
+                    <h3><a :href="`${this.supportHost}/#/forgot-password`">I forgot my password</a></h3>
                 </div>
             </b-form>
         </div>

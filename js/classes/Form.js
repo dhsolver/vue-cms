@@ -154,7 +154,7 @@ class Form {
                     console.log('Axios error');
                     this.busy = false;
                     this.handler = new AxiosResponseHandler();
-                    this.handler.handleError(error, this.alertFromResponse);
+                    this.handler.handleError(error, this.alertOnResponse);
                     reject(error);
                 });
         });

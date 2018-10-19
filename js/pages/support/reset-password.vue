@@ -8,9 +8,9 @@
             <div v-if="success" class="text-center">
                 Your password has been reset.
 
-                <div class="mt-2">
+                <!-- <div class="mt-2">
                     <b-btn :to="{ name: 'login' }" type="button" variant="secondary" class="w-100">Login</b-btn>
-                </div>
+                </div> -->
             </div>
 
             <div v-else>
@@ -102,7 +102,7 @@ export default {
 
     mounted() {
         if (! this.$route.query.token || ! this.$route.query.email) {
-            this.$router.push({ name: 'login' });
+            this.$router.push({ name: '404' });
             return;
         }
 

@@ -35,13 +35,13 @@
                 </b-form>
             </div>
 
-            <div class="mt-5 text-center">
+            <!-- <div class="mt-5 text-center">
                 <h3>Remember your password?</h3>
             </div>
 
             <div class="mt-2">
                 <b-btn :to="{ name: 'login' }" type="button" variant="secondary" class="w-100">Login</b-btn>
-            </div>
+            </div> -->
         </div>
     </div>
 </template>

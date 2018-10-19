@@ -36,9 +36,16 @@ export default {
     }),
 
     metaInfo () {
+        let title = 'Junket CMS';
+        if (window.location.href.indexOf(this.supportHost) === 0) {
+            title = 'Junket'
+        } else if (window.location.href.indexOf('/#/admin') > 0) {
+            title = 'Junket Admin';
+        }
+        console.log(title);
         return {
-            title: "Junket CMS",
-            titleTemplate: `%s · Junket CMS`
+            title: title,
+            titleTemplate: `%s · ` + title,
         }
     },
 

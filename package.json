@@ -1,7 +1,7 @@
 {
     "name": "junket-cms",
     "version": "1.0.0",
-    "description": "Junket CMS",
+    "description": "Junket Frontend",
     "author": "Jonathan Willard <jonwillard11@gmail.com>",
     "private": true,
     "scripts": {
