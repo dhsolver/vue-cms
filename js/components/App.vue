@@ -42,7 +42,6 @@ export default {
         } else if (window.location.href.indexOf('/#/admin') > 0) {
             title = 'Junket Admin';
         }
-        console.log(title);
         return {
             title: title,
             titleTemplate: `%s · ` + title,

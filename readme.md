@@ -49,7 +49,7 @@ Updating the files on the S3 bucket alone will not make the changes live.  The f
 
 1. Make sure URLs are set properly in the .env file
 
-2. Run deploy script.  This requires the [aws-cli](https://aws.amazon.com/cli/) and utilizes a local profile named 'junket'.
+2. Run deploy script.  This requires the [aws-cli](https://aws.amazon.com/cli/) and assumes a local aws profile exists with the name 'junket'.
 
 ```
 npm run deploy
