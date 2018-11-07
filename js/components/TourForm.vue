@@ -249,6 +249,7 @@
                 </div>
 
                 <div v-if="form.has_prize">
+                    <h3>Prize Details</h3>
                     <b-form-group>
                         <b-form-textarea id="prize_details"
                             :disabled="form.busy"
@@ -260,6 +261,24 @@
                         </b-form-textarea>
                         <input-help :form="form" field="prize_details" text=""></input-help>
                     </b-form-group>
+
+                    <h3>Time Limit
+                        <span class="info-icon" v-b-tooltip.hover title="The length of time (in hours) that the prize will be available after a user has won it.">
+                            <fa :icon="['fas', 'info']"/>
+                        </span>
+                    </h3>
+                    <b-form-group>
+                        <b-form-input id="prize_time_limit"
+                            :disabled="form.busy"
+                            type="text"
+                            v-model="form.prize_time_limit"
+                            required
+                            placeholder="Time Limit">
+                        </b-form-input>
+                        <input-help :form="form" field="prize_time_limit" text=""></input-help>
+                    </b-form-group>
+
+                    <h3>Redeem Prize At</h3>
                     <b-form-group>
                         <b-form-textarea id="prize_instructions"
                             :disabled="form.busy"
@@ -448,6 +467,7 @@ export default {
             pricing_type: "",
             prize_details: "",
             prize_instructions: "",
+            prize_time_limit: "",
             published_at: "",
             start_image: "",
             start_message: "",

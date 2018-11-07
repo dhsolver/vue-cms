@@ -243,6 +243,7 @@ export const mutations = {
             has_prize: false,
             prize_details: "",
             prize_instructions: "",
+            prize_time_limit: "",
             published_at: "",
             start_image: "",
             start_message: "",
