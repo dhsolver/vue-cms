@@ -65,6 +65,10 @@
                     <b-col lg="12">
                         <div v-if="profile.fb_id" class="text-center">
                             Linked with Facebook ID {{ profile.fb_id }}
+
+                            <b-btn variant="danger" class="mt-3 w-100" @click="detachFacebook()" :disabled="busy">
+                                Unlink Facebook
+                            </b-btn>
                         </div>
                         <facebook-login v-else @success="fbSuccess" />
                     </b-col>
@@ -197,11 +201,10 @@ export default {
             });
             
             form.alertOnResponse = false;
-            form.post(this.config.urls.cms + 'facebook/attach')
+            form.post(this.config.urls.auth + 'facebook/attach')
                 .then( ({ data }) => {
                     // update the users profile information
                     this.syncProfile();
-
                     this.busy = false;
                 })
                 .catch( e => {
@@ -210,6 +213,20 @@ export default {
                     } else {
                         alerts.addMessage('error', 'Unexpected error while attaching Facebook account.  Please try again.');
                     }
+                    this.busy = false;
+                });
+        },
+        
+        detachFacebook() {
+            this.busy = true;
+            axios.delete(this.config.urls.auth + 'facebook')
+                .then( ({ data }) => {
+                    this.syncProfile();
+                    alerts.addMessage('success', 'Your Facebook has been unlinked from this account.');
+                    this.busy = false;
+                })
+                .catch( e => {
+                    alerts.addMessage('error', 'An unexpected error while trying to unlink your Facebook account.  Please try again.');
                     this.busy = false;
                 });
         },
