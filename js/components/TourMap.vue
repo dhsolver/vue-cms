@@ -14,10 +14,9 @@ export default {
     
     data: () => ({
         map: {},
-        tourMarker: null,
-        stopMarkers: [],
-        radiusCircles: [],
+        tourMarker: { pin: null },
         routeLine: {},
+        markers: [],
     }),
 
     computed: {
@@ -33,9 +32,9 @@ export default {
         }),
         allMarkers() {
             if (this.tourMarker != null) {
-                return [...this.stopMarkers, this.tourMarker];
+                return [...this.markers, this.tourMarker];
             }
-            return [...this.stopMarkers];
+            return [...this.markers];
         },
 
         tourLocation() {
@@ -65,13 +64,13 @@ export default {
 
     methods: {
         loadTourMarker() {
-            if (this.tourMarker) {
-                this.tourMarker.setMap(null);
-                this.tourMarker = null;
+            if (this.tourMarker.pin) {
+                this.tourMarker.pin.setMap(null);
+                this.tourMarker = { pin: null, radius: null };
             }
             
             if (this.tourLocation) {
-                this.tourMarker = new MarkerWithLabel({
+                this.tourMarker.pin = new MarkerWithLabel({
                     position: this.tourLocation,
                     map: this.map,
                     title: 'Junket Location',
@@ -83,32 +82,27 @@ export default {
                     // icon: 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png',
                 });
 
-                this.tourMarker.addListener('click', e => {
+                this.tourMarker.pin.addListener('click', e => {
                     this.onClickTourMarker(e);
                 });
             }
         },
 
         clearMarkers() {
-            this.stopMarkers.forEach(item => {
+            this.markers.forEach(item => {
                 if (item) {
-                    item.setMap(null);
+                    if (item.pin) {
+                        item.pin.setMap(null);
+                    }
+                    if (item.radius) {
+                        item.radius.setMap(null);
+                    }
                 }
             });
-            this.stopMarkers.length = 0;
-        },
-
-        clearRadiusCircles() {
-            this.radiusCircles.forEach(item => {
-                if (item) {
-                    item.setMap(null);
-                }
-            });
-            this.radiusCircles.length = 0;
+            this.markers.length = 0;
         },
 
         loadStopMarkers() {
-            this.clearRadiusCircles();
             this.clearMarkers();
             
             this.tour.stops.forEach(item => {
@@ -116,10 +110,10 @@ export default {
 
                 if (item.id == this.stop.id && this.objHasCoordinates(this.stop.location)) {
                     // draw from current stop object so it reflect the live form data
-                    this.drawMarker(this.stop, true);
+                    this.createMarker(this.stop, true);
                 } else if (this.objHasCoordinates(item.location)) {
                     // draw from object in stop list
-                    this.drawMarker(item);
+                    this.createMarker(item);
                 } else {
                     console.log(item);
                     return;
@@ -128,12 +122,67 @@ export default {
 
             // load a temp marker if the create form has a location
             if (! this.stop.id && this.objHasCoordinates(this.stop.location)) {
-                this.drawMarker(this.stop, true);
+                this.createMarker(this.stop, true);
+            }
+
+            if (this.routeMode == 'hide') {
+                this.showStopRadi();
             }
         },
+        
+        /**
+         * Display blue radius circle around all stop markers.
+         */
+        showStopRadi() {
+            this.markers.forEach(marker => {
+                let stop = this.$store.getters['tours/getStopFromid'](marker.id)
+                if (! stop) {
+                    return;
+                }
 
-        drawMarker(stop, isCurrent = false) {
-            let m = new MarkerWithLabel({
+                marker.radius = new google.maps.Circle({
+                    map: this.map,
+                    radius: stop.play_radius ? parseFloat(stop.play_radius) : 0,  // in metres
+                    fillColor: '#0099ff',
+                    fillOpacity: 0.40,
+                    strokeWeight: 1,
+                });
+                marker.radius.bindTo('center', marker.pin, 'position');
+            });
+        },
+
+        /**
+         * Hide all the stop radi on the map.
+         */
+        hideStopRadi() {
+            this.markers.forEach(marker => {
+                if (marker.radius) {
+                    marker.radius.setMap(null);
+                    marker.radius = null;
+                }
+            });
+        },
+
+        /**
+         * Get stop by ID
+         */
+        findStop(id) {
+            let index = this.markers.find(obj => obj.id == id);
+            if (index >= 0) {
+                return this.markers[index];
+            }
+
+            return null;
+        },
+
+        createMarker(stop, isCurrent = false) {
+            let marker = {
+                radius: null,
+                pin: null,
+                id: stop.id,
+            };
+
+            marker.pin = new MarkerWithLabel({
                 map: this.map,
                 title: stop.title,
                 // label: String(stop.order),
@@ -145,25 +194,15 @@ export default {
                 draggable: isCurrent,
             });
 
-            var radiusCircle = new google.maps.Circle({
-                map: this.map,
-                radius: stop.play_radius ? parseFloat(stop.play_radius) : 0,  // in metres
-                fillColor: '#0099ff',
-                fillOpacity: 0.40,
-                strokeWeight: 1,
-            });
-            radiusCircle.bindTo('center', m, 'position');
-            this.radiusCircles.push(radiusCircle);
-
-            m.addListener('click', () => {
-                this.onClickMarker(m, stop);
+            marker.pin.addListener('click', () => {
+                this.onClickMarker(marker.pin, stop);
             });
 
-            m.addListener('dragend', (e) => {
-                this.onDragMarker(e, m, stop);
+            marker.pin.addListener('dragend', (e) => {
+                this.onDragMarker(e, marker.pin, stop);
             });
 
-            this.stopMarkers.push(m);
+            this.markers.push(marker);
         },
 
         zoomToFitMarkers(initial = false) {
@@ -171,7 +210,9 @@ export default {
             if (markers.length) {
                 let bounds = new google.maps.LatLngBounds();
                 for (var i = 0; i < markers.length; i++) {
-                    bounds.extend(markers[i].getPosition());
+                    if (markers[i].pin) {
+                        bounds.extend(markers[i].pin.getPosition());
+                    }
                 }
 
                 if (initial) {
@@ -305,6 +346,14 @@ export default {
     },
 
     watch: {
+        routeMode(newVal) {
+            if (newVal == 'hide') {
+                this.showStopRadi();
+            } else {
+                this.hideStopRadi();
+            }
+        },
+
         routes(newVal, oldVal) {
             console.log('tourmap: routes object changed (watch)');
             this.routeLine.setPath(newVal);
