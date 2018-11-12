@@ -195,21 +195,21 @@ export default {
                 token,
                 role: 'client',
             });
-
-            form.post(this.config.urls.auth + 'login/facebook')
+            
+            form.alertOnResponse = false;
+            form.post(this.config.urls.cms + 'facebook/attach')
                 .then( ({ data }) => {
-                    // save the sites jwt auth token.
-                    this.$store.commit('auth/saveToken', {
-                        token: data.token,
-                        remember: this.remember
-                    })
-
                     // update the users profile information
                     this.syncProfile();
 
                     this.busy = false;
                 })
                 .catch( e => {
+                    if (e.response.data.error == 'fb_exists') {
+                        alerts.addMessage('error', 'This Facebook is already attached to another account.  Please contact support if you are having issues.');
+                    } else {
+                        alerts.addMessage('error', 'Unexpected error while attaching Facebook account.  Please try again.');
+                    }
                     this.busy = false;
                 });
         },
