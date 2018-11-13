@@ -518,3 +518,16 @@ hr { border: 1px solid $grayBorder; width: 60%; margin-top: 1.2rem; margin-botto
 .gray {
     color: darkgray;
 }
+
+#alerts {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 9999;
+    right: 25px;
+    top: 25px;
+}
+#alerts .alert { 
+    position: absolute;
+    right: 50px;
+    max-width: 500px;
+}

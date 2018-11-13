@@ -44,12 +44,3 @@ export default {
     }
 }
 </script>
-
-<style>
-#alerts {
-    position: absolute;
-    z-index: 9999;
-    right: 25px;
-    top: 70px;
-}
-</style>
