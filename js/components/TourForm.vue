@@ -224,11 +224,12 @@
                 <div class="trophy-box d-flex">
                     <input id="trophy_image" name="trophy_image" type="file" class="input-file" @change="(e) => uploadMedia(e, 'icon')" hidden>
 
-                    <img v-if="! form.trophy_image" src="/images/trophy.png" width="100" height="100" class="mr-3" />
+                    <img v-if="! form.trophy_image" src="/images/trophy-default.png" width="100" height="100" class="mr-3" />
                     <div v-else 
                         class="trophy-img mr-3" 
                         :style="{ 'background-image': `url('${imagePath(form.trophy_image)}')` }" 
                     >
+                        <img src="/images/trophy-cutout.png" width="100" height="100"/>
                         <div class="delete" @click.stop="deleteMedia('trophy_image')">
                             <fa :icon="['fas', 'times']" />
                         </div>
