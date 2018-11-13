@@ -20,6 +20,10 @@ import ResetPassword from '../pages/support/reset-password';
 import ForgotPassword from '../pages/support/forgot-password';
 import ConfirmEmail from '../pages/support/confirm-email';
 
+import AnalyticsOverview from '../pages/analytics/overview';
+import AnalyticsDetails from '../pages/analytics/details';
+import AnalyticsDevices from '../pages/analytics/devices';
+
 import store from '../store'
 let routes = [];
 
@@ -35,12 +39,15 @@ if (window.location.href.indexOf(store.state.config.urls.support) === 0) {
 }
 else {
     routes = [
-
         { path: '/', name: 'home', component: Home },
         { path: '/login', name: 'login', component: Login },
         { path: '/register', name: 'register', component: Register },
         { path: '/tour/:id', name: 'tour', component: EditTour },
         { path: '/profile', name: 'profile', component: Profile },
+
+        { path: '/analytics/:id/overview', name: 'analytics.overview', component: AnalyticsOverview },
+        { path: '/analytics/:id/details', name: 'analytics.details', component: AnalyticsDetails },
+        { path: '/analytics/:id/devices', name: 'analytics.devices', component: AnalyticsDevices },
 
         { path: '/admin/', name: 'admin.dashboard', component: Dashboard },
         { path: '/admin/clients', name: 'admin.clients', component: Clients },

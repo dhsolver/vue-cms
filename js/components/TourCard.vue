@@ -13,7 +13,9 @@
         </div>
         <div class="footer d-flex p-1">
             <div>
-                <a href="#" class="skinny"><fa :icon="['fas', 'chart-bar']" />&nbsp;Analytics</a>
+                <router-link :to="{ name: 'analytics.overview', params: { id: this.tour.id } }" class="skinny">
+                    <fa :icon="['fas', 'chart-bar']" />&nbsp;Analytics
+                </router-link>
             </div>
             <div class="ml-auto">
                 <a href="#" class="skinny" ><fa :icon="['fas', 'link']" />&nbsp;URL</a>

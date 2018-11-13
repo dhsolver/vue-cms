@@ -1,0 +1,57 @@
+// @import 'variables';
+
+.topbar {
+  background-color: $white;
+  display: flex;
+  color: $white;
+}
+
+.topbar .back-btn {
+  cursor: pointer;
+  background-color: $blue;
+  padding: 15px;
+  margin-right: 5px;
+  width: 110px;
+  text-align: center;
+}
+
+.topbar .nav-container {
+  background-color: $darkBlue;
+  padding: 15px;
+  padding-left: 25px;
+  flex: 1;
+}
+
+.subnav {
+  display: flex;
+  margin-left: 115px;
+  background-color: $white;
+  flex-direction: row!important; 
+}
+
+.subnav .subnav-item {
+  color: $darkBlue;
+  font-size: .8rem;
+  cursor: pointer;
+  background-color: $bg-grey;
+  margin-top: 1px;
+  margin-right: 1px;
+}
+.subnav-item .nav-link { 
+  padding: 7px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.subnav-item .nav-link.active {
+  background-color: $darkBlue;
+  color: $white;
+}
+.subnav .extra { flex: 1; }
+    
+.root.analytics .wrapper { background-color: $white; }
+.root.analytics .content { 
+  margin-top: 25px;
+  text-align: center;
+  margin-left: 15px;
+  margin-right: 15px;
+}
