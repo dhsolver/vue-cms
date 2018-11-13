@@ -435,7 +435,7 @@ export default {
         useMap() {
             this.$store.commit('map/setCursor', 'n-resize');
             this.useMapForLocation = true;
-            this.$store.commit('tours/setStopMode', 'map');
+            this.$store.commit('stops/setViewMode', 'map');
         },
 
         cancelUseMap() {

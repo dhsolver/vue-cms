@@ -101,7 +101,7 @@ export default {
                 lat: this.stop.location.latitude,
                 lng: this.stop.location.longitude,
             });
-            this.$store.commit('tours/setStopMode', 'map');
+            this.$store.commit('stops/setViewMode', 'map');
         },
         clearRoute() {
             this.$store.commit('tours/clearStopRoute', this.next_stop_id);
@@ -122,7 +122,7 @@ export default {
             } else {
                 this.$store.commit('routes/setId', this.next_stop_id);
                 this.$store.commit('routes/show', this.route);
-                this.$store.commit('tours/setStopMode', 'map');
+                this.$store.commit('stops/setViewMode', 'map');
             }
         },
         saveRoute() {
