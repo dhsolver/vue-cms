@@ -39,6 +39,11 @@ npm run hot-ssl
 
 3. Point a webserver at the contents of the /public directory.
 
+You will likely have issues running https in chrome.  Adding the ssl cert to keychain should resolve this:
+
+```
+sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
+```
 
 ### How to Deploy
 
