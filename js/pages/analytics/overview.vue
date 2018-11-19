@@ -14,7 +14,7 @@
         layout: 'analytics',
 
         metaInfo() {
-            return { title: 'Overview' }
+            return { title: 'Analytics Overview' }
         },
             
         data: () => ({

@@ -5,7 +5,7 @@
                 <fa :icon="['fas', 'arrow-left']" class="mr-2"></fa>BACK
             </div>
             <div class="nav-container">
-                <fa :icon="['fas', 'chart-bar']" class="mr-2" />ANALYTICS
+                <fa :icon="['fas', 'chart-bar']" class="mr-2" />ANALYTICS - {{ tour ? tour.title : 'Loading...' }}
             </div>
         </div>
         <b-navbar-nav class="subnav">
@@ -22,7 +22,8 @@ import { mapGetters } from 'vuex';
 
 export default {
     computed: mapGetters({
-        user: 'auth/user'
+        user: 'auth/user',
+        tour: 'analytics/tour',
     }),
 
     props: ['tourId'],
