@@ -152,16 +152,16 @@ export default {
         },
 
         androidTotal() {
-            return _.sumBy(this.stats.filter(obj => obj.os == 'android'), stat => stat.downloads);
+            return _.sumBy(this.stats.filter(obj => obj.os == 'android'), stat => stat.downloads) || 0;
         },
         androidPercent() {
-            return Math.round((this.androidTotal / (this.androidTotal + this.iosTotal)) * 100);
+            return this.androidTotal == 0 ? 0 : Math.round((this.androidTotal / (this.androidTotal + this.iosTotal)) * 100);
         },
         iosTotal() {
-            return _.sumBy(this.stats.filter(obj => obj.os == 'ios'), stat => stat.downloads);
+            return _.sumBy(this.stats.filter(obj => obj.os == 'ios'), stat => stat.downloads) || 0;
         },
         iosPercent() {
-            return Math.round((this.iosTotal / (this.androidTotal + this.iosTotal)) * 100);
+            return this.iosTotal == 0 ? 0 : Math.round((this.iosTotal / (this.androidTotal + this.iosTotal)) * 100);
         },
     },
 
