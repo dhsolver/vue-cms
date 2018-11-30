@@ -35,6 +35,8 @@
         "lodash": "^4.17.10",
         "markerwithlabel": "github:arkhipovandrei/node-MarkerWithLabel#master",
         "moment": "^2.22.2",
+        "numeral": "^2.0.6",
+        "v-calendar": "^0.9.7",
         "vue": "^2.5.17",
         "vue-meta": "^1.4.4",
         "vue-router": "^3.0.1",

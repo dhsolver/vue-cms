@@ -1,5 +1,8 @@
 export default {
     methods: {
+        numberCommasFormat(number) {
+            return numeral(number).format('0,0');
+        },
         numberFormat(number) {
             return numeral(number).format('0,0.00');
         },

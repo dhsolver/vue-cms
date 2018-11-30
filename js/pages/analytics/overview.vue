@@ -1,5 +1,6 @@
 <template>
     <div class="content">
+        <date-picker v-model="dateRange" @input="fetch()"></date-picker>
         <div class="table-responsive">
             <spinner v-model="loading" class="mt-5" />
             <b-table striped hover show-empty
@@ -31,11 +32,10 @@ export default {
 
     data() {
         return {
-            loading: true,
+            dateRange: {},
+            loading: false,
             sortBy: 'order',
             sortDesc: false,
-            end_date: moment(new Date()).format('MM/DD/YYYY'),
-            start_date: moment(new Date()).subtract(14, 'days').format('MM/DD/YYYY'),
             items: [],
             fields: [
                 {
@@ -58,10 +58,12 @@ export default {
                     key: 'visits',
                     label: 'Visitors',
                     sortable: true,
+                    formatter: (val) => this.numberCommasFormat(val),
                 },
                 {
                     key: 'actions',
                     sortable: true,
+                    formatter: (val) => this.numberCommasFormat(val),
                 },
             ],
         }
@@ -74,7 +76,12 @@ export default {
 
     methods: {
         fetch() {
-            let url = `${this.config.urls.cms}analytics/${this.tour.id}/overview/?start=${this.start_date}&end=${this.end_date}`;
+            this.loading = true;
+
+            let start = moment(this.dateRange.start).format('MM/DD/YYYY');
+            let end = moment(this.dateRange.end).format('MM/DD/YYYY');
+            
+            let url = `${this.config.urls.cms}analytics/${this.tour.id}/overview/?start=${start}&end=${end}`;
             axios.get(url)
                 .then( ({ data }) => {
                     this.items = data.stops;
@@ -88,7 +95,11 @@ export default {
     },
 
     mounted() {
-        this.fetch();
+        // this.dateRange = {
+        //     start: moment().subtract(6, 'days').toDate(),
+        //     end: moment().toDate(),
+        // };
+        // this.fetch();
     },
 }
 </script>
