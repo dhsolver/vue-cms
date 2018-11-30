@@ -18,6 +18,7 @@ import NextStopDropdown from './NextStopDropdown';
 import FacebookLogin from './FacebookLogin';
 import DatePicker from './DatePicker';
 import LineChart from './LineChart';
+import DonutChart from './DonutChart';
 
 // Components that are registered globaly.
 [
@@ -40,6 +41,7 @@ import LineChart from './LineChart';
     FacebookLogin,
     DatePicker,
     LineChart,
+    DonutChart,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

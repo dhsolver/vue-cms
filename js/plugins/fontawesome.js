@@ -11,11 +11,12 @@ import {
 } from '@fortawesome/fontawesome-free-regular/shakable.es'
 
 import {
-    faGithub, faInstagram, faFacebookF, faTwitter, faYoutube, faFacebook
+    faGithub, faInstagram, faFacebookF, faTwitter, faYoutube, faFacebook,
+    faAndroid, faApple,
 } from '@fortawesome/fontawesome-free-brands/shakable.es'
 
 fontawesome.library.add(
-    faUser, faLock, faSignOutAlt, faCog, faGithub, faInstagram, faFacebookF,faFacebook, faTwitter, faYoutube, faArrowLeft, faCalendarAlt
+    faUser, faLock, faSignOutAlt, faCog, faGithub, faInstagram, faFacebookF,faFacebook, faTwitter, faYoutube, faArrowLeft, faCalendarAlt, faAndroid, faApple,
 )
 
 Vue.component('fa', FontAwesomeIcon)

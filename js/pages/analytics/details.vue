@@ -10,7 +10,7 @@
 
         <spinner v-model="loading" class="mt-5" />
 
-        <div v-if="! loading" class="chart-container" style="">
+        <div v-if="! loading" class="chart-container">
             <line-chart style="height: 50vh; min-height: 100px" :chart-data="chartData" :options="chartOptions" />
         </div>
     </div>
@@ -38,7 +38,7 @@ export default {
             dateRange: {},
             mode: 'downloads',
             items: [],
-            profitColor: '#79acd1',
+            chartColor: '#79acd1',
             chartOptions: {
                 responsive: true,
                 maintainAspectRatio: false, 
@@ -77,8 +77,8 @@ export default {
                 datasets: [
                     {
                         label: this.stringFormat(this.mode),
-                        borderColor: this.profitColor,
-                        backgroundColor: this.profitColor,
+                        borderColor: this.chartColor,
+                        backgroundColor: this.chartColor,
                         data: this.dataPoints,
                     },
                 ],
