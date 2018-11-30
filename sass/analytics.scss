@@ -47,8 +47,8 @@
   color: $white;
 }
 .subnav .extra { flex: 1; }
-    
-.root.analytics .wrapper { background-color: $white; }
+  
+.root.analytics .wrapper { background-color: $white; overflow-y: auto; }
 .root.analytics .content { 
   margin-top: 25px;
   // text-align: center;
