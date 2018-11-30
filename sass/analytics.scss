@@ -77,3 +77,6 @@ table.b-table > thead > tr > th.sorting::after, table.b-table > tfoot > tr > th.
 .table-striped tbody tr:nth-of-type(odd) {
   background-color: #ebecee;
 }
+.table-hover tbody tr:hover {
+  background-color: #ebecee;
+}

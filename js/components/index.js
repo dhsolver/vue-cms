@@ -17,6 +17,7 @@ import GoogleAddressSearch from './GoogleAddressSearch';
 import NextStopDropdown from './NextStopDropdown';
 import FacebookLogin from './FacebookLogin';
 import DatePicker from './DatePicker';
+import LineChart from './LineChart';
 
 // Components that are registered globaly.
 [
@@ -38,6 +39,7 @@ import DatePicker from './DatePicker';
     NextStopDropdown,
     FacebookLogin,
     DatePicker,
+    LineChart,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

@@ -1,6 +1,6 @@
 <template>
     <div class="d-flex mb-3 align-items-baseline">
-        <b-dropdown id="date-dropdown" :text="presetLabel(preset)" class="m-md-2" size="sm">
+        <b-dropdown id="date-dropdown" :text="presetLabel(preset)" class="mr-3" size="sm">
             <b-dropdown-item v-for="item in presets" 
                 :key="item.key"
                 @click="switchPreset(item)">
@@ -93,7 +93,7 @@ export default {
     },
 
     mounted() {
-        this.switchPreset({ key: 'this_week', label: 'This Week (Sun - Today)', start: moment().toDate(), end: moment().toDate() });
+        this.switchPreset({ key: 'this_week', label: 'This Week (Sun - Today)', start: moment().day(0).toDate(), end: moment().toDate() });
     },
 
     created() {
