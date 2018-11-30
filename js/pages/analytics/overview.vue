@@ -85,9 +85,6 @@ export default {
             axios.get(url)
                 .then( ({ data }) => {
                     this.items = data.stops;
-                    // this.items = response.data.map(function (item) {
-                    // })
-
                     this.loading = false
                 })
                 .catch(error => this.loading = false);
@@ -95,11 +92,6 @@ export default {
     },
 
     mounted() {
-        // this.dateRange = {
-        //     start: moment().subtract(6, 'days').toDate(),
-        //     end: moment().toDate(),
-        // };
-        // this.fetch();
     },
 }
 </script>

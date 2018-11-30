@@ -121,12 +121,4 @@ export default {
     min-width: 250px!important;
     border: 0px;
 }
-
-
-.test {
-    border: 1px solid blue;
-    border-radius: 25px;
-    padding: 5px;
-    padding-left: 25px;
-}
 </style>
