@@ -1,13 +1,13 @@
 <template>
     <b-card :header="title"
-        class="card-primary"
+        header-bg-variant="secondary"
     >
         <spinner v-model="loading"></spinner>
 
         <div v-if="! loading">
             <tour-form ref="tourForm" :tour="tour"></tour-form>
 
-            <busy-button variant="info" :busy="saving" @click="update">Save Tour</busy-button>
+            <busy-button variant="secondary" :busy="saving" @click="update">Save Tour</busy-button>
             <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="saving">Delete Tour</busy-button>
         </div>
 

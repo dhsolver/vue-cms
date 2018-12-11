@@ -1,11 +1,11 @@
 <template>
     <b-card header="Tours"
-        class="card-primary"
+        header-bg-variant="secondary"
     >
         <!-- Filters -->
         <b-row class="mb-3">
             <b-col md="6">
-                <button class="btn btn-primary" @click.prevent="prepareAddModal">
+                <button class="btn btn-secondary" @click.prevent="prepareAddModal">
                     <fa :icon="['fas', 'plus']" /> Add Tour
                 </button>
             </b-col>
@@ -28,6 +28,8 @@
                     :sort-desc.sync="sortDesc"
                     :current-page="currentPage"
                     :per-page="perPage"
+                    striped
+                    hover
                 >
                     <template slot="type" slot-scope="{ item }">
                         {{ item.type | capitalize }}
@@ -40,7 +42,7 @@
                     </template>
                     <template slot="actions" slot-scope="{ item }">
                         <router-link
-                                class="btn btn-sm btn-primary"
+                                class="btn btn-sm btn-info"
                                 :to="{ name: 'admin.tour.edit', params: { id: item.id } }"
                         >
                             <fa :icon="['far', 'edit']" />
@@ -51,7 +53,7 @@
                 <!-- Pagination -->
                 <b-row>
                     <b-col md="6" >
-                        <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" />
+                        <b-pagination :total-rows="totalRows" :per-page="perPage" v-model="currentPage" variant="secondary" />
                     </b-col>
                     <b-col md="6" class="text-right">
                         Showing {{ showing }} of {{ totalRows }} results
@@ -70,7 +72,7 @@
             <tour-form ref="tourForm" :tour="currentTour"></tour-form>
             <div slot="modal-footer">
                <b-btn variant="default" @click="addTourModal = false">Close</b-btn>
-               <busy-button :busy="isAdding" variant="info" @click="addTour">Add Tour</busy-button>
+               <busy-button :busy="isAdding" variant="secondary" @click="addTour">Add Tour</busy-button>
             </div>
         </b-modal>
 
@@ -126,10 +128,10 @@ export default {
         totalRows: 0,
 
         fields: {
-            id: { sortable: true },
+            id: { sortable: true, label: 'ID' },
             title: { sortable: true },
             type: { sortable: true },
-            pricing_type: { sortable: true },
+            pricing_type: { sortable: true, label: 'Pricing' },
             created_at: { sortable: true },
             updated_at: {
                 sortable: true, 

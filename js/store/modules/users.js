@@ -49,7 +49,7 @@ export const actions = {
         }
     },
 
-    async fetchUser ({ commit }, id) {
+    async fetchUser ({ commit, rootState }, id) {
         try {
             commit('fetchUserSuccess', {})
             const { data } = await axios.get(rootState.config.urls.admin + `users/${id}`)

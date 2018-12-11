@@ -1,13 +1,13 @@
 <template>
     <b-card :header="title"
-        class="card-primary"
+        header-bg-variant="secondary"
     >
         <spinner v-model="loading"></spinner>
 
         <div v-if="! loading">
             <user-form ref="userForm" :user="user"></user-form>
 
-            <busy-button variant="info" :busy="saving" @click="update">Save User</busy-button>
+            <busy-button variant="secondary" :busy="saving" @click="update">Save User</busy-button>
             <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="saving">Delete User</busy-button>
         </div>
 

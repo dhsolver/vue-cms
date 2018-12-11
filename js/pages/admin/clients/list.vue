@@ -1,11 +1,11 @@
 <template>
     <b-card header="Clients"
-        class="card-primary"
+        header-bg-variant="secondary"
     >
         <!-- Filters -->
         <b-row class="mb-3">
             <b-col md="6">
-                <button class="btn btn-primary" @click.prevent="prepareAddModal">
+                <button class="btn btn-secondary" @click.prevent="prepareAddModal">
                     <fa :icon="['fas', 'plus']" /> Add Client
                 </button>
             </b-col>
@@ -23,18 +23,20 @@
                     :items="items"
                     :fields="fields"
                     :filter="filter"
-                     @filtered="onFiltered"
+                    @filtered="onFiltered"
                     :sort-by.sync="sortBy"
                     :sort-desc.sync="sortDesc"
                     :current-page="currentPage"
                     :per-page="perPage"
+                    striped
+                    hover
                 >
                     <template slot="created_at" slot-scope="{ item }">
                         {{ formatDateTimeFromUTC(item.created_at) }}
                     </template>
                     <template slot="actions" slot-scope="{ item }">
                         <router-link
-                                class="btn btn-sm btn-primary"
+                                class="btn btn-sm btn-info"
                                 :to="{ name: 'admin.client.show', params: { id: item.id } }"
                         >
                             <fa :icon="['far', 'edit']" />
@@ -60,11 +62,11 @@
         </b-row>
 
         <!-- Add Modal -->
-        <b-modal id="addClientModal" :title="addClientModalTitle" v-model="addClientModal">
+        <b-modal id="addClientModal" :title="addClientModalTitle" v-model="addClientModal" header-bg-variant="secondary">
             <client-form ref="clientForm" :client="currentClient"></client-form>
             <div slot="modal-footer">
                <b-btn variant="default" @click="addClientModal = false">Close</b-btn>
-               <busy-button :busy="isAdding" variant="info" @click="addClient">Add Client</busy-button>
+               <busy-button :busy="isAdding" variant="secondary" @click="addClient">Add Client</busy-button>
             </div>
         </b-modal>
 

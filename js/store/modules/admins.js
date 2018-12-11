@@ -43,7 +43,6 @@ export const actions = {
     async fetchAdmins ({ commit, rootState }) {
         try {
             const { data } = await axios.get(rootState.config.urls.admin + 'admins')
-            console.log('wtf');
             let list = data instanceof Array ? data : [];
             commit('fetchAdminsSuccess', { list: data })
         } catch (e) {

@@ -1,11 +1,11 @@
 <template>
     <b-card header="Users"
-        class="card-primary"
+        header-bg-variant="secondary"
     >
         <!-- Filters -->
         <b-row class="mb-3">
             <b-col md="6">
-                <button class="btn btn-primary" @click.prevent="prepareAddModal">
+                <button class="btn btn-secondary" @click.prevent="prepareAddModal">
                     <fa :icon="['fas', 'plus']" /> Add User
                 </button>
             </b-col>
@@ -28,13 +28,15 @@
                     :sort-desc.sync="sortDesc"
                     :current-page="currentPage"
                     :per-page="perPage"
+                    striped
+                    hover
                 >
                     <template slot="created_at" slot-scope="{ item }">
                         {{ formatDateTimeFromUTC(item.created_at) }}
                     </template>
                     <template slot="actions" slot-scope="{ item }">
                         <router-link
-                                class="btn btn-sm btn-primary"
+                                class="btn btn-sm btn-info"
                                 :to="{ name: 'admin.user.show', params: { id: item.id } }"
                         >
                             <fa :icon="['far', 'edit']" />
@@ -64,7 +66,7 @@
             <user-form ref="userForm" :user="currentUser"></user-form>
             <div slot="modal-footer">
                <b-btn variant="default" @click="addUserModal = false">Close</b-btn>
-               <busy-button :busy="isAdding" variant="info" @click="addUser">Add User</busy-button>
+               <busy-button :busy="isAdding" variant="secondary" @click="addUser">Add User</busy-button>
             </div>
         </b-modal>
 
