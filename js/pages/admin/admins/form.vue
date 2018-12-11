@@ -25,6 +25,17 @@
                 <input-help :form="form" field="email" text=""></input-help>
             </b-form-group>
             
+            <b-form-group label="Zipcode:" label-for="zipcode">
+                <b-form-input id="zipcode"
+                    :disabled="form.busy"
+                    type="text"
+                    v-model="form.zipcode"
+                    required
+                    placeholder="Zipcode">
+                </b-form-input>
+                <input-help :form="form" field="zipcode" text=""></input-help>
+            </b-form-group>
+            
             <b-form-group v-if="! hasAdmin" label="Password:" label-for="password">
                 <b-form-input id="password"
                     :disabled="form.busy"
@@ -58,6 +69,7 @@
                 'form': new Form({
                     name: '',
                     email: '',
+                    zipcode: '',
                     password: '',
                 }),
             }
