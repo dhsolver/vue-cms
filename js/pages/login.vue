@@ -140,11 +140,6 @@ export default {
             // Fetch the user.
             await this.$store.dispatch('auth/fetchUser')
 
-            // if (this.user.role === 'admin') {
-            //     this.$router.push({ name: 'admin.dashboard' })
-            //     return;
-            // }
-            
             // Redirect home.
             this.$router.push({ name: 'home' })
         },

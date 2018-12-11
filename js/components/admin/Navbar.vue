@@ -3,16 +3,16 @@
 
     <b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 
-    <router-link :to="{ name: 'admin.dashboard' }" class="navbar-brand">Junket Admin</router-link>
+    <router-link :to="{ name: 'admin.tours' }" class="navbar-brand">Junket Admin</router-link>
 
     <b-collapse is-nav id="nav_collapse">
 
         <!-- Navbar left -->
         <b-navbar-nav>
+            <b-nav-item :to="{ name: 'admin.tours' }" active-class="active">Tours</b-nav-item>
             <b-nav-item :to="{ name: 'admin.clients' }" active-class="active">Clients</b-nav-item>
             <b-nav-item :to="{ name: 'admin.users' }" active-class="active">Users</b-nav-item>
             <b-nav-item :to="{ name: 'admin.admins' }" active-class="active">Admins</b-nav-item>
-            <b-nav-item :to="{ name: 'admin.tours' }" active-class="active">Tours</b-nav-item>
         </b-navbar-nav>
 
         <!-- Right aligned nav items -->

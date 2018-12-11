@@ -6,7 +6,6 @@ import Profile from '../pages/profile';
 
 import NotFound from '../pages/errors/404';
 
-import Dashboard from '../pages/admin/dashboard';
 import Clients from '../pages/admin/clients/list';
 import ClientEdit from '../pages/admin/clients/edit';
 import Users from '../pages/admin/users/list';
@@ -49,7 +48,7 @@ else {
         { path: '/analytics/:id/details', name: 'analytics.details', component: AnalyticsDetails },
         { path: '/analytics/:id/devices', name: 'analytics.devices', component: AnalyticsDevices },
 
-        { path: '/admin/', name: 'admin.dashboard', component: Dashboard },
+        { path: '/admin/', redirect: to => { return '/admin/tours'; } },
         { path: '/admin/clients', name: 'admin.clients', component: Clients },
         { path: '/admin/client/:id', name: 'admin.client.show', component: ClientEdit },
         { path: '/admin/users', name: 'admin.users', component: Users },
