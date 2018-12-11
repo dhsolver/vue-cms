@@ -14,6 +14,18 @@
                 <input-help :form="form" field="name" text=""></input-help>
             </b-form-group>
             
+            <b-form-group label="Organization Name:" label-for="company_name">
+                <b-form-input id="company_name"
+                    :disabled="form.busy"
+                    type="text"
+                    v-model="form.company_name"
+                    required
+                    autofocus
+                    placeholder="Organization Name">
+                </b-form-input>
+                <input-help :form="form" field="company_name" text=""></input-help>
+            </b-form-group>
+            
             <b-form-group label="Email:" label-for="email">
                 <b-form-input id="email"
                     :disabled="form.busy"
