@@ -20,7 +20,6 @@
                     type="text"
                     v-model="form.company_name"
                     required
-                    autofocus
                     placeholder="Organization Name">
                 </b-form-input>
                 <input-help :form="form" field="company_name" text=""></input-help>
@@ -46,6 +45,16 @@
                     placeholder="Zipcode">
                 </b-form-input>
                 <input-help :form="form" field="zipcode" text=""></input-help>
+            </b-form-group>
+            
+            <b-form-group label="Max Number of Junkets:" label-for="tour_limit">
+                <b-form-input id="tour_limit"
+                    :disabled="form.busy"
+                    type="text"
+                    v-model="form.tour_limit"
+                    required>
+                </b-form-input>
+                <input-help :form="form" field="tour_limit" text=""></input-help>
             </b-form-group>
             
             <b-form-group v-if="! hasClient" label="Password:" label-for="password">
@@ -83,6 +92,7 @@
                     email: '',
                     zipcode: '',
                     password: '',
+                    tour_limit: 0,
                 }),
             }
         },
