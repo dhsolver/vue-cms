@@ -2,7 +2,7 @@
     <main>
         <div class="root">
             <div class="fill">
-                <child/>
+                <slot />
             </div>
         </div>
     </main>

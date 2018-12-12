@@ -2,7 +2,7 @@
     <div class="main-layout">
         <navbar></navbar>
         <main class="container mt-4">
-            <child/>
+            <slot />
         </main>
     </div>
 </template>

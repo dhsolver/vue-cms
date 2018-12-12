@@ -6,7 +6,7 @@
                     <spinner v-if="! tour.id" v-model="loading"></spinner>
                     <div v-else>
                         <navbar :tour-id="tourId"></navbar>
-                        <child :tour-id="tourId" />
+                        <slot />
                     </div>
                 </div>
             </div>
