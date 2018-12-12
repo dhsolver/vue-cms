@@ -1,54 +1,47 @@
-@import 'variables';
-
-@import '~bootstrap/scss/bootstrap';
-
-@import 'elements/transitions';
-
-.card-header.bg-secondary {
-  color: #fff;
-}
-thead.secondary {
-  background-color: theme-color('secondary');
-  color: #fff;
-}
-thead.secondary th {
-  font-weight: 400;
-}
-
-.btn-primary, .btn-info, .btn-success {
-  color:#fff; 
-}
-
-.page-item.active .page-link {
-  background-color: theme-color('secondary');
-  border-color: theme-color('secondary');
-}
-
-.page-link {
-  color: theme-color('secondary');
-}
-.page-link:hover {
-  color: theme-color('secondary');
-}
-
-.modal header.bg-secondary {
-  color: #fff;
-  background-color: theme-color('secondary');
-}
-
-.modal header.bg-secondary .close {
-  color: #fff;
-}
-
-#alerts {
-  position: -webkit-sticky;
-  position: sticky;
-  z-index: 9999;
-  right: 25px;
-  top: 25px;
-}
-#alerts .alert { 
-  position: absolute;
-  right: 50px;
-  max-width: 500px;
+.admin-layout {
+    .card-header.bg-secondary {
+        color: #fff;
+    }
+    thead.secondary {
+        background-color: theme-color('secondary');
+        color: #fff;
+    }
+    thead.secondary th {
+        font-weight: 400;
+    }
+    
+    
+    .page-item.active .page-link {
+        background-color: theme-color('secondary');
+        border-color: theme-color('secondary');
+    }
+    
+    .page-link {
+        color: theme-color('secondary');
+    }
+    .page-link:hover {
+        color: theme-color('secondary');
+    }
+    
+    .modal header.bg-secondary {
+        color: #fff;
+        background-color: theme-color('secondary');
+    }
+    
+    .modal header.bg-secondary .close {
+        color: #fff;
+    }
+    
+    #alerts {
+        position: -webkit-sticky;
+        position: sticky;
+        z-index: 9999;
+        right: 25px;
+        top: 25px;
+    }
+    #alerts .alert { 
+        position: absolute;
+        right: 50px;
+        max-width: 500px;
+    }
 }

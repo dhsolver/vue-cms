@@ -11,6 +11,7 @@ export const getters = {
     token: state => state.token,
     check: state => state.user.id !== undefined,
     isAdmin: state => state.user && (state.user.role == 'admin' || state.user.role == 'superadmin'),
+    id: state => state.user.id,
 }
 
 export const mutations = {

@@ -1,5 +1,5 @@
 <template>
-    <main>
+    <main class="default-layout analytics-layout">
         <div class="root analytics">
             <div class="fill">
                 <div class="wrapper shadow-lg">
@@ -55,5 +55,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss" src="../../sass/app.scss"></style>

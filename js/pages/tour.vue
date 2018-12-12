@@ -162,6 +162,8 @@ export default {
             route: 'routes/current',
             clickedPoint: 'map/clickedPoint',
             stopFormHasChanges: 'tours/getStopChanges',
+            isAdmin: 'auth/isAdmin',
+            authId: 'auth/id',
         }),
 
         formTransition() {
@@ -178,8 +180,8 @@ export default {
                 return;
             }
 
-            if (this.$store.getters['auth/isAdmin']) {
-                window.location = '/#/admin/tours';
+            if (this.isAdmin && this.tour.user_id != this.authId) {
+                this.$router.push({ name: 'admin.tours' });
                 return;
             }
 

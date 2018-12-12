@@ -1,5 +1,5 @@
 <template>
-    <div class="main-layout">
+    <div class="admin-layout">
         <navbar></navbar>
         <main class="container mt-4">
             <slot />
@@ -19,5 +19,3 @@ export default {
     },
 }
 </script>
-
-<style lang="scss" src="../../sass/admin.scss"></style>

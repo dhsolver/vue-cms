@@ -1,82 +1,82 @@
-// @import 'variables';
+.analytics-layout {
+    .topbar {
+        background-color: $white;
+        display: flex;
+        color: $white;
+    }
 
-.topbar {
-  background-color: $white;
-  display: flex;
-  color: $white;
-}
+    .topbar .back-btn {
+        cursor: pointer;
+        background-color: $blue;
+        padding: 15px;
+        margin-right: 5px;
+        width: 110px;
+        text-align: center;
+    }
 
-.topbar .back-btn {
-  cursor: pointer;
-  background-color: $blue;
-  padding: 15px;
-  margin-right: 5px;
-  width: 110px;
-  text-align: center;
-}
+    .topbar .nav-container {
+        background-color: $darkBlue;
+        padding: 15px;
+        padding-left: 25px;
+        flex: 1;
+    }
 
-.topbar .nav-container {
-  background-color: $darkBlue;
-  padding: 15px;
-  padding-left: 25px;
-  flex: 1;
-}
+    .subnav {
+        display: flex;
+        margin-left: 115px;
+        background-color: $white;
+        flex-direction: row!important; 
+    }
 
-.subnav {
-  display: flex;
-  margin-left: 115px;
-  background-color: $white;
-  flex-direction: row!important; 
-}
+    .subnav .subnav-item {
+        color: $darkBlue;
+        font-size: .8rem;
+        cursor: pointer;
+        background-color: $bg-grey;
+        margin-top: 1px;
+        margin-right: 1px;
+    }
+    .subnav-item .nav-link { 
+        padding: 7px;
+        padding-right: 15px;
+        padding-left: 15px;
+    }
+    .subnav-item .nav-link.active {
+        background-color: $darkBlue;
+        color: $white;
+    }
+    .subnav .extra { flex: 1; }
+        
+    .root .wrapper { background-color: $white; overflow-y: auto; }
+    .root .content { 
+        margin-top: 25px;
+        // text-align: center;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
 
-.subnav .subnav-item {
-  color: $darkBlue;
-  font-size: .8rem;
-  cursor: pointer;
-  background-color: $bg-grey;
-  margin-top: 1px;
-  margin-right: 1px;
-}
-.subnav-item .nav-link { 
-  padding: 7px;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-.subnav-item .nav-link.active {
-  background-color: $darkBlue;
-  color: $white;
-}
-.subnav .extra { flex: 1; }
-  
-.root.analytics .wrapper { background-color: $white; overflow-y: auto; }
-.root.analytics .content { 
-  margin-top: 25px;
-  // text-align: center;
-  margin-left: 15px;
-  margin-right: 15px;
-}
+    thead {
+        background-color: #3d4658;
+        color: #fff;
+    }
 
-thead {
-  background-color: #3d4658;
-  color: #fff;
-}
+    table.b-table > thead > tr > th.sorting::before, table.b-table > tfoot > tr > th.sorting::before {
+        right: 1.5em;
+        content: '\25b2';
+    }
 
-table.b-table > thead > tr > th.sorting::before, table.b-table > tfoot > tr > th.sorting::before {
-  right: 1.5em;
-  content: '\25b2';
-}
+    table.b-table > thead > tr > th.sorting::after, table.b-table > tfoot > tr > th.sorting::after {
+        right: .5em;
+        content: '\25bc';
+    }
 
-table.b-table > thead > tr > th.sorting::after, table.b-table > tfoot > tr > th.sorting::after {
-  right: .5em;
-  content: '\25bc';
-}
+    .table th { padding: .5rem; text-transform: uppercase; font-weight: 400 }
+    .table td { padding: .5rem; color: #3c4657; font-weight: 600 }
 
-.table th { padding: .5rem; text-transform: uppercase; font-weight: 400 }
-.table td { padding: .5rem; color: #3c4657; font-weight: 600 }
-
-.table-striped tbody tr:nth-of-type(odd) {
-  background-color: #ebecee;
-}
-.table-hover tbody tr:hover {
-  background-color: #ebecee;
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #ebecee;
+    }
+    .table-hover tbody tr:hover {
+        background-color: #ebecee;
+    }
 }
