@@ -41,12 +41,15 @@
                         {{ formatDateTimeFromUTC(item.created_at) }}
                     </template>
                     <template slot="actions" slot-scope="{ item }">
-                        <router-link
+                        <b-btn variant="info" size="sm" @click="editTour(item.id)">
+                            <fa :icon="['far', 'edit']" />
+                        </b-btn>
+                        <!-- <router-link
                                 class="btn btn-sm btn-info"
                                 :to="{ name: 'admin.tour.edit', params: { id: item.id } }"
                         >
                             <fa :icon="['far', 'edit']" />
-                        </router-link>
+                        </router-link> -->
                     </template>
                 </b-table>
 
@@ -148,6 +151,10 @@ export default {
     }),
 
     methods: {
+        editTour(id) {
+            window.location = `/#/tour/${id}`;
+        },
+
         prepareAddModal() {
             this.$refs.tourForm.reset(); 
             this.addTourModal = true 

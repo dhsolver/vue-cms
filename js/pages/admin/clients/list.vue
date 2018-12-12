@@ -41,6 +41,9 @@
                         >
                             <fa :icon="['far', 'edit']" />
                         </router-link>
+                        <b-btn variant="secondary" size="sm">
+                            <fa :icon="['fas', 'sign-in-alt']" />
+                        </b-btn>
                     </template>
                 </b-table>
 

@@ -178,6 +178,11 @@ export default {
                 return;
             }
 
+            if (this.$store.getters['auth/isAdmin']) {
+                window.location = '/#/admin/tours';
+                return;
+            }
+
             this.$router.push({ name: 'home' });
         },
 
