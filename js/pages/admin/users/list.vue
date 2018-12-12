@@ -126,6 +126,7 @@ export default {
                 id: { sortable: true },
                 name: { sortable: true },
                 email: { sortable: true },
+                zipcode: { sortable: true },
                 created_at: {
                     sortable: true,
                     label: 'Joined',
