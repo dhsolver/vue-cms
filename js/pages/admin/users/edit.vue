@@ -4,11 +4,18 @@
     >
         <spinner v-model="loading"></spinner>
 
-        <div v-if="! loading">
+        <div v-if="! loading" class="d-flex flex-col">
+            <div class="mb-1 ml-auto">
+                <busy-button variant="light" size="sm" :busy="changingRole.client" @click="changeRole('client')" :disabled="busy">Promote User to Client</busy-button>
+                <busy-button variant="light" size="sm" :busy="changingRole.admin" @click="changeRole('admin')" :disabled="busy">Promote User to Admin</busy-button>
+            </div>
+
             <user-form ref="userForm" :user="user"></user-form>
 
-            <busy-button variant="secondary" :busy="saving" @click="update">Save User</busy-button>
-            <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="saving">Delete User</busy-button>
+            <div>
+                <busy-button variant="secondary" :busy="saving" @click="update" :disabled="busy">Save User</busy-button>
+                <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete User</busy-button>
+            </div>
         </div>
 
         <!-- Confirmation modal -->
@@ -16,6 +23,10 @@
             Are you sure you want to delete {{ user.name }}?
         </confirm-modal>
 
+        <!-- Confirmation modal -->
+        <confirm-modal ref="confirmChangeRole">
+            Are you sure you want to change {{ user.name }}'s account type to {{ newRole | capitalize }}?
+        </confirm-modal>
     </b-card>
 </template>
 
@@ -31,9 +42,12 @@ export default {
     components: { UserForm },
 
     data: () => ({
+        busy: false,
         loading: true,
         saving: false,
         deleting: false,
+        changingRole: { client: false, admin: false },
+        newRole: '',
     }),
 
     computed: {
@@ -47,29 +61,48 @@ export default {
     },
 
     methods: {
+        changeRole(role) {
+            this.newRole = role;
+            this.$refs.confirmChangeRole.confirm(() => {
+                this.busy = true;
+                this.changingRole[role] = true;
+                axios.patch(this.config.urls.admin + `change-role/${this.user.id}`, { role })
+                    .then( ({data}) => {
+                        // redirect to new role page
+                        alerts.addMessage('success', 'Users role has been changed.');
+                        this.$router.push({ name: `admin.${role}.show`, params: { id: this.user.id } });
+                    }).catch( e => {
+                        this.changingRole[role] = false;
+                        this.busy = false;
+                    });
+            });
+        },
+        
         update() {
             this.saving = true;
+            this.busy = true;
             this.$refs.userForm.submit()
                 .then( ({data}) => {
                     this.$store.commit('users/fetchUserSuccess', data.data);
                     this.saving = false;
+                    this.busy = false;
                 }).catch( e => {
                     this.saving = false;
+                    this.busy = false;
                 });
         },
         
         destroy() {
             this.$refs.confirmDelete.confirm(() => {
+                this.busy = true;
                 this.deleting = true;
                 let f = new Form({});
-                console.log(this.$refs.userForm.url);
                 f.delete(this.$refs.userForm.url)
                     .then( ({ data }) => {
-                        this.deleting = false;
-                        console.log('redirect back');
                         this.$router.push({ name: 'admin.users' });
                     }).catch( e => {
                         this.deleting = false;
+                        this.busy = false;
                     });
             });
         },
@@ -77,6 +110,10 @@ export default {
 
     async mounted () {
         await this.$store.dispatch('users/fetchUser', this.$route.params.id);
+
+        if (! this.user.id) {
+            this.$router.push({ name: 'admin.users' });
+        }
         this.loading = false;
     },
 }

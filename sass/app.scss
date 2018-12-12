@@ -42,6 +42,7 @@ main,
 .btn-primary, .btn-info, .btn-success, .btn-secondary {
     color:#fff; 
 }
+.btn-warning { color: #3e4759 }
 
 a { color: $darkBlue; text-decoration: none; font-weight: 600; }
 a:hover { color: $blue; text-decoration: none }
