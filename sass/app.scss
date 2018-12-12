@@ -49,6 +49,19 @@ a:active { color: $blue; text-decoration: none }
 
 .dropdown-item:active { background-color: $darkBlue }
 
+#alerts {
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 9999;
+    right: 25px;
+    top: 25px;
+}
+#alerts .alert { 
+    position: absolute;
+    right: 50px;
+    max-width: 500px;
+}
+
 @import 'custom';
 
 @import 'admin';
