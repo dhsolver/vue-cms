@@ -48,6 +48,14 @@
                 <input-help :form="form" field="password" text=""></input-help>
             </b-form-group>
             
+            <b-form-group label="Subscription Override:" label-for="subscribe_override">
+                <b-form-checkbox v-model="form.subscribe_override"
+                                unchecked-value="0">
+                Force Subscription
+                </b-form-checkbox>
+                <input-help :form="form" field="subscribe_override" text="When checked, this will force the mobile app to treat this user as subscribed without requiring payment."></input-help>
+            </b-form-group>
+            
         </b-form>
     </div>
 </template>
@@ -71,6 +79,7 @@
                     email: '',
                     zipcode: '',
                     password: '',
+                    subscribe_override: 0,
                 }),
             }
         },
