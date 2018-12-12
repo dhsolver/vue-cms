@@ -34,6 +34,9 @@
                     <template slot="created_at" slot-scope="{ item }">
                         {{ formatDateTimeFromUTC(item.created_at) }}
                     </template>
+                    <template slot="tours_count" slot-scope="{ item }">
+                        {{ item.tours_count }} / {{ item.tour_limit }}
+                    </template>
                     <template slot="actions" slot-scope="{ item }">
                         <router-link
                                 class="btn btn-sm btn-info"
@@ -121,16 +124,17 @@ export default {
             addClientModal: false,
             addClientModalTitle: 'Add Client',
             totalRows: 0,
-
             fields: {
                 id: { sortable: true },
                 name: { sortable: true },
                 email: { sortable: true },
+                tours_count: { sortable: true, label: 'Tours' },
                 created_at: {
                     sortable: true,
-                    label: 'Signup Date',
+                    label: 'Joined',
                     formatter: val => this.formatDateTimeFromUTC(val),
                 },
+                company_name: { sortable: true, label: 'Organization' },
                 actions: {},
             },
             filter: null,

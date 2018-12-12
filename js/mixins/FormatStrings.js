@@ -5,6 +5,6 @@ export default {
         },
         boolToYesNo(bool) {
             return bool ? 'Yes' : 'No';
-        }
+        },
     }
 }

@@ -128,7 +128,7 @@ export default {
                 email: { sortable: true },
                 created_at: {
                     sortable: true,
-                    label: 'Signup Date',
+                    label: 'Joined',
                     formatter: val => this.formatDateTimeFromUTC(val),
                 },
                 actions: {},

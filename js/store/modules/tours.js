@@ -287,7 +287,7 @@ export const actions = {
     async fetchTours ({ commit }) {
         try {
             const { data } = await axios.get(state.url + 'tours')
-
+            
             commit('fetchToursSuccess', { list: data })
         } catch (e) {
             commit('fetchToursFailure')

@@ -40,6 +40,12 @@
                     <template slot="created_at" slot-scope="{ item }">
                         {{ formatDateTimeFromUTC(item.created_at) }}
                     </template>
+                    <template slot="status" slot-scope="{ item }">
+                        {{ item.status | capitalize }}
+                    </template>
+                    <template slot="creator.name" slot-scope="{ item }">
+                        <router-link :to="{ name: 'admin.client.show', params: { id: item.creator.id } }">{{ item.creator.name }}</router-link>
+                    </template>
                     <template slot="actions" slot-scope="{ item }">
                         <router-link
                                 class="btn btn-sm btn-info"
@@ -131,23 +137,27 @@ export default {
             fields: {
                 id: { sortable: true, label: 'ID' },
                 title: { sortable: true },
+                owner: { sortable: true, key: 'creator.name', label: 'Owner' },
                 type: { sortable: true },
                 pricing_type: { sortable: true, label: 'Pricing' },
+                stops_count: { sortable: true, label: 'Stops' },
+                length: { sortable: true, formatter: val => `${val} mi` },
+                status: { sortable: true },
                 created_at: { 
                     sortable: true, 
                     label: 'Created',
                     formatter: val => this.formatDateTimeFromUTC(val),
                 },
-                updated_at: {
-                    sortable: true, 
-                    key: 'updated_at',
-                    label: 'Updated',
-                    formatter: val => this.formatDateTimeFromUTC(val),
-                },
+                // updated_at: {
+                //     sortable: true, 
+                //     key: 'updated_at',
+                //     label: 'Updated',
+                //     formatter: val => this.formatDateTimeFromUTC(val),
+                // },
                 published_at: {
                     key: 'published_at',
                     sortable: true, 
-                    label: 'Updated',
+                    label: 'Published',
                     formatter: val => val ? this.formatDateTimeFromUTC(val) : 'N/A',
                 },
                 actions: {},

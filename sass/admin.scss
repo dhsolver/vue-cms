@@ -1,7 +1,12 @@
 .admin-layout {
+    // font-size: 0.8rem!important;
+    // .btn { font-size: 0.8rem }
+    .container { max-width: 100% }
+
     .card-header.bg-secondary {
         color: #fff;
     }
+
     thead.secondary {
         background-color: theme-color('secondary');
         color: #fff;
@@ -9,7 +14,6 @@
     thead.secondary th {
         font-weight: 400;
     }
-    
     
     .page-item.active .page-link {
         background-color: theme-color('secondary');
@@ -27,7 +31,6 @@
         color: #fff;
         background-color: theme-color('secondary');
     }
-    
     .modal header.bg-secondary .close {
         color: #fff;
     }
