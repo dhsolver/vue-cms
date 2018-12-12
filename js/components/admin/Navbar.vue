@@ -11,7 +11,7 @@
         <b-navbar-nav>
             <b-nav-item :to="{ name: 'admin.tours' }" active-class="active">Tours</b-nav-item>
             <b-nav-item :to="{ name: 'admin.clients' }" active-class="active">Clients</b-nav-item>
-            <b-nav-item :to="{ name: 'admin.users' }" active-class="active">Users</b-nav-item>
+            <b-nav-item :to="{ name: 'admin.users' }" active-class="active">Members</b-nav-item>
             <b-nav-item :to="{ name: 'admin.admins' }" active-class="active">Admins</b-nav-item>
         </b-navbar-nav>
 

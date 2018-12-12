@@ -6,15 +6,15 @@
 
         <div v-if="! loading" class="d-flex flex-col">
             <div class="mb-1 ml-auto">
-                <busy-button variant="light" size="sm" :busy="changingRole.client" @click="changeRole('client')" :disabled="busy">Promote User to Client</busy-button>
-                <busy-button variant="light" size="sm" :busy="changingRole.admin" @click="changeRole('admin')" :disabled="busy">Promote User to Admin</busy-button>
+                <busy-button variant="light" size="sm" :busy="changingRole.client" @click="changeRole('client')" :disabled="busy">Promote Member to Client</busy-button>
+                <busy-button variant="light" size="sm" :busy="changingRole.admin" @click="changeRole('admin')" :disabled="busy">Promote Member to Admin</busy-button>
             </div>
 
             <user-form ref="userForm" :user="user"></user-form>
 
             <div>
-                <busy-button variant="secondary" :busy="saving" @click="update" :disabled="busy">Save User</busy-button>
-                <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete User</busy-button>
+                <busy-button variant="secondary" :busy="saving" @click="update" :disabled="busy">Save Member</busy-button>
+                <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete Member</busy-button>
             </div>
         </div>
 
@@ -56,7 +56,7 @@ export default {
         }),
 
         title() {
-            return "Edit User: " + this.user.name;
+            return "Edit Member: " + this.user.name;
         },
     },
 

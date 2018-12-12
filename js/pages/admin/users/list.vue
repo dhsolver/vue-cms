@@ -1,12 +1,12 @@
 <template>
-    <b-card header="Users"
+    <b-card header="Members"
         header-bg-variant="secondary"
     >
         <!-- Filters -->
         <b-row class="mb-3">
             <b-col md="6">
                 <button class="btn btn-secondary" @click.prevent="prepareAddModal">
-                    <fa :icon="['fas', 'plus']" /> Add User
+                    <fa :icon="['fas', 'plus']" /> Add Member
                 </button>
             </b-col>
             <b-col md="6">
@@ -66,7 +66,7 @@
             <user-form ref="userForm" :user="currentUser"></user-form>
             <div slot="modal-footer">
                <b-btn variant="default" @click="addUserModal = false">Close</b-btn>
-               <busy-button :busy="isAdding" variant="secondary" @click="addUser">Add User</busy-button>
+               <busy-button :busy="isAdding" variant="secondary" @click="addUser">Add Member</busy-button>
             </div>
         </b-modal>
 
@@ -88,7 +88,7 @@ export default {
     },
 
     metaInfo() {
-        return { title: 'Users' }
+        return { title: 'Members' }
     },
     
     mixins: [ FormatsDates ],
@@ -119,7 +119,7 @@ export default {
             loading: true,
             isAdding: false,
             addUserModal: false,
-            addUserModalTitle: 'Add User',
+            addUserModalTitle: 'Add Member',
             totalRows: 0,
 
             fields: {

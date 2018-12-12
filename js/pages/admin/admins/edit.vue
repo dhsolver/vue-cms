@@ -6,7 +6,7 @@
 
         <div v-if="! loading" class="d-flex flex-col">
             <div class="mb-1 ml-auto">
-                <busy-button variant="light" size="sm" :busy="changingRole.user" @click="changeRole('user')" :disabled="busy">Demote Admin to Mobile User</busy-button>
+                <busy-button variant="light" size="sm" :busy="changingRole.user" @click="changeRole('user')" :disabled="busy">Demote Admin to Member</busy-button>
                 <busy-button variant="light" size="sm" :busy="changingRole.client" @click="changeRole('client')" :disabled="busy">Demote Admin to Client</busy-button>
             </div>
 
