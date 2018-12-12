@@ -53,6 +53,9 @@
                         >
                             <fa :icon="['far', 'edit']" />
                         </router-link>
+                        <b-btn variant="secondary" size="sm" @click="transferTour(item)">
+                            <fa :icon="['fas', 'user-edit']" />
+                        </b-btn>
                     </template>
                 </b-table>
 
@@ -79,6 +82,27 @@
             <div slot="modal-footer">
                <b-btn variant="default" @click="addTourModal = false">Close</b-btn>
                <busy-button :busy="isAdding" variant="secondary" @click="addTour">Add Tour</busy-button>
+            </div>
+        </b-modal>
+
+        <b-modal id="transferModal" title="Transfer Tour To Another Client" v-model="transferModal">
+            <div class="mb-2"><b>Transfer "{{ tour.title }}"</b></div>
+
+            <form>
+                <b-form-group label="Transfer to Client:" label-for="user_id">    
+                    <b-form-select 
+                        v-model="transferForm.user_id" 
+                        :disabled="isTransfering"
+                        class="mb-3">
+                        <option value="">-- Select a Client --</option>
+                        <option v-for="item in clients" :value="item.id" :key="item.id">{{ item.name }}</option>
+                    </b-form-select>
+                    <input-help :form="transferForm" field="user_id" text=""></input-help>
+                </b-form-group>
+            </form>
+            <div slot="modal-footer">
+               <b-btn variant="default" @click="transferModal = false">Cancel</b-btn>
+               <busy-button :busy="isTransfering" variant="secondary" @click="transferTour(tour, false)">Transfer Tour</busy-button>
             </div>
         </b-modal>
 
@@ -109,6 +133,8 @@ export default {
         ...mapGetters({
             items: 'tours/list',
             itemCount: 'tours/count',
+            tour: 'tours/current',
+            clients: 'clients/dropdown',
         }),
 
         showing() {
@@ -133,6 +159,11 @@ export default {
             addTourModal: false,
             addTourModalTitle: 'Add Tour',
             totalRows: 0,
+            transferModal: false,
+            isTransfering: false,
+            transferForm: new Form({
+                user_id: null,
+            }),
 
             fields: {
                 id: { sortable: true, label: 'ID' },
@@ -172,6 +203,37 @@ export default {
     },
 
     methods: {
+        async fetchTours() {
+            this.loading = true;
+            this.$store.commit('tours/setUrl', this.config.urls.admin);
+            this.$store.commit('tours/clearCurrentTour');
+            await this.$store.dispatch('tours/fetchTours');
+            this.totalRows = this.itemCount;
+            this.loading = false;
+        },
+
+        async transferTour(tour, modal = true) {
+            if (modal) {
+                this.$store.commit('tours/setCurrent', tour);
+                this.transferForm.user_id = tour.user_id;
+                this.transferModal = true;
+                return;
+            }
+
+            this.isTransfering = true;
+
+            this.transferForm.patch(this.config.urls.admin + `tours/${tour.id}/transfer`)
+                .then( ({ data }) => {
+                    this.fetchTours();
+                    this.isTransfering = false;
+                    this.transferModal = false;
+                })
+                .catch(e => {
+                    this.isTransfering = false;
+                    this.transferModal = false;
+                });
+        },
+
         prepareAddModal() {
             this.$refs.tourForm.reset(); 
             this.addTourModal = true 
@@ -205,14 +267,9 @@ export default {
         },
     },
 
-    async created() {
-        this.$store.commit('tours/setUrl', this.config.urls.admin);
-        console.log(this.config.urls.admin);
-        this.$store.commit('tours/clearCurrentTour');
-        await this.$store.dispatch('tours/fetchTours');
-        this.totalRows = this.itemCount;
-        this.loading = false;
+    async mounted() {
+        await this.fetchTours();
+        await this.$store.dispatch('clients/fetchDropdown');
     },
-
 }
 </script>

@@ -180,7 +180,7 @@ export default {
         },
     },
 
-    async created() {
+    async mounted() {
         await this.$store.dispatch('clients/fetchClients');
         this.totalRows = this.itemCount;
         this.loading = false;

@@ -2,17 +2,23 @@ import axios from 'axios';
 import Vue from 'vue';
 
 export const state = {
+    dropdown: [],
     list: [],
     current: {},
 }
 
 export const getters = {
     list: state => state.list,
+    dropdown: state => state.dropdown,
     count: state => state.list.length,
     current: state => state.current,
 }
 
 export const mutations = {
+    setDropdown(state, { list }) {
+        state.dropdown = list
+    },
+
     fetchClientsSuccess(state, { list }) {
         state.list = list
     },
@@ -58,6 +64,16 @@ export const actions = {
         } catch (e) {
             console.log(e);
             commit('fetchClientFailure')
+        }
+    },
+
+    async fetchDropdown ({ commit, rootState }) {
+        try {
+            const { data } = await axios.get(rootState.config.urls.admin + 'clients?dropdown=1')
+
+            commit('setDropdown', { list: data })
+        } catch (e) {
+            commit('setDropdown', { list: [] })
         }
     },
 }
