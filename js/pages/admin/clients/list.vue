@@ -114,31 +114,34 @@ export default {
         }
     },
 
-    data: () => ({
-        loading: true,
-        isAdding: false,
-        addClientModal: false,
-        addClientModalTitle: 'Add Client',
-        totalRows: 0,
+    data() {
+        return {
+            loading: true,
+            isAdding: false,
+            addClientModal: false,
+            addClientModalTitle: 'Add Client',
+            totalRows: 0,
 
-        fields: {
-            id: { sortable: true },
-            name: { sortable: true },
-            email: { sortable: true },
-            created_at: {
-                sortable: true,
-                label: 'Signup Date',
+            fields: {
+                id: { sortable: true },
+                name: { sortable: true },
+                email: { sortable: true },
+                created_at: {
+                    sortable: true,
+                    label: 'Signup Date',
+                    formatter: val => this.formatDateTimeFromUTC(val),
+                },
+                actions: {},
             },
-            actions: {},
-        },
-        filter: null,
-        sortBy: 'name',
-        sortDesc: false,
-        currentClient: {},
-        perPage: 25,
-        currentPage: 1,
-    }),
-
+            filter: null,
+            sortBy: 'name',
+            sortDesc: false,
+            currentClient: {},
+            perPage: 25,
+            currentPage: 1,
+        };
+    },
+    
     methods: {
         prepareAddModal() {
             this.$refs.clientForm.reset(); 

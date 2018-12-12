@@ -120,32 +120,46 @@ export default {
         }
     },
 
-    data: () => ({
-        loading: true,
-        isAdding: false,
-        addTourModal: false,
-        addTourModalTitle: 'Add Tour',
-        totalRows: 0,
+    data() {
+        return {
+            loading: true,
+            isAdding: false,
+            addTourModal: false,
+            addTourModalTitle: 'Add Tour',
+            totalRows: 0,
 
-        fields: {
-            id: { sortable: true, label: 'ID' },
-            title: { sortable: true },
-            type: { sortable: true },
-            pricing_type: { sortable: true, label: 'Pricing' },
-            created_at: { sortable: true },
-            updated_at: {
-                sortable: true, 
-                label: 'Last Update',
+            fields: {
+                id: { sortable: true, label: 'ID' },
+                title: { sortable: true },
+                type: { sortable: true },
+                pricing_type: { sortable: true, label: 'Pricing' },
+                created_at: { 
+                    sortable: true, 
+                    label: 'Created',
+                    formatter: val => this.formatDateTimeFromUTC(val),
+                },
+                updated_at: {
+                    sortable: true, 
+                    key: 'updated_at',
+                    label: 'Updated',
+                    formatter: val => this.formatDateTimeFromUTC(val),
+                },
+                published_at: {
+                    key: 'published_at',
+                    sortable: true, 
+                    label: 'Updated',
+                    formatter: val => val ? this.formatDateTimeFromUTC(val) : 'N/A',
+                },
+                actions: {},
             },
-            actions: {},
-        },
-        filter: null,
-        sortBy: 'title',
-        sortDesc: false,
-        currentTour: {},
-        perPage: 25,
-        currentPage: 1,
-    }),
+            filter: null,
+            sortBy: 'title',
+            sortDesc: false,
+            currentTour: {},
+            perPage: 25,
+            currentPage: 1,
+        };
+    },
 
     methods: {
         prepareAddModal() {
