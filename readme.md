@@ -39,7 +39,7 @@ npm run hot-ssl
 
 3. Point a webserver at the contents of the /public directory.
 
-You will likely have issues running https in chrome.  Adding the ssl cert to keychain should resolve this:
+You will likely have issues running https in chrome.  Adding the SSL cert to keychain should resolve this:
 
 ```
 sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain private.crt
@@ -50,11 +50,17 @@ sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keyc
 The front end SPA is published to an S3 bucket, which is distributed via CloudFront.  
 Reference on S3/CloudFront setup: [S3 Static Sites](https://gist.github.com/bradwestfall/b5b0e450015dbc9b4e56e5f398df48ff)
 
-Updating the files on the S3 bucket alone will not make the changes live.  The files need to be invalidated on the CDN so that they can then be updated.
+Note: Updating the files on the S3 bucket alone will not make the changes live.  The files need to be invalidated on the CDN so that they can then be updated.
+
+#### Deployment NPM Script
+
+There is a deployment NPM script to handle this task, but there are assumptions for the local AWS profile and the CloudFront distribution ID.  You may have to edit these values in the package.json file.
+
+**This requires the [aws-cli](https://aws.amazon.com/cli/)
 
 1. Make sure URLs are set properly in the .env file
 
-2. Run deploy script.  This requires the [aws-cli](https://aws.amazon.com/cli/) and assumes a local aws profile exists with the name 'junket'.
+2. Run deploy script
 
 ```
 npm run deploy
