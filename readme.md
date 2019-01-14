@@ -54,9 +54,7 @@ Note: Updating the files on the S3 bucket alone will not make the changes live. 
 
 #### Deployment NPM Script
 
-There is a deployment NPM script to handle this task, but there are assumptions for the local AWS profile and the CloudFront distribution ID.  You may have to edit these values in the package.json file.
-
-**This requires the [aws-cli](https://aws.amazon.com/cli/)
+There is a deployment NPM script that utilizes the [aws-cli](https://aws.amazon.com/cli/) to handle this task.   There are assumptions hard coded into the script for the local AWS profile name and the CloudFront distribution ID.  You may have to edit these values in the package.json file.
 
 1. Make sure URLs are set properly in the .env file
 
