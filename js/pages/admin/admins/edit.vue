@@ -5,9 +5,13 @@
         <spinner v-model="loading"></spinner>
 
         <div v-if="! loading" class="d-flex flex-col">
-            <div class="mb-1 ml-auto">
+            <div v-if="admin.active" class="mb-1 ml-auto">
                 <busy-button variant="light" size="sm" :busy="changingRole.user" @click="changeRole('user')" :disabled="busy">Demote Admin to Member</busy-button>
                 <busy-button variant="light" size="sm" :busy="changingRole.client" @click="changeRole('client')" :disabled="busy">Demote Admin to Client</busy-button>
+                <busy-button variant="light" size="sm" :busy="disablingAccount" @click="disableAccount()" :disabled="busy">Disable Account</busy-button>
+            </div>
+            <div v-else class="mb-1 ml-auto">
+                <busy-button variant="success" size="sm" :busy="disablingAccount" @click="enableAccount()" :disabled="busy">Re-activate Account</busy-button>
             </div>
 
             <admin-form ref="adminForm" :admin="admin"></admin-form>
@@ -53,6 +57,7 @@ export default {
         changingRole: { user: false, client: false },
         newRole: '',
         changePasswordModal: false,
+        disablingAccount: false,
     }),
 
     computed: {
@@ -66,6 +71,30 @@ export default {
     },
 
     methods: {
+        enableAccount() {
+            this.disablingAccount = true;
+            axios.patch(this.config.urls.admin + `reactivate/${this.admin.id}`)
+                .then( ({ data }) => {
+                    this.$store.commit('admins/fetchAdminSuccess', data.data);
+                    this.disablingAccount = false;
+                })
+                .catch(e => {
+                    this.disablingAccount = false;
+                })
+        },
+        
+        disableAccount() {
+            this.disablingAccount = true;
+            axios.patch(this.config.urls.admin + `deactivate/${this.admin.id}`)
+                .then( ({ data }) => {
+                    this.$store.commit('admins/fetchAdminSuccess', data.data);
+                    this.disablingAccount = false;
+                })
+                .catch(e => {
+                    this.disablingAccount = false;
+                })
+        },
+
         changeRole(role) {
             this.newRole = role;
             this.$refs.confirmChangeRole.confirm(() => {

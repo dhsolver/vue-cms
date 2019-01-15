@@ -132,6 +132,7 @@ export default {
                     label: 'Joined',
                     formatter: val => this.formatDateTimeFromUTC(val),
                 },
+                active: { sortable: true, formatter: val => val == 1 ? 'Yes' : 'No' },
                 actions: {},
             },
             filter: null,

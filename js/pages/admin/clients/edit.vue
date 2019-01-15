@@ -5,17 +5,21 @@
         <spinner v-model="loading"></spinner>
 
         <div v-if="! loading" class="d-flex flex-col">
-            <div class="mb-1 ml-auto">
+            <div v-if="client.active" class="mb-1 ml-auto">
                 <busy-button variant="light" size="sm" :busy="changingRole.user" @click="changeRole('user')" :disabled="busy">Demote Client to Member</busy-button>
                 <busy-button variant="light" size="sm" :busy="changingRole.admin" @click="changeRole('admin')" :disabled="busy">Promote Client to Admin</busy-button>
+                <busy-button variant="light" size="sm" :busy="disablingAccount" @click="disableAccount()" :disabled="busy">Disable Account</busy-button>
+            </div>
+            <div v-else class="mb-1 ml-auto">
+                <busy-button variant="success" size="sm" :busy="disablingAccount" @click="enableAccount()" :disabled="busy">Re-activate Account</busy-button>
             </div>
 
             <client-form ref="clientForm" :client="client"></client-form>
 
             <div>
                 <busy-button variant="secondary" :busy="saving" @click="update" :disabled="busy">Save Client</busy-button>
-                <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete Client</busy-button>
                 <busy-button variant="light" :busy="deleting" @click="changePasswordModal = true" :disabled="busy">Change Password</busy-button>
+                <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete Client</busy-button>
             </div>
         </div>
 
@@ -53,6 +57,7 @@ export default {
         changingRole: { user: false, admin: false },
         newRole: '',
         changePasswordModal: false,
+        disablingAccount: false,
     }),
 
     computed: {
@@ -66,6 +71,29 @@ export default {
     },
 
     methods: {
+        enableAccount() {
+            this.disablingAccount = true;
+            axios.patch(this.config.urls.admin + `reactivate/${this.client.id}`)
+                .then( ({ data }) => {
+                    this.$store.commit('clients/fetchClientSuccess', data.data);
+                    this.disablingAccount = false;
+                })
+                .catch(e => {
+                    this.disablingAccount = false;
+                })
+        },
+        disableAccount() {
+            this.disablingAccount = true;
+            axios.patch(this.config.urls.admin + `deactivate/${this.client.id}`)
+                .then( ({ data }) => {
+                    this.$store.commit('clients/fetchClientSuccess', data.data);
+                    this.disablingAccount = false;
+                })
+                .catch(e => {
+                    this.disablingAccount = false;
+                })
+        },
+
         changeRole(role) {
             this.newRole = role;
             this.$refs.confirmChangeRole.confirm(() => {

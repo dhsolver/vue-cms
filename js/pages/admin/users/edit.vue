@@ -5,9 +5,13 @@
         <spinner v-model="loading"></spinner>
 
         <div v-if="! loading" class="d-flex flex-col">
-            <div class="mb-1 ml-auto">
+            <div v-if="user.active" class="mb-1 ml-auto">
                 <busy-button variant="light" size="sm" :busy="changingRole.client" @click="changeRole('client')" :disabled="busy">Promote Member to Client</busy-button>
                 <busy-button variant="light" size="sm" :busy="changingRole.admin" @click="changeRole('admin')" :disabled="busy">Promote Member to Admin</busy-button>
+                <busy-button variant="light" size="sm" :busy="disablingAccount" @click="disableAccount()" :disabled="busy">Disable Account</busy-button>
+            </div>
+            <div v-else class="mb-1 ml-auto">
+                <busy-button variant="success" size="sm" :busy="disablingAccount" @click="enableAccount()" :disabled="busy">Re-activate Account</busy-button>
             </div>
 
             <user-form ref="userForm" :user="user"></user-form>
@@ -66,6 +70,30 @@ export default {
     },
 
     methods: {
+        enableAccount() {
+            this.disablingAccount = true;
+            axios.patch(this.config.urls.admin + `reactivate/${this.user.id}`)
+                .then( ({ data }) => {
+                    this.$store.commit('users/fetchUserSuccess', data.data);
+                    this.disablingAccount = false;
+                })
+                .catch(e => {
+                    this.disablingAccount = false;
+                })
+        },
+        
+        disableAccount() {
+            this.disablingAccount = true;
+            axios.patch(this.config.urls.admin + `deactivate/${this.user.id}`)
+                .then( ({ data }) => {
+                    this.$store.commit('users/fetchUserSuccess', data.data);
+                    this.disablingAccount = false;
+                })
+                .catch(e => {
+                    this.disablingAccount = false;
+                })
+        },
+
         changeRole(role) {
             this.newRole = role;
             this.$refs.confirmChangeRole.confirm(() => {

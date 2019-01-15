@@ -135,6 +135,7 @@ export default {
                     formatter: val => this.formatDateTimeFromUTC(val),
                 },
                 company_name: { sortable: true, label: 'Organization' },
+                active: { sortable: true, formatter: val => val == 1 ? 'Yes' : 'No' },
                 actions: {},
             },
             filter: null,
