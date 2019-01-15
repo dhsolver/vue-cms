@@ -72,6 +72,8 @@ export default {
                         alerts.addMessage('success', 'Users role has been changed.');
                         this.$router.push({ name: `admin.${role}.show`, params: { id: this.admin.id } });
                     }).catch( e => {
+                        alerts.addMessage('error', e.response.data.message);
+                    }).finally(() => {
                         this.changingRole[role] = false;
                         this.busy = false;
                     });
