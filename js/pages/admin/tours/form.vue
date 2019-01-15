@@ -7,7 +7,6 @@
                     v-model="form.user_id" 
                     :disabled="form.busy"
                     class="mb-3">
-
                     <option value="">-- Select a Client --</option>
                     <option v-for="item in clients" :value="item.id" :key="item.id">{{ item.name }}</option>
                 </b-form-select>
@@ -69,7 +68,11 @@
             autoReset: {
                 type: Boolean,
                 default: false,
-            }
+            },
+            clients: {
+                type: Array,
+                default: null,
+            },
         },
         
         data() {
@@ -100,10 +103,6 @@
         },
 
         computed: {
-            ...mapGetters({
-                clients: 'clients/list',
-            }),
-
             hasTour() {
                 return this.tour.id ? true : false;
             },
@@ -121,8 +120,6 @@
             if (this.tour.id) {
                 this.form = new Form(this.tour);
             }
-
-            await this.$store.dispatch('clients/fetchClients');
         },
 
         methods: {

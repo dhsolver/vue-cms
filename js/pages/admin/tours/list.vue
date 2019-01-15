@@ -78,7 +78,7 @@
 
         <!-- Add Modal -->
         <b-modal id="addTourModal" :title="addTourModalTitle" v-model="addTourModal">
-            <tour-form ref="tourForm" :tour="currentTour"></tour-form>
+            <tour-form ref="tourForm" :tour="currentTour" :clients="clients"></tour-form>
             <div slot="modal-footer">
                <b-btn variant="default" @click="addTourModal = false">Close</b-btn>
                <busy-button :busy="isAdding" variant="secondary" @click="addTour">Add Tour</busy-button>
