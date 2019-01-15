@@ -100,6 +100,13 @@ export default {
 
             form.post(this.config.urls.auth + 'login/facebook')
                 .then( ({ data }) => {
+                    if (! ['client', 'admin'].includes(data.user.role)) {
+                        // role does not have access to the CMS
+                        alerts.addMessage('error', 'You do not have access to this feature.');
+                        this.busy = false;
+                        return;
+                    }
+
                     // save the sites jwt auth token.
                     this.$store.commit('auth/saveToken', {
                         token: data.token,
@@ -118,6 +125,13 @@ export default {
             
             axios.post(this.config.urls.auth + 'login', this.form.data())
                 .then( ({ data }) => {
+                    if (! ['client', 'admin'].includes(data.user.role)) {
+                        // role does not have access to the CMS
+                        alerts.addMessage('error', 'You do not have access to this feature.');
+                        this.busy = false;
+                        return;
+                    }
+
                     this.$store.commit('auth/saveToken', {
                         token: data.token,
                         remember: this.remember
