@@ -15,6 +15,7 @@
             <div>
                 <busy-button variant="secondary" :busy="saving" @click="update" :disabled="busy">Save Admin</busy-button>
                 <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete Admin</busy-button>
+                <busy-button variant="light" :busy="deleting" @click="changePasswordModal = true" :disabled="busy">Change Password</busy-button>
             </div>
         </div>
 
@@ -27,6 +28,9 @@
         <confirm-modal ref="confirmChangeRole">
             Are you sure you want to change {{ admin.name }}'s account type to {{ newRole | capitalize }}?
         </confirm-modal>
+
+        <!-- Change Password Modal -->
+        <change-password-modal v-model="changePasswordModal" :user_id="admin.id"></change-password-modal>
     </b-card>
 </template>
 
@@ -48,6 +52,7 @@ export default {
         deleting: false,
         changingRole: { user: false, client: false },
         newRole: '',
+        changePasswordModal: false,
     }),
 
     computed: {

@@ -19,6 +19,7 @@ import FacebookLogin from './FacebookLogin';
 import DatePicker from './DatePicker';
 import LineChart from './LineChart';
 import DonutChart from './DonutChart';
+import ChangePasswordModal from './admin/ChangePasswordModal';
 
 // Components that are registered globaly.
 [
@@ -42,6 +43,7 @@ import DonutChart from './DonutChart';
     DatePicker,
     LineChart,
     DonutChart,
+    ChangePasswordModal,
 ].forEach(Component => {
     Vue.component(Component.name, Component)
 })

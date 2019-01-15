@@ -27,6 +27,9 @@
         <confirm-modal ref="confirmChangeRole">
             Are you sure you want to change {{ client.name }}'s account type to {{ newRole | capitalize }}?
         </confirm-modal>
+
+        <!-- Change Password Modal -->
+        <change-password-modal v-model="changePasswordModal" :user_id="client.id"></change-password-modal>
     </b-card>
 </template>
 
@@ -48,6 +51,7 @@ export default {
         deleting: false,
         changingRole: { user: false, admin: false },
         newRole: '',
+        changePasswordModal: false,
     }),
 
     computed: {
