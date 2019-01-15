@@ -15,6 +15,7 @@
             <div>
                 <busy-button variant="secondary" :busy="saving" @click="update" :disabled="busy">Save Client</busy-button>
                 <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete Client</busy-button>
+                <busy-button variant="light" :busy="deleting" @click="changePasswordModal = true" :disabled="busy">Change Password</busy-button>
             </div>
         </div>
 
