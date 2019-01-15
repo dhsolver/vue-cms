@@ -24,7 +24,7 @@
                 <input-help :form="form" field="title" text=""></input-help>
             </b-form-group>
             
-            <b-form-group label="Description:" label-for="description">
+            <!-- <b-form-group label="Description:" label-for="description">
                 <b-form-textarea id="textarea1"
                     v-model="form.description"
                     placeholder="Tour Description"
@@ -34,7 +34,7 @@
                     :max-rows="8">
                 </b-form-textarea>
                 <input-help :form="form" field="description" text=""></input-help>
-            </b-form-group>
+            </b-form-group> -->
             
             <b-form-group label="Tour Type:" label-for="type">    
                 <b-form-select 
