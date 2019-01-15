@@ -13,7 +13,6 @@ import UserEdit from '../pages/admin/users/edit';
 import Admins from '../pages/admin/admins/list';
 import AdminEdit from '../pages/admin/admins/edit';
 import AdminTours from '../pages/admin/tours/list';
-import AdminTourEdit from '../pages/admin/tours/edit';
 
 import ResetPassword from '../pages/support/reset-password';
 import ForgotPassword from '../pages/support/forgot-password';
@@ -56,7 +55,6 @@ else {
         { path: '/admin/admins', name: 'admin.admins', component: Admins },
         { path: '/admin/admin/:id', name: 'admin.admin.show', component: AdminEdit },
         { path: '/admin/tours', name: 'admin.tours', component: AdminTours },
-        { path: '/admin/tour/:id', name: 'admin.tour.edit', component: AdminTourEdit },
 
         // catch all 404
         { path: '*', name: '404', component: NotFound }
