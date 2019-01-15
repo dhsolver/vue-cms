@@ -8,7 +8,13 @@ export const state = {
 }
 
 export const getters = {
-    list: state => state.list,
+    list: (state) => { 
+        return state.list.sort((a, b) => {
+            if (a.name > b.name) return 1;
+            if (a.name < b.name) return -1;
+            return 0;
+        })
+    },
     dropdown: state => state.dropdown,
     count: state => state.list.length,
     current: state => state.current,
