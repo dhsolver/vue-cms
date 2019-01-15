@@ -9,8 +9,8 @@
         "development": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "watch-poll": "npm run watch -- --watch-poll",
-        "hot-ssl": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --https --cert ssl_cert.pem --key ssl_key.key --config=node_modules/laravel-mix/setup/webpack.config.js",
-        "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --progress --hot --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "hot-ssl": "cross-env NODE_ENV=development webpack-dev-server --inline --hot --https --cert ssl_cert.pem --key ssl_key.key --config=node_modules/laravel-mix/setup/webpack.config.js --disableHostCheck=true",
+        "hot": "cross-env NODE_ENV=development webpack-dev-server --inline --progress --hot --config=node_modules/laravel-mix/setup/webpack.config.js --disableHostCheck=true",
         "prod": "npm run production",
         "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --no-progress --hide-modules --config=node_modules/laravel-mix/setup/webpack.config.js",
         "deploy": "npm run production && npm run push-to-s3 && npm run invalidate-cdn",
@@ -32,13 +32,15 @@
         "css-loader": "^0.28.11",
         "howler": "^2.0.13",
         "js-cookie": "^2.2.0",
-        "laravel-mix": "^2.1.14",
         "lodash": "^4.17.10",
         "markerwithlabel": "github:arkhipovandrei/node-MarkerWithLabel#master",
         "moment": "^2.22.2",
         "numeral": "^2.0.6",
+        "resolve-url-loader": "^2.3.1",
+        "sass": "^1.16.0",
+        "sass-loader": "^7.1.0",
         "v-calendar": "^0.9.7",
-        "vue": "^2.5.17",
+        "vue": "^2.5.22",
         "vue-chartjs": "^3.4.0",
         "vue-meta": "^1.4.4",
         "vue-router": "^3.0.1",
@@ -46,5 +48,8 @@
         "vuedraggable": "^2.16.0",
         "vuex": "^3.0.1",
         "vuex-router-sync": "^5.0.0"
+    },
+    "dependencies": {
+        "laravel-mix": "^4.0.0"
     }
 }
