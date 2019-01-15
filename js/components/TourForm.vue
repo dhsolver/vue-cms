@@ -50,7 +50,7 @@
             </b-form-group>
             
             <!-- STATUS / PUBLISH -->
-            <div class="d-flex mb-3" style="align-items: baseline">
+            <div v-if="hasTour" class="d-flex mb-3" style="align-items: baseline">
                 <h4 class="info-heading mt-3 f-1">
                     Status: 
                     <span v-if="tour.status == 'draft'" class="text-danger">DRAFT</span>
