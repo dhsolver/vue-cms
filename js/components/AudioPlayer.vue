@@ -42,6 +42,7 @@
 
 <script>
 import { Howl } from 'howler';
+import EventBus from '../event-bus';
 
 export default {
     name: 'AudioPlayer',
@@ -145,13 +146,19 @@ export default {
             });
 
             this.drawVolumeProgress();
-        }
+        },
     },
 
     mounted() {
         if (this.source) {
             this.load();
         }
+
+        EventBus.$on('stop-audio', () => {
+            if (this.howler) {
+                this.howler.stop();
+            }
+        })
     },
 
     watch: {

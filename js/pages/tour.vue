@@ -19,12 +19,14 @@
             </div>
 
             <transition :name="formTransition" mode="out-in">
-                <stop-form 
-                    v-if="mode == 'stop'" 
+                <stop-form v-if="mode == 'stop'" 
+                    ref="stopForm"
                     @addStop="createStop()" 
                     @deleted="deleteStop(currentStop)"
                 />
-                <tour-form v-if="mode == 'tour' && tour.id" ref="tourForm" @publish="publish" />
+                <tour-form v-if="mode == 'tour' && tour.id"
+                    ref="tourForm"
+                    @publish="publish" />
             </transition>
         </div>
 
@@ -124,6 +126,7 @@ import Geocoding from '../mixins/Geocoding';
 import TourForm from '../components/TourForm';
 import TourMap from '../components/TourMap';
 import StopForm from '../components/StopForm';
+import EventBus from '../event-bus';
 
 export default {
     metaInfo() {
@@ -173,6 +176,8 @@ export default {
 
     methods: {
         showDashboard(confirmed = false) {
+            EventBus.$emit('stop-audio');
+            
             if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
                 this.$refs.confirm.confirm(() => {
                     this.showDashboard(true);
@@ -189,6 +194,8 @@ export default {
         },
 
         showTourForm(confirmed = false) {
+            EventBus.$emit('stop-audio');
+
             if (! confirmed && this.mode == 'stop' && this.stopFormHasChanges) {
                 this.$refs.confirm.confirm(() => {
                     this.showTourForm(true);
@@ -205,6 +212,8 @@ export default {
         },
 
         showStopForm(stop_id, confirmed = false) {
+            EventBus.$emit('stop-audio');
+
             if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
                 this.$refs.confirm.confirm(() => {
                     this.showStopForm(stop_id, true);
@@ -242,6 +251,8 @@ export default {
         },
 
         createStop(location = {}, confirmed = false) {
+            EventBus.$emit('stop-audio');
+
             if (! confirmed && this.mode == 'tour' && this.tourWasModified) {
                 this.$refs.confirm.confirm(() => {
                     this.createStop(location, true);
