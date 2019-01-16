@@ -256,7 +256,8 @@ export const mutations = {
             trophy_image_id: "",
             twitter_url: "",
             type: "",
-            video_url: ""
+            video_url: "",
+            in_app_id: '',
         });
     },
 

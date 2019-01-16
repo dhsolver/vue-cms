@@ -2,7 +2,7 @@
     <div>
         <b-form @submit.prevent="submit">
             
-            <b-form-group label="Client:" label-for="user_id">    
+            <b-form-group label="Client:" label-for="user_id">
                 <b-form-select 
                     v-model="form.user_id" 
                     :disabled="form.busy"

@@ -9,8 +9,18 @@
                     <fa :icon="['fas', 'plus']" /> Add Tour
                 </button>
             </b-col>
-            <b-col md="6">
-                <b-form-input v-model="filter" placeholder="Search..." class="ml-auto" />
+            <b-col md="2">
+                <b-form-select
+                    v-model="statusFilter"
+                    class="mb-3">
+                    <option value="">All Tours</option>
+                    <option value="live">Live</option>
+                    <option value="pending">Pending</option>
+                    <option value="draft">Draft</option>
+                </b-form-select>
+            </b-col>
+            <b-col md="4">
+                <b-form-input v-model="searchFilter" placeholder="Search..." class="ml-auto" />
             </b-col>
         </b-row>
 
@@ -20,10 +30,8 @@
         <b-row v-if="!loading && totalRows">
             <b-col lg="12">
                 <b-table
-                    :items="items"
+                    :items="filteredItems"
                     :fields="fields"
-                    :filter="filter"
-                     @filtered="onFiltered"
                     :sort-by.sync="sortBy"
                     :sort-desc.sync="sortDesc"
                     :current-page="currentPage"
@@ -36,9 +44,6 @@
                     </template>
                     <template slot="pricing_type" slot-scope="{ item }">
                         {{ item.pricing_type | capitalize }}
-                    </template>
-                    <template slot="created_at" slot-scope="{ item }">
-                        {{ formatDateTimeFromUTC(item.created_at) }}
                     </template>
                     <template slot="status" slot-scope="{ item }">
                         {{ item.status | capitalize }}
@@ -149,6 +154,16 @@ export default {
             }
             
             return `${start} - ${end}`;
+        },
+
+        filteredItems() {
+            return this.items.filter((tour) => {
+                return (
+                    (! this.searchFilter || JSON.stringify(tour).toLowerCase().includes(this.searchFilter.toLowerCase()))
+                    &&
+                    (! this.statusFilter || tour.status == this.statusFilter)
+                )
+            })
         }
     },
 
@@ -174,17 +189,6 @@ export default {
                 stops_count: { sortable: true, label: 'Stops' },
                 length: { sortable: true, formatter: val => `${val} mi` },
                 status: { sortable: true },
-                created_at: { 
-                    sortable: true, 
-                    label: 'Created',
-                    formatter: val => this.formatDateTimeFromUTC(val),
-                },
-                // updated_at: {
-                //     sortable: true, 
-                //     key: 'updated_at',
-                //     label: 'Updated',
-                //     formatter: val => this.formatDateTimeFromUTC(val),
-                // },
                 published_at: {
                     key: 'published_at',
                     sortable: true, 
@@ -193,12 +197,13 @@ export default {
                 },
                 actions: {},
             },
-            filter: null,
             sortBy: 'title',
             sortDesc: false,
             currentTour: {},
             perPage: 25,
             currentPage: 1,
+            statusFilter: '',
+            searchFilter: '',
         };
     },
 
@@ -251,19 +256,12 @@ export default {
                     this.isAdding = false;
                 });
         },
-
-        onFiltered(filteredItems) {
-            // Trigger pagination to update the number of buttons/pages due to filtering
-            this.totalRows = filteredItems.length;
-            this.currentPage = 1;
-        }
     },
 
     watch: {
-        filter(val) {
-            if (val === '') {
-                this.totalRows = this.itemCount;
-            }
+        filteredItems(val) {
+            this.totalRows = val.length;
+            this.currentPage = 1;
         },
     },
 

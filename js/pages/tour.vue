@@ -337,14 +337,14 @@ export default {
 
             this.publishErrors = [];
             this.$refs.tourForm.busyPublishing = true;
-            this.$refs.tourForm.form.busy = true;
+            this.$refs.tourForm.busy = true;
 
             axios.put(this.saveUrl + '/publish', {})
                 .then(response => {
                     this.$store.commit('tours/setCurrent', response.data.data);
                     alerts.addMessage('success', response.data.message);
                     this.$refs.tourForm.busyPublishing = false;
-                    this.$refs.tourForm.form.busy = false;
+                    this.$refs.tourForm.busy = false;
 
                     Vue.nextTick(() => {
                         this.$refs.tourForm.markFormAsChanged(false);
@@ -363,7 +363,7 @@ export default {
                             });
                         }
                         this.$refs.tourForm.busyPublishing = false;
-                        this.$refs.tourForm.form.busy = false;
+                        this.$refs.tourForm.busy = false;
                     }
                 })
         },

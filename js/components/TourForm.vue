@@ -40,7 +40,7 @@
             <h4>Title</h4>
             <b-form-group>
                 <b-form-input id="title"
-                    :disabled="form.busy"
+                    :disabled="busy"
                     type="text"
                     v-model="form.title"
                     required
@@ -61,17 +61,21 @@
                     </span>
                 </h4>
                 <div class="ml-auto">
-                    <busy-button v-if="tour.status == 'draft'" variant="success" size="sm" :disabled="form.busy" @click.prevent="publish()">Publish</busy-button>
-                    <busy-button v-if="tour.status == 'live'" variant="danger" size="sm" :disabled="form.busy" @click.prevent="unpublish()">Unpublish</busy-button>
-                    <busy-button v-if="tour.status == 'pending'" variant="danger" size="sm" :disabled="form.busy" @click.prevent="unpublish()">Cancel</busy-button>
+                    <busy-button v-if="tour.status == 'draft'" variant="success" size="sm" :disabled="busy" @click.prevent="publish()">Publish</busy-button>
+                    <busy-button v-if="tour.status == 'live'" variant="danger" size="sm" :disabled="busy" @click.prevent="unpublish()">Unpublish</busy-button>
+                    <busy-button v-if="! isAdmin && tour.status == 'pending'" class="ml-3" variant="danger" size="sm" :disabled="busy" @click.prevent="unpublish()">Cancel</busy-button>
                 </div>
+            </div>
+            <div v-if="isAdmin && tour.status == 'pending'" class="d-flex mb-4">
+                <busy-button variant="success" size="sm" :disabled="busy" @click.prevent="publish()">Approve</busy-button>
+                <busy-button class="ml-3" variant="danger" size="sm" :disabled="busy" @click.prevent="unpublish()">Cancel</busy-button>
             </div>
             
             <div v-if="hasTour">
                 <h4>Description</h4>
                 <b-form-group>
                     <b-form-textarea id="description"
-                        :disabled="form.busy"
+                        :disabled="busy"
                         type="text"
                         v-model="form.description"
                         required
@@ -86,7 +90,7 @@
             <b-form-group>    
                 <b-form-select 
                     v-model="form.pricing_type" 
-                    :disabled="form.busy">
+                    :disabled="busy">
                     <option value="">-- Select Pricing --</option>
                     <option value="free">Free</option>
                     <option value="premium">Premium</option>
@@ -94,11 +98,22 @@
                 <input-help :form="form" field="pricing_type" text=""></input-help>
             </b-form-group>
 
+            <b-form-group v-if="this.isAdmin && form.pricing_type == 'premium'">    
+            <h4>In-App ID</h4>
+                <b-form-input id="in_app_id"
+                    :disabled="busy"
+                    type="text"
+                    v-model="form.in_app_id"
+                    placeholder="In-App ID">
+                </b-form-input>
+                <input-help :form="form" field="in_app_id" text=""></input-help>
+            </b-form-group>
+
             <h4>Junket Type</h4>
             <b-form-group>    
                 <b-form-select 
                     v-model="form.type" 
-                    :disabled="form.busy">
+                    :disabled="busy">
                     <option value="">-- Select Type --</option>
                     <option value="outdoor">Outdoor</option>
                     <option value="indoor">Indoor</option>
@@ -119,7 +134,7 @@
                         <span class="icon fb-circle">
                             <fa :icon="['fab', 'facebook-f']"/>
                         </span>
-                        <input type="text" placeholder="Facebook URL" v-model="form.facebook_url" id="facebook_url" :disabled="form.busy" />
+                        <input type="text" placeholder="Facebook URL" v-model="form.facebook_url" id="facebook_url" :disabled="busy" />
                     </div>
                     <input-help :form="form" field="facebook_url" text=""></input-help>
                 </b-form-group>
@@ -128,7 +143,7 @@
                         <span class="icon ig-circle">
                             <fa :icon="['fab', 'instagram']"/>
                         </span>
-                        <input type="text" placeholder="Instagram URL" v-model="form.instagram_url" id="instagram_url" :disabled="form.busy" />
+                        <input type="text" placeholder="Instagram URL" v-model="form.instagram_url" id="instagram_url" :disabled="busy" />
                     </div>
                     <input-help :form="form" field="instagram_url" text=""></input-help>
                 </b-form-group>
@@ -137,7 +152,7 @@
                         <span class="icon twitter-circle">
                             <fa :icon="['fab', 'twitter']"/>
                         </span>
-                        <input type="text" placeholder="Twitter URL" v-model="form.twitter_url" id="twitter_url" :disabled="form.busy" />
+                        <input type="text" placeholder="Twitter URL" v-model="form.twitter_url" id="twitter_url" :disabled="busy" />
                     </div>
                     <input-help :form="form" field="twitter_url" text=""></input-help>
                 </b-form-group>
@@ -253,7 +268,7 @@
                     <h3>Prize Details</h3>
                     <b-form-group>
                         <b-form-textarea id="prize_details"
-                            :disabled="form.busy"
+                            :disabled="busy"
                             type="text"
                             v-model="form.prize_details"
                             required
@@ -270,7 +285,7 @@
                     </h3>
                     <b-form-group>
                         <b-form-input id="prize_time_limit"
-                            :disabled="form.busy"
+                            :disabled="busy"
                             type="text"
                             v-model="form.prize_time_limit"
                             required
@@ -282,7 +297,7 @@
                     <h3>Redeem Prize At</h3>
                     <b-form-group>
                         <b-form-textarea id="prize_instructions"
-                            :disabled="form.busy"
+                            :disabled="busy"
                             type="text"
                             v-model="form.prize_instructions"
                             required
@@ -299,7 +314,7 @@
                     <h4 class="mt-3">START POINT</h4>
 
                     <b-form-group>
-                        <b-form-select :disabled="form.busy" v-model="form.start_point_id">
+                        <b-form-select :disabled="busy" v-model="form.start_point_id">
                             <option value="">-- Select Stop --</option>
                             <option v-for="item in tour.stops" 
                                 :key="item.id" 
@@ -313,7 +328,7 @@
 
                     <b-form-group>
                         <b-form-textarea id="start_message"
-                            :disabled="form.busy"
+                            :disabled="busy"
                             type="text"
                             v-model="form.start_message"
                             required
@@ -341,7 +356,7 @@
 
                     <h4 class="mt-3">END POINT</h4>
                     <b-form-group>
-                        <b-form-select :disabled="form.busy" v-model="form.end_point_id">
+                        <b-form-select :disabled="busy" v-model="form.end_point_id">
                             <option value="">-- Select Stop --</option>
                             <option v-for="item in tour.stops" 
                                 :key="item.id" 
@@ -355,7 +370,7 @@
 
                     <b-form-group>
                         <b-form-textarea id="end_message"
-                            :disabled="form.busy"
+                            :disabled="busy"
                             type="text"
                             v-model="form.end_message"
                             required
@@ -387,7 +402,7 @@
                 <b-row>
                     <b-col lg="6">
                         <busy-button 
-                            :busy="form.busy" 
+                            :busy="busy" 
                             variant="primary" 
                             class="w-100" 
                             @click="save" 
@@ -397,7 +412,7 @@
                         </busy-button>
                     </b-col>
                     <b-col lg="6">
-                        <busy-button :busy="form.busy" variant="danger" class="w-100" @click="destroy()">
+                        <busy-button :busy="busy" variant="danger" class="w-100" @click="destroy()">
                             <fa :icon="['fas', 'times']"/>&nbsp;&nbsp;Delete
                         </busy-button>
                     </b-col>
@@ -427,6 +442,7 @@ export default {
     mixins: [ UploadsMedia, Geocoding ],
 
     data: () => ({
+        busy: false,
         form: new Form({
             id: null,
             title: "",
@@ -481,7 +497,8 @@ export default {
             trophy_image_id: "",
             twitter_url: "",
             type: "",
-            video_url: ""
+            video_url: "",
+            in_app_id: '',
         }),
     }),
 
@@ -494,6 +511,7 @@ export default {
             tour: "tours/current",
             createUrl: "tours/createUrl",
             saveUrl: "tours/saveUrl",
+            isAdmin: 'auth/isAdmin',
         }),
 
         hasTour() {
@@ -551,15 +569,15 @@ export default {
 
         destroy() {
             this.$refs.confirmDelete.confirm(() => {
-                this.form.busy = true;
+                this.busy = true;
                 let f = new Form({});
                 f.delete(this.saveUrl)
                     .then( ({ data }) => {
                         this.$router.push({ name: 'home' });
-                        this.form.busy = false;
+                        this.busy = false;
                     }).catch( e => {
                         alerts.addMessage('error', e.response.data.message);
-                        this.form.busy = false;
+                        this.busy = false;
                     });
             });
         },
@@ -586,14 +604,14 @@ export default {
             }
 
             this.busyPublishing = true;
-            this.form.busy = true;
+            this.busy = true;
 
             axios.put(this.saveUrl + '/unpublish', {})
                 .then(response => {
                     this.$store.commit('tours/setCurrent', response.data.data);
                     alerts.addMessage('success', response.data.message);
                     this.busyPublishing = false;
-                    this.form.busy = false;
+                    this.busy = false;
 
                     Vue.nextTick(() => {
                         this.markFormAsChanged(false);
@@ -604,7 +622,7 @@ export default {
                     if (e.response.data.message) {
                         alerts.addMessage('error', e.response.data.message);
                         this.busyPublishing = false;
-                        this.form.busy = false;
+                        this.busy = false;
                     }
                 })
         },
