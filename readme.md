@@ -54,7 +54,11 @@ Note: Updating the files on the S3 bucket alone will not make the changes live. 
 
 #### Deployment NPM Script
 
-There is a deployment NPM script that utilizes the [aws-cli](https://aws.amazon.com/cli/) to handle this task.   There are assumptions hard coded into the script for the local AWS profile name and the CloudFront distribution ID.  You may have to edit these values in the package.json file.
+There is a deployment NPM script that utilizes the [aws-cli](https://aws.amazon.com/cli/) to handle this task.   
+
+There are assumptions hard coded into the script for the local AWS profile name and the CloudFront distribution ID.  You may have to edit these values in the package.json file.
+
+If you install the [aws-cli](https://aws.amazon.com/cli/) and create a [named profile](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-profiles.html) with the name "junket", it should work like magic.
 
 1. Make sure URLs are set properly in the .env file
 

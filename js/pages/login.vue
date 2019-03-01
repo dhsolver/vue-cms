@@ -100,7 +100,7 @@ export default {
 
             form.post(this.config.urls.auth + 'login/facebook')
                 .then( ({ data }) => {
-                    if (! ['client', 'admin'].includes(data.user.role)) {
+                    if (! ['client', 'admin', 'superadmin'].includes(data.user.role)) {
                         // role does not have access to the CMS
                         alerts.addMessage('error', 'You do not have access to this feature.');
                         this.busy = false;
@@ -125,7 +125,7 @@ export default {
             
             axios.post(this.config.urls.auth + 'login', this.form.data())
                 .then( ({ data }) => {
-                    if (! ['client', 'admin'].includes(data.user.role)) {
+                    if (! ['client', 'admin', 'superadmin'].includes(data.user.role)) {
                         // role does not have access to the CMS
                         alerts.addMessage('error', 'You do not have access to this feature.');
                         this.busy = false;
