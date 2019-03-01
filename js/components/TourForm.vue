@@ -294,7 +294,7 @@
                         <input-help :form="form" field="prize_time_limit" text=""></input-help>
                     </b-form-group>
 
-                    <h3>Redeem Prize At</h3>
+                    <h3>PRIZE INSTRUCTIONS</h3>
                     <b-form-group>
                         <b-form-textarea id="prize_instructions"
                             :disabled="busy"
