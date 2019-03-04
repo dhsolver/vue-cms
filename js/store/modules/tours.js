@@ -240,6 +240,16 @@ export const mutations = {
             pin_image: "",
             pin_image_id: "",
             pricing_type: "",
+            prize_location: {
+                latitude: "",
+                longitude: "",
+                address1: "",
+                address2: "",
+                city: "",
+                state: "",
+                country: "",
+                zipcode: ""
+            },
             has_prize: false,
             prize_details: "",
             prize_instructions: "",

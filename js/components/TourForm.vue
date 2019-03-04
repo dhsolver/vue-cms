@@ -293,6 +293,9 @@
                         </b-form-input>
                         <input-help :form="form" field="prize_time_limit" text=""></input-help>
                     </b-form-group>
+                    
+                    <h3>Prize Location</h3>
+                    <address-form :form="form" v-model="form.prize_location" @input="updatePrizeLocation"></address-form>
 
                     <h3>PRIZE INSTRUCTIONS</h3>
                     <b-form-group>
@@ -485,7 +488,16 @@ export default {
             prize_details: "",
             prize_instructions: "",
             prize_time_limit: "",
-            published_at: "",
+            prize_location: {
+                latitude: "",
+                longitude: "",
+                address1: "",
+                address2: "",
+                city: "",
+                country: "",
+                state: "",
+                zipcode: ""
+            },
             start_image: "",
             start_message: "",
             start_point_id: "",
@@ -565,6 +577,11 @@ export default {
         updateLocation() {
             console.log('tour location changed');
             this.$store.commit('tours/setCurrent', {...this.form.data()});
+        },
+
+        updatePrizeLocation() {
+            // console.log('prize location changed');
+            // this.$store.commit('tours/setCurrent', {...this.form.data()});
         },
 
         destroy() {
