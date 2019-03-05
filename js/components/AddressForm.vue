@@ -5,7 +5,7 @@
         </div>
 
         <google-address-search
-            id="map"
+            :id="id"
             classname="form-control"
             placeholder="Search..."
             @placechanged="getAddressData"
@@ -39,6 +39,7 @@ export default {
     mixins: [ Geocoding ],
 
     props: {
+        id: {type: String, default: 'map' },
         form: { type: Object, default: {} },
         value: { type: Object, default: {} },
         overlay: { type: Boolean, default: false },

@@ -124,7 +124,7 @@
 
             <div v-if="hasTour">
                 <h4>Location</h4>
-                <address-form :form="form" v-model="form.location" @input="updateLocation"></address-form>
+                <address-form id="location" :form="form" v-model="form.location" @input="updateLocation"></address-form>
 
                 <!-- SOCIAL URLS -->
                 <h4>Social</h4>
@@ -295,7 +295,7 @@
                     </b-form-group>
                     
                     <h3>Prize Location</h3>
-                    <address-form :form="form" v-model="form.prize_location" @input="updatePrizeLocation"></address-form>
+                    <address-form id="prize_location" :form="form" v-model="form.prize_location" @input="updatePrizeLocation"></address-form>
 
                     <h3>PRIZE INSTRUCTIONS</h3>
                     <b-form-group>
@@ -576,12 +576,14 @@ export default {
 
         updateLocation() {
             console.log('tour location changed');
+            console.log(this.form.location);
             this.$store.commit('tours/setCurrent', {...this.form.data()});
         },
 
         updatePrizeLocation() {
-            // console.log('prize location changed');
-            // this.$store.commit('tours/setCurrent', {...this.form.data()});
+            console.log('tour prize location changed');
+            console.log(this.form.prize_location);
+            this.$store.commit('tours/setCurrent', {...this.form.data()});
         },
 
         destroy() {
