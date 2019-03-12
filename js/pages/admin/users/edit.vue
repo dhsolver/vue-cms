@@ -20,6 +20,7 @@
                 <busy-button variant="secondary" :busy="saving" @click="update" :disabled="busy">Save Member</busy-button>
                 <busy-button variant="danger" :busy="deleting" @click="destroy()" :disabled="busy">Delete Member</busy-button>
                 <busy-button variant="light" :busy="deleting" @click="changePasswordModal = true" :disabled="busy">Change Password</busy-button>
+                <busy-button variant="warning" :busy="reseting" @click="resetScores()">Reset Scores</busy-button>
             </div>
         </div>
 
@@ -35,6 +36,11 @@
 
         <!-- Change Password Modal -->
         <change-password-modal v-model="changePasswordModal" :user_id="user.id"></change-password-modal>
+
+        <!-- Reset Scores Modal -->
+        <confirm-modal ref="confirmResetScores">
+            Are you sure you want to reset scores?
+        </confirm-modal>
     </b-card>
 </template>
 
@@ -54,6 +60,8 @@ export default {
         loading: true,
         saving: false,
         deleting: false,
+        reseting: false,
+        disablingAccount: false,
         changingRole: { client: false, admin: false },
         newRole: '',
         changePasswordModal: false,
@@ -139,6 +147,21 @@ export default {
                     });
             });
         },
+
+        resetScores() {
+            this.$refs.confirmResetScores.confirm(() => {
+                this.reseting = true;
+                console.log(this.config.urls.admin);
+                axios.patch(this.config.urls.admin + `reset/${this.user.id}`)
+                .then( ({ data }) => {
+                    this.$store.commit('admins/fetchAdminSuccess', data.data);
+                    this.reseting = false;
+                })
+                .catch(e => {
+                    this.reseting = false;
+                })
+            });
+        }
     },
 
     async mounted () {
