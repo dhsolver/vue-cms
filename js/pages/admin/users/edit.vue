@@ -154,7 +154,8 @@ export default {
                 console.log(this.config.urls.admin);
                 axios.patch(this.config.urls.admin + `reset/${this.user.id}`)
                 .then( ({ data }) => {
-                    this.$store.commit('admins/fetchAdminSuccess', data.data);
+                    this.$store.commit('users/fetchUserSuccess', data.data);
+                    alerts.addMessage('success', 'Successfully reset.');
                     this.reseting = false;
                 })
                 .catch(e => {
