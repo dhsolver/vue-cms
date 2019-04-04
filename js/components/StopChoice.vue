@@ -69,6 +69,6 @@ export default {
 
 <style>
 .tab-content .decision-point:last-of-type hr {
-    display: none!important;
+    display: none !important;
 }
 </style>

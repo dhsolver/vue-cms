@@ -143,7 +143,7 @@ class Form {
         return new Promise((resolve, reject) => {
             axios[method](url, this.data(multipart))
                 .then(response => {
-                    // console.log('Axios success');
+                    console.log('Axios success');
                     this.busy = false;
                     this.handler = new AxiosResponseHandler();
                     this.handler.handleResponse(response, this.alertOnResponse);

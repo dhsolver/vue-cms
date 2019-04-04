@@ -65,7 +65,7 @@ export default {
                 return false;
             }
 
-            if (!this.address.latitude || ! this.address.longitude || ! this.address.city || ! this.address.state || ! this.address.zipcode || ! this.address.country) {
+            if (!this.address.latitude || !this.address.longitude || !this.address.city || !this.address.state || !this.address.zipcode || !this.address.country) {
                 return false;
             }
 
@@ -94,13 +94,13 @@ export default {
 </script>
 
 <style scoped>
-.overlay {
-    position: absolute;
-    background-color: #e20e24;
-    width: 100%;
-    height: 100%;
-    z-index: 99;
-    color: #fff;
-    opacity: 0.6;
-}
+    .overlay {
+        position: absolute;
+        background-color: #e20e24;
+        width: 100%;
+        height: 100%;
+        z-index: 99;
+        color: #fff;
+        opacity: 0.6;
+    }
 </style>

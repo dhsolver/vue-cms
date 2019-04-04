@@ -25,7 +25,6 @@ export default {
     },
 
     methods: {
-
         classFromType(type) {
             if (type === 'error') return 'danger';
             return type;
@@ -34,7 +33,6 @@ export default {
         dismiss() {
             this.visible = false;
         }
-
     },
 
     computed: {
