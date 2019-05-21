@@ -5,7 +5,6 @@
         <div class="mt-4 mb-4">
             <b-button class="d-inline" size="sm" :class="{'grey-btn': mode != 'downloads'}" @click="mode = 'downloads'">Downloads</b-button>
             <b-button class="d-inline" size="sm" :class="{'grey-btn': mode != 'time_spent'}" @click="mode = 'time_spent'" >Total Time</b-button>
-            <b-button class="d-inline" size="sm" :class="{'grey-btn': mode != 'actions'}" @click="mode = 'actions'" >Actions</b-button>
         </div>
 
         <spinner v-model="loading" class="mt-5" />

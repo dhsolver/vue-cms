@@ -60,11 +60,6 @@ export default {
                     sortable: true,
                     formatter: (val) => this.numberCommasFormat(val),
                 },
-                {
-                    key: 'actions',
-                    sortable: true,
-                    formatter: (val) => this.numberCommasFormat(val),
-                },
             ],
         }
     },

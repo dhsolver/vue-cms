@@ -92,15 +92,6 @@ export default {
                     key: 'downloads',
                     formatter: (val) => this.numberCommasFormat(val),
                 },
-                {
-                    key: 'visitors',
-                    label: 'Unique Visitors',
-                    formatter: (val) => this.numberCommasFormat(val),
-                },
-                {
-                    key: 'actions',
-                    formatter: (val) => this.numberCommasFormat(val),
-                },
             ],
         }
     },
